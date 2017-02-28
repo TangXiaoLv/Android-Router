@@ -1,0 +1,1 @@
+include ':simple', ':AndroidRouter', ':AndroidRouter-compiler', ':AndroidRouter-annotations', ':simple-lib'

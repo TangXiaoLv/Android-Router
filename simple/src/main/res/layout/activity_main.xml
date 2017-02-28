@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+        tools:context="com.tangxiaolv.simple.MainActivity">
+
+    <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#BDBDBD"
+            android:layout_marginBottom="8dp"/>
+
+    <TextView
+            android:id="@+id/router1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="toon://one/openOne?params={'key1':1,'key2':'2'}"/>
+
+    <TextView
+            android:id="@+id/router2"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="toon://one/openOne2"/>
+
+    <TextView
+            android:id="@+id/router3"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="toon://one"/>
+
+    <TextView
+            android:id="@+id/router4"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="toon://one?params={'key1':'1','key2':true}"/>
+
+    <TextView
+            android:id="@+id/router5"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="toon2://one?params={'key1':'1','key2':true}"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:layout_height="48dp">
+        <EditText
+                android:id="@+id/input"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="match_parent"/>
+        <Button
+                android:id="@+id/go"
+                android:text="GO"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+
+    </LinearLayout>
+</LinearLayout>
