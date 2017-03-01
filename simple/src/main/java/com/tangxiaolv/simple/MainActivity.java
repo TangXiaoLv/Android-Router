@@ -15,8 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import static android.R.attr.id;
-
 public class MainActivity extends AppCompatActivity {
 
     private TextView title;
@@ -45,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 }, new Reject() {
                     @Override
                     public void call(Exception e) {
-                        title.setText(e.getCause().toString());
+                        title.setText(e.toString());
                     }
                 });
             }
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 }, new Reject() {
                     @Override
                     public void call(Exception e) {
-                        title.setText(e.getCause().toString());
+                        title.setText(e.toString());
                     }
                 });
             }
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 }, new Reject() {
                     @Override
                     public void call(Exception e) {
-                        title.setText(e.getCause().toString());
+                        title.setText(e.toString());
                     }
                 });
             }

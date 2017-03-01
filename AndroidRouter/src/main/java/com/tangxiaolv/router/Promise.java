@@ -4,8 +4,9 @@ package com.tangxiaolv.router;
 import android.os.Looper;
 
 import com.tangxiaolv.router.exceptions.RouterException;
+import com.tangxiaolv.router.utils.RLog;
 
-public class Promise {
+public final class Promise {
 
     private final Asker asker;
     private Resolve resolve;
@@ -34,16 +35,16 @@ public class Promise {
         asker.request();
     }
 
-    public void resolve(final Object o) {
+    public void resolve(final Object result) {
         if (resolve == null)
             return;
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            resolve.call(o);
+            resolve.call(result);
         } else {
             AndroidRouter.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
-                    resolve.call(o);
+                    resolve.call(result);
                 }
             });
         }
@@ -52,7 +53,7 @@ public class Promise {
     public void reject(Exception e) {
         if (e == null)
             e = new RouterException("unkownException");
-        RLog.e(e.getMessage());
+        e.printStackTrace();
         if (reject == null)
             return;
         if (Looper.myLooper() == Looper.getMainLooper()) {

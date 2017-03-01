@@ -7,14 +7,15 @@ import java.util.Map;
 
 import com.tangxiaolv.router.exceptions.NotFoundRouterException;
 import com.tangxiaolv.router.exceptions.RouterException;
+import com.tangxiaolv.router.utils.RLog;
 
 import android.net.Uri;
 import android.text.TextUtils;
 
 class Asker {
 
-    private static final String PREFIX = "com.tangxiaolv.router.module.Mirror_";
-    private static final String PARAMS_SPAER = "?params=";
+    private static final String MIRROR_PREFIX = "com.tangxiaolv.router.module.Mirror_";
+    private static final String URL_PARAMS = "?params=";
 
     private String scheme;
     private String host;
@@ -29,7 +30,7 @@ class Asker {
 
     Asker(String scheme, String host, String path, Map params) {
         if (TextUtils.isEmpty(host) || TextUtils.isEmpty(scheme)) {
-            reject(new NotFoundRouterException(null));
+            reject(new RouterException("scheme or host isEmpty."));
             return;
         }
         this.scheme = scheme;
@@ -41,7 +42,7 @@ class Asker {
     private void parse(String url) {
         try {
             if (TextUtils.isEmpty(url)) {
-                reject(new RouterException(""));
+                reject(new RouterException("url isEmpty."));
                 return;
             }
 
@@ -51,27 +52,28 @@ class Asker {
             host = uri.getHost().toLowerCase();
             path = uri.getPath() == null ? "" : uri.getPath().toLowerCase();
             String s = uri.toString();
-            int index = s.indexOf(PARAMS_SPAER);
+            int index = s.indexOf(URL_PARAMS);
             if (index != -1) {
-                params = s.substring(index + PARAMS_SPAER.length(), s.length());
+                params = s.substring(index + URL_PARAMS.length(), s.length());
             }
         } catch (Exception e) {
-            this._e = new NotFoundRouterException(url);
+            this._e = new NotFoundRouterException("invalid router url: " + url);
         }
     }
 
     void request() {
-        if (_e != null) {
-            reject(_e);
+        if (_e == null) {
+            searchAndInvoke();
             return;
         }
-        searchAndInvoke();
+        reject(_e);
     }
 
     private void searchAndInvoke() {
-        String modlue = PREFIX + scheme + "_" + host;
+        RLog.d("send router url: " + getUrl());
+        String mirror = MIRROR_PREFIX + scheme + "_" + host;
         try {
-            Class<?> clazz = Class.forName(modlue);
+            Class<?> clazz = Class.forName(mirror);
             Method method = clazz.getMethod(
                     "invoke",
                     String.class,
@@ -79,8 +81,11 @@ class Asker {
             ParamsWrapper wrapper = new ParamsWrapper(params);
             wrapper.put("scheme", scheme);
             wrapper.put("promise", promise);
+            // TODO instance Cache
             method.invoke(clazz.newInstance(), path, wrapper);
-        } catch (Exception e) {
+        } catch (ClassNotFoundException e){
+            reject(new NotFoundRouterException("invalid router url: " + getUrl()));
+        }catch (Exception e) {
             reject(e);
         }
     }
@@ -93,5 +98,10 @@ class Asker {
         if (promise != null) {
             promise.reject(e);
         }
+    }
+
+    private String getUrl() {
+        String param = params == null ? "" : params.toString();
+        return scheme + "://" + host + "/" + path + URL_PARAMS + param;
     }
 }

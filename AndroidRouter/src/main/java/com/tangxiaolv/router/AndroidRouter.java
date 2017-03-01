@@ -6,7 +6,7 @@ import java.util.Map;
 import android.os.Handler;
 import android.os.Looper;
 
-public class AndroidRouter {
+public final class AndroidRouter {
 
     static Handler HANDLER = new Handler(Looper.getMainLooper());
 
