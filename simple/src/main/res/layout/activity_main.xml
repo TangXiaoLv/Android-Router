@@ -52,7 +52,7 @@
             android:layout_marginBottom="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="toon2://one?params={'key1':'1','key2':true}"/>
+            android:text="toon2://one?params={'key1':'1','key2':'true'}"/>
 
     <LinearLayout
             android:layout_width="match_parent"

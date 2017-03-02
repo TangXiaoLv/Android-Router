@@ -5,7 +5,6 @@ import com.google.auto.common.SuperficialValidation;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -32,6 +31,7 @@ import com.squareup.javapoet.TypeSpec;
 import com.tangxiaolv.annotations.RouterModule;
 import com.tangxiaolv.annotations.RouterPath;
 
+import static com.tangxiaolv.compiler.PUtils.*;
 import static com.tangxiaolv.compiler.PUtils.isEmpty;
 
 public class AndroidRouterProcessor extends AbstractProcessor {
@@ -137,9 +137,7 @@ public class AndroidRouterProcessor extends AbstractProcessor {
         // constructor build
         MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder();
         constructorBuilder.addModifiers(Modifier.PUBLIC)
-                .addException(NoSuchMethodException.class)
-                .addException(IllegalAccessException.class)
-                .addException(InstantiationException.class);
+                .addException(Exception.class);
 
         // constructor body
         ClassName original = ClassName.get(elementUtils.getPackageOf(moduleEle).toString(),
@@ -155,16 +153,16 @@ public class AndroidRouterProcessor extends AbstractProcessor {
             if (pathAnno == null)
                 continue;
 
-            String types = "";
             String agrs = ((ExecutableElement) elm).getParameters().toString();
+            String types = "";
             String methodParams = elm.toString();
             int start = methodParams.indexOf("(");
             int end = methodParams.indexOf(")");
             if (end - start > 1) {
-                // open1(java.lang.String,com.tangxiaolv.router.Promise) ==>
+                // open1(java.lang.String,com.tangxiaolv.router.Promise) =>
                 // ,java.lang.String.class,com.tangxiaolv.router.Promise.class))
                 types = methodParams.substring(start + 1, end);
-                methodParams = "," + types.replaceAll(",", ".class,") + ".class))";
+                methodParams = "," + getFullTypesString(types) + "))";
             } else {
                 methodParams = "))";
             }
@@ -198,9 +196,7 @@ public class AndroidRouterProcessor extends AbstractProcessor {
                 .returns(void.class)
                 .addParameter(String.class, "path")
                 .addParameter(PARAMS_WRAPPER, "params")
-                .addException(NOT_FOUND_PATH_EXCEPTION)
-                .addException(InvocationTargetException.class)
-                .addException(IllegalAccessException.class);
+                .addException(Exception.class);
 
         // method body
         invokeBuilder.addStatement("$T.invoke(path,params,original,mapping)", MODULE_DELEGATER);
@@ -217,7 +213,7 @@ public class AndroidRouterProcessor extends AbstractProcessor {
                 .addMethod(constructorBuilder.build())
                 // Methods
                 .addMethod(invokeBuilder.build())
-                //doc
+                // doc
                 .addJavadoc(FILE_DOC)
                 .build();
 
@@ -269,9 +265,7 @@ public class AndroidRouterProcessor extends AbstractProcessor {
                     .returns(void.class)
                     .addParameter(String.class, "path")
                     .addParameter(PARAMS_WRAPPER, "params")
-                    .addException(NoSuchMethodException.class)
-                    .addException(InvocationTargetException.class)
-                    .addException(IllegalAccessException.class)
+                    .addException(Exception.class)
                     .addStatement(
                             "main.getClass().getMethod(\"invoke\",String.class,$T.class).invoke(main, path, params)",
                             PARAMS_WRAPPER);
@@ -285,7 +279,7 @@ public class AndroidRouterProcessor extends AbstractProcessor {
                     .addMethod(constructor.build())
                     // Methods
                     .addMethod(invoke.build())
-                    //doc
+                    // doc
                     .addJavadoc(FILE_DOC)
                     .build();
 

@@ -1,11 +1,11 @@
 
 package com.tangxiaolv.router;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,15 +15,22 @@ public class ParamsWrapper extends HashMap<String, Object> {
 
     ParamsWrapper(Object params) throws JSONException {
         if (params instanceof String) {
-            JSONObject jobj = new JSONObject((String) params);
-            Iterator<String> it = jobj.keys();
+            String json = (String) params;
+            // JSONArray
+            if (json.charAt(0) == '[' && json.charAt(json.length() - 1) == ']') {
+                put("params", new JSONArray(json));
+                return;
+            }
+            JSONObject jObj = new JSONObject(json);
+            Iterator<String> it = jObj.keys();
             while (it.hasNext()) {
                 String key = it.next();
-                Object value = jobj.get(key);
-                if (value instanceof Double || value instanceof Float) {
-                    BigDecimal db = new BigDecimal(value.toString());
-                    value = db.toPlainString();
-                }
+                Object value = jObj.get(key);
+                //TODO maybe need parse
+                // if (value instanceof Double || value instanceof Float) {
+                // BigDecimal db = new BigDecimal(value.toString());
+                // value = db.toPlainString();
+                // }
                 put(key, value);
             }
         } else if (params instanceof Map) {

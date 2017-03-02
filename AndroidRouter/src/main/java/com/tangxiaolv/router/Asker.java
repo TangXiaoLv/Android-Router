@@ -8,9 +8,12 @@ import java.util.Map;
 import com.tangxiaolv.router.exceptions.NotFoundRouterException;
 import com.tangxiaolv.router.exceptions.RouterException;
 import com.tangxiaolv.router.utils.RLog;
+import com.tangxiaolv.router.utils.ReflectTool;
 
 import android.net.Uri;
 import android.text.TextUtils;
+
+import org.json.JSONException;
 
 class Asker {
 
@@ -78,16 +81,21 @@ class Asker {
                     "invoke",
                     String.class,
                     ParamsWrapper.class);
-            ParamsWrapper wrapper = new ParamsWrapper(params);
-            wrapper.put("scheme", scheme);
-            wrapper.put("promise", promise);
             // TODO instance Cache
-            method.invoke(clazz.newInstance(), path, wrapper);
+            method.invoke(clazz.newInstance(), path, createParamsWrapper(params));
         } catch (ClassNotFoundException e){
             reject(new NotFoundRouterException("invalid router url: " + getUrl()));
         }catch (Exception e) {
             reject(e);
         }
+    }
+
+    private ParamsWrapper createParamsWrapper(Object params) throws JSONException {
+        ParamsWrapper wrapper = new ParamsWrapper(params);
+        wrapper.put("scheme", scheme);
+        wrapper.put("promise", promise);
+        wrapper.put("context", ReflectTool.getApplication());
+        return wrapper;
     }
 
     void setPromise(Promise promise) {

@@ -1,12 +1,11 @@
 
 package com.tangxiaolv.router;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
 import com.tangxiaolv.router.exceptions.NotFoundPathException;
-import com.tangxiaolv.router.utils.SafeCase;
+import com.tangxiaolv.router.utils.ValueParser;
 
 public class ModuleDelegater {
 
@@ -15,7 +14,7 @@ public class ModuleDelegater {
     public static final String _TYPES = "_TYPES";
 
     public static void invoke(String path, ParamsWrapper params, Object target,
-            Map<String, Object> mapping) throws InvocationTargetException, IllegalAccessException {
+            Map<String, Object> mapping) throws Exception {
         Method method = (Method) mapping.get(path + _METHOD);
         if (method == null) {
             throw new NotFoundPathException("path not found: " + path);
@@ -30,12 +29,12 @@ public class ModuleDelegater {
                 String[] typeNames = types.split(",");
                 Object[] arr = new Object[agrNames.length];
                 for (int i = 0; i < agrNames.length; i++) {
-                    arr[i] = SafeCase.getValue(params.get(agrNames[i]), typeNames[i]);
+                    arr[i] = ValueParser.parse(params.get(agrNames[i]), typeNames[i]);
                 }
                 method.invoke(target, arr);
                 return;
             }
-            method.invoke(target, SafeCase.getValue(args, types));
+            method.invoke(target, ValueParser.parse(args, types));
             return;
         }
         method.invoke(target);

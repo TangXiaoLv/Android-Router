@@ -7,7 +7,7 @@ import com.tangxiaolv.router.BuildConfig;
 
 public final class RLog {
     private static final String TAG = "AndroidRouter";
-    private static boolean DEBUG = BuildConfig.DEBUG;
+    private static boolean DEBUG = true;
 
     public static void e(String msg, Object... args) {
         if (DEBUG) {

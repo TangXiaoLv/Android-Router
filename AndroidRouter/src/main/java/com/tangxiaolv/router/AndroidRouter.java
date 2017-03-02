@@ -6,6 +6,11 @@ import java.util.Map;
 import android.os.Handler;
 import android.os.Looper;
 
+/**
+ * Android Router
+ * <p>
+ * scheme://host/path?params=json
+ */
 public final class AndroidRouter {
 
     static Handler HANDLER = new Handler(Looper.getMainLooper());
