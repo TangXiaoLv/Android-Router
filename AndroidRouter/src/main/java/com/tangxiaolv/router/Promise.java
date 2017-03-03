@@ -2,42 +2,43 @@
 package com.tangxiaolv.router;
 
 import android.os.Looper;
-import android.os.SystemClock;
 import android.text.TextUtils;
 
 import com.tangxiaolv.router.exceptions.RouterException;
 
-public final class Promise {
+class Promise {
 
     private final Asker asker;
+    private final RPromise mRPromise;
     private Resolve resolve;
     private Reject reject;
     private String tag;
 
     Promise(Asker asker) {
         this.asker = asker;
+        this.mRPromise = new RPromise(this);
         if (asker != null) asker.setPromise(this);
     }
 
-    public void call() {
+    void call() {
         call(null, null);
     }
 
-    public void call(Resolve resolve) {
+    void call(Resolve resolve) {
         call(resolve, null);
     }
 
-    public void call(Reject reject) {
+    void call(Reject reject) {
         call(null, reject);
     }
 
-    public void call(Resolve resolve, Reject reject) {
+    void call(Resolve resolve, Reject reject) {
         this.resolve = resolve;
         this.reject = reject;
         if (asker != null) asker.request();
     }
 
-    public void resolve(final Object result) {
+    void resolve(final Object result) {
         if (resolve == null)
             return;
         if (Looper.myLooper() == Looper.getMainLooper()) {
@@ -52,7 +53,7 @@ public final class Promise {
         }
     }
 
-    public void reject(Exception e) {
+    void reject(Exception e) {
         if (e == null)
             e = new RouterException("unkownException");
         e.printStackTrace();
@@ -71,10 +72,14 @@ public final class Promise {
         }
     }
 
-    public String getTag() {
+    RPromise getRPromise() {
+        return mRPromise;
+    }
+
+    String getTag() {
         if (TextUtils.isEmpty(tag)) {
             tag = RouterHelper.getInstance().genPromiseTag();
-            RouterHelper.getInstance().addToPromisePool(tag,this);
+            RouterHelper.getInstance().addToPromisePool(tag, mRPromise);
         }
         return tag;
     }

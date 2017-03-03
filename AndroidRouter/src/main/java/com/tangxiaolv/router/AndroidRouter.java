@@ -5,10 +5,6 @@ import java.util.Map;
 
 import android.text.TextUtils;
 
-import com.tangxiaolv.router.module.ModuleDelegater;
-
-import static android.R.attr.tag;
-
 /**
  * Android Router Facade.
  *
@@ -16,17 +12,21 @@ import static android.R.attr.tag;
  */
 public final class AndroidRouter {
 
-    public static Promise open(String url) {
-        return new Promise(new Asker(url));
+    public static CPromise open(String url) {
+        Promise promise = new Promise(new Asker(url));
+        return new CPromise(promise);
     }
 
-    public static Promise open(String scheme, String host, String path, Map<String, Object> params) {
-        return new Promise(new Asker(scheme, host, path, params));
+    public static CPromise open(String scheme, String host, String path, Map<String, Object> params) {
+        Promise promise = new Promise(new Asker(scheme, host, path, params));
+        return new CPromise(promise);
     }
 
-    public static Promise popPromiseByTag(String tag) {
+    public static RPromise popPromiseByTag(String tag) {
+        if (TextUtils.isEmpty(tag)) return null;
         return RouterHelper.getInstance().popPromiseByTag(tag);
     }
+
     public static void removePromiseByTag(String tag) {
         RouterHelper.getInstance().removePromiseByTag(tag);
     }

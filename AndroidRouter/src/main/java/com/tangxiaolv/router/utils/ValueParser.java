@@ -121,7 +121,7 @@ public class ValueParser {
             try {
                 JSONArray jArray = input instanceof String ? new JSONArray((String) input)
                         : (JSONArray) input;
-                String genericity = getListGenericity(expectType);
+                String genericity = getListGeneric(expectType);
                 ArrayList<Object> list = new ArrayList<>(jArray.length());
                 int length = jArray.length();
                 for (int i = 0; i < length; i++) {
@@ -163,7 +163,7 @@ public class ValueParser {
             try {
                 JSONObject jObj = input instanceof String ? new JSONObject((String) input)
                         : (JSONObject) input;
-                Class<?> clazz = Class.forName(expectType);
+                Class<?> clazz = Class.forName(getNoGenericClassName(expectType));
                 Object instance = clazz.newInstance();
                 Iterator<String> it = jObj.keys();
                 while (it.hasNext()) {
@@ -183,11 +183,11 @@ public class ValueParser {
         return input;
     }
 
-    private static String getListGenericity(String type) {
+    private static String getListGeneric(String type) {
         if (type.contains("<")) {
-            type = type.substring(type.indexOf("<") + 1, type.indexOf(">"));
+            return type.substring(type.indexOf("<") + 1, type.indexOf(">"));
         }
-        return type;
+        return "";
     }
 
     private static String[] getMapGenericity(String type) {
@@ -196,6 +196,15 @@ public class ValueParser {
         }
         return null;
     }
+
+    private static String getNoGenericClassName(String className) {
+        int index = className.indexOf("<");
+        if (index != -1) {
+            className = className.substring(0, index);
+        }
+        return className;
+    }
+
 
     // eg => List<Simple>
     @SuppressWarnings("all")

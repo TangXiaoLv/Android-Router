@@ -9,19 +9,19 @@ import java.util.HashMap;
 class RouterCachePool {
 
     private final LruCache<String, IMirror> mirrorPool = new LruCache<>(20);
-    private final HashMap<String, Promise> promisePool = new HashMap<>();
+    private final HashMap<String, RPromise> promisePool = new HashMap<>();
 
-    synchronized void addToPromisePool(String tag, Promise p) {
-        if (tag != null)
+    synchronized void addToPromisePool(String tag, RPromise p) {
+        if (tag != null && p != null)
             promisePool.put(tag, p);
     }
 
-    synchronized Promise popPromise(String tag) {
+    synchronized RPromise popPromise(String tag) {
         return promisePool.remove(tag);
     }
 
     synchronized void addToMirrorPool(String key, IMirror m) {
-        if (key != null && m != null && mirrorPool.get(key) != null)
+        if (key != null && m != null && mirrorPool.get(key) == null)
             mirrorPool.put(key, m);
     }
 

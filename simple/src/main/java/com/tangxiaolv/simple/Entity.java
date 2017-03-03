@@ -3,6 +3,8 @@ package com.tangxiaolv.simple;
 
 import java.util.List;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+
 public class Entity {
 
     private String key1;

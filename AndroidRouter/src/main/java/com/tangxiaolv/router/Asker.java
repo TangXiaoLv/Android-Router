@@ -27,7 +27,6 @@ class Asker {
     private Object params;
     private Promise promise;
     private Exception _e;
-    private Method targetMethod;
 
     Asker(String url) {
         parse(url);
@@ -78,14 +77,11 @@ class Asker {
         RLog.d("send router url: " + getUrl());
         String mirror = MIRROR_PREFIX + scheme + "_" + host;
         try {
-            Class<?> clazz = null;
-            if (targetMethod == null) {
-                clazz = Class.forName(mirror);
-                targetMethod = clazz.getMethod("invoke", String.class, ParamsWrapper.class);
-            }
+            Class<?> clazz = Class.forName(mirror);
+            Method targetMethod = clazz.getMethod("invoke", String.class, ParamsWrapper.class);
             //find from cache pool
             IMirror target = RouterHelper.getInstance().findMirrorByKey(mirror);
-            if (target == null && clazz != null) {
+            if (target == null) {
                 target = (IMirror) clazz.newInstance();
                 RouterHelper.getInstance().addToMirrorPool(mirror, target);
             }
@@ -100,7 +96,7 @@ class Asker {
     private ParamsWrapper createParamsWrapper(Object params) throws JSONException {
         ParamsWrapper wrapper = new ParamsWrapper(params);
         wrapper.put("scheme", scheme);
-        wrapper.put("promise", promise);
+        wrapper.put("promise", promise.getRPromise());
         wrapper.put("context", ReflectTool.getApplication());
         return wrapper;
     }
