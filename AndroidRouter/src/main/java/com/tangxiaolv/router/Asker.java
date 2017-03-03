@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.tangxiaolv.router.exceptions.NotFoundRouterException;
 import com.tangxiaolv.router.exceptions.RouterException;
+import com.tangxiaolv.router.interfaces.IMirror;
 import com.tangxiaolv.router.utils.RLog;
 import com.tangxiaolv.router.utils.ReflectTool;
 
@@ -26,6 +27,7 @@ class Asker {
     private Object params;
     private Promise promise;
     private Exception _e;
+    private Method targetMethod;
 
     Asker(String url) {
         parse(url);
@@ -76,16 +78,21 @@ class Asker {
         RLog.d("send router url: " + getUrl());
         String mirror = MIRROR_PREFIX + scheme + "_" + host;
         try {
-            Class<?> clazz = Class.forName(mirror);
-            Method method = clazz.getMethod(
-                    "invoke",
-                    String.class,
-                    ParamsWrapper.class);
-            // TODO instance Cache
-            method.invoke(clazz.newInstance(), path, createParamsWrapper(params));
-        } catch (ClassNotFoundException e){
+            Class<?> clazz = null;
+            if (targetMethod == null) {
+                clazz = Class.forName(mirror);
+                targetMethod = clazz.getMethod("invoke", String.class, ParamsWrapper.class);
+            }
+            //find from cache pool
+            IMirror target = RouterHelper.getInstance().findMirrorByKey(mirror);
+            if (target == null && clazz != null) {
+                target = (IMirror) clazz.newInstance();
+                RouterHelper.getInstance().addToMirrorPool(mirror, target);
+            }
+            targetMethod.invoke(target, path, createParamsWrapper(params));
+        } catch (ClassNotFoundException e) {
             reject(new NotFoundRouterException("invalid router url: " + getUrl()));
-        }catch (Exception e) {
+        } catch (Exception e) {
             reject(e);
         }
     }

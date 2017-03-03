@@ -1,7 +1,7 @@
 
 package com.tangxiaolv.compiler;
 
-class PUtils {
+class ARUtils {
 
     static boolean isEmpty(String s) {
         return s == null || s.length() == 0;

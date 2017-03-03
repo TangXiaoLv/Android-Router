@@ -19,8 +19,8 @@ public class ValueParser {
 
     /**
      * parse value to expect type.
-     * 
-     * @param input input
+     *
+     * @param input        input
      * @param expectedType expected type. like 'java.lang.Integer'
      * @return expected value
      */

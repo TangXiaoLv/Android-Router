@@ -3,19 +3,18 @@ package com.tangxiaolv.simple;
 
 import java.util.List;
 
-public class Entity {
+public class Entity_2 {
 
     private String key1;
     private int key2;
     private boolean key3;
     private float key4;
     private List<Entity_1> key5;
-    private Entity_2 key6;
 
-    public Entity() {
+    public Entity_2() {
     }
 
-    public Entity(String key1, int key2, boolean key3, float key4) {
+    public Entity_2(String key1, int key2, boolean key3, float key4) {
         this.key1 = key1;
         this.key2 = key2;
         this.key3 = key3;
@@ -60,13 +59,5 @@ public class Entity {
 
     public void setKey5(List<Entity_1> key5) {
         this.key5 = key5;
-    }
-
-    public Entity_2 getKey6() {
-        return key6;
-    }
-
-    public void setKey6(Entity_2 key6) {
-        this.key6 = key6;
     }
 }

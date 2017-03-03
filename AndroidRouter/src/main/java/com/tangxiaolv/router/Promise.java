@@ -2,19 +2,21 @@
 package com.tangxiaolv.router;
 
 import android.os.Looper;
+import android.os.SystemClock;
+import android.text.TextUtils;
 
 import com.tangxiaolv.router.exceptions.RouterException;
-import com.tangxiaolv.router.utils.RLog;
 
 public final class Promise {
 
     private final Asker asker;
     private Resolve resolve;
     private Reject reject;
+    private String tag;
 
     Promise(Asker asker) {
         this.asker = asker;
-        asker.setPromise(this);
+        if (asker != null) asker.setPromise(this);
     }
 
     public void call() {
@@ -32,7 +34,7 @@ public final class Promise {
     public void call(Resolve resolve, Reject reject) {
         this.resolve = resolve;
         this.reject = reject;
-        asker.request();
+        if (asker != null) asker.request();
     }
 
     public void resolve(final Object result) {
@@ -41,7 +43,7 @@ public final class Promise {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             resolve.call(result);
         } else {
-            AndroidRouter.HANDLER.post(new Runnable() {
+            RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
                     resolve.call(result);
@@ -60,12 +62,20 @@ public final class Promise {
             reject.call(e);
         } else {
             final Exception _e = e;
-            AndroidRouter.HANDLER.post(new Runnable() {
+            RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
                     reject.call(_e);
                 }
             });
         }
+    }
+
+    public String getTag() {
+        if (TextUtils.isEmpty(tag)) {
+            tag = RouterHelper.getInstance().genPromiseTag();
+            RouterHelper.getInstance().addToPromisePool(tag,this);
+        }
+        return tag;
     }
 }

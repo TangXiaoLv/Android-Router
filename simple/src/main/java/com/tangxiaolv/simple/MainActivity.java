@@ -50,14 +50,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String url = input.getText().toString();
-                try {
-
-                    Entity entity1 = new Gson().fromJson(
-                            "{\"key4\":4,\"key3\":false,\"key5\":[{\"key4\":4,\"key3\":false,\"key2\":2,\"key1\":\"1\"},{\"key4\":4,\"key3\":false,\"key2\":2,\"key1\":\"1\"},{\"key4\":4,\"key3\":false,\"key2\":2,\"key1\":\"1\"}],\"key2\":2,\"key1\":\"1\"}",
-                            Entity.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 if (TextUtils.isEmpty(url)) {
                     Entity entity = new Entity("1", 2, false, 4);
                     ArrayList<Entity_1> list = new ArrayList<>();
@@ -65,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
                     list.add(new Entity_1("1", 2, false, 4));
                     list.add(new Entity_1("1", 2, false, 4));
                     entity.setKey5(list);
+
+                    Entity_2 entity_2 = new Entity_2("1", 2, false, 4);
+                    entity_2.setKey5(list);
+                    entity.setKey6(entity_2);
 
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("entity", entity);

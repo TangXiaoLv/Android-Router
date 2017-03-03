@@ -3,27 +3,15 @@ package com.tangxiaolv.simple;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.JsonToken;
 
-import com.tangxiaolv.annotations.RouterPath;
 import com.tangxiaolv.annotations.RouterModule;
+import com.tangxiaolv.annotations.RouterPath;
+import com.tangxiaolv.router.AndroidRouter;
 import com.tangxiaolv.router.Promise;
 
-import org.json.JSONObject;
-import org.json.JSONStringer;
-import org.json.JSONTokener;
-
 import java.util.List;
-import java.util.Map;
 
-import static android.R.attr.name;
-import static android.R.attr.scheme;
-import static android.R.id.list;
-
-/**
- * Hell
- */
-@RouterModule(scheme = "toon|toon2|toon3", host = "one")
+@RouterModule(scheme = "toon", host = "one")
 public class Module {
 
     @RouterPath
@@ -37,13 +25,13 @@ public class Module {
     }
 
     @RouterPath("/openOne2")
-    public void open2(Activity activity, String name, int age, String scheme,
+    public void open2(String name, int age, String scheme,
             final Promise promise) {
         promise.resolve(null);
     }
 
     @RouterPath("/entity")
-    public void open3(Map<String, String> entity, Promise promise) {
+    public void open3(Entity entity, Promise promise) {
         promise.resolve(entity.toString());
     }
 
@@ -54,5 +42,6 @@ public class Module {
 
     @RouterPath("/empty")
     public void open3(Promise promise) {
+        String tag = promise.getTag();
     }
 }

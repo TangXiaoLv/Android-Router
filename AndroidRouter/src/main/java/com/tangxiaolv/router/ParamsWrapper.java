@@ -46,6 +46,7 @@ public class ParamsWrapper extends HashMap<String, Object> {
         return super.get(key);
     }
 
+    @SuppressWarnings("all")
     @Override
     public Object put(String key, Object value) {
         if (params != null) {
