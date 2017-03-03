@@ -8,7 +8,7 @@ import com.tangxiaolv.router.ParamsWrapper;
 import com.tangxiaolv.router.exceptions.NotFoundPathException;
 import com.tangxiaolv.router.utils.ValueParser;
 
-public class ModuleDelegater {
+class ModuleDelegater {
 
     static final String _METHOD = "_METHOD";
     static final String _ARGS = "_AGRS";

@@ -40,7 +40,7 @@ public class ValueParser {
         } else if (expectedType.contains("java.util.Map")) {
             input = toMap(input, expectedType);
         } else if (!"java.lang.Object".equals(expectedType)) {
-            input = toCustomObj(input, expectedType);
+            input = toTargetObj(input, expectedType);
         }
         return input;
     }
@@ -116,7 +116,7 @@ public class ValueParser {
     }
 
     // maybe List<?>
-    private static Object toList(Object input, String expectType) {
+    private static Object toList(Object input, String expectType) throws Exception {
         if (input instanceof String || input instanceof JSONArray) {
             try {
                 JSONArray jArray = input instanceof String ? new JSONArray((String) input)
@@ -135,6 +135,13 @@ public class ValueParser {
                 input = list;
             } catch (Exception ignored) {
             }
+        } else if (input != null && input instanceof List) {
+            List origin = (List) input;
+            List<Object> target = new ArrayList<>();
+            for (Object o : origin) {
+                target.add(parseObjToTarget(o, getListGeneric(expectType)));
+            }
+            input = target;
         }
         return input;
     }
@@ -158,27 +165,59 @@ public class ValueParser {
         return input;
     }
 
-    private static Object toCustomObj(Object input, String expectType) throws Exception {
+    private static Object toTargetObj(Object input, String expectType) throws Exception {
         if (input instanceof String || input instanceof JSONObject) {
-            try {
-                JSONObject jObj = input instanceof String ? new JSONObject((String) input)
-                        : (JSONObject) input;
-                Class<?> clazz = Class.forName(getNoGenericClassName(expectType));
-                Object instance = clazz.newInstance();
-                Iterator<String> it = jObj.keys();
-                while (it.hasNext()) {
-                    String key = it.next();
-                    Field f = clazz.getDeclaredField(key);
-                    if (f != null) {
-                        String name = f.getName();
-                        String type = getFullTypeName(f);
-                        f.setAccessible(true);
-                        f.set(instance, parse(jObj.get(name), type));
-                    }
+            input = parseJsonToObj(input, expectType);
+        } else if (input != null && !expectType.equalsIgnoreCase(input.getClass().getName())) {
+            input = parseObjToTarget(input, expectType);
+        }
+        return input;
+    }
+
+    //json => obj
+    private static Object parseJsonToObj(Object input, String expectType) throws Exception {
+        try {
+            JSONObject jObj = input instanceof String ? new JSONObject((String) input)
+                    : (JSONObject) input;
+            Class<?> clazz = Class.forName(getNoGenericClassName(expectType));
+            Object target = clazz.newInstance();
+            Iterator<String> it = jObj.keys();
+            while (it.hasNext()) {
+                String key = it.next();
+                Field f = clazz.getDeclaredField(key);
+                if (f != null) {
+                    String name = f.getName();
+                    String type = getListFullTypeName(f);
+                    f.setAccessible(true);
+                    f.set(target, parse(jObj.get(name), type));
                 }
-                input = instance;
-            } catch (JSONException ignored) {
             }
+            input = target;
+        } catch (JSONException ignored) {
+        }
+        return input;
+    }
+
+    //from obj => to obj
+    private static Object parseObjToTarget(Object input, String expectType) throws Exception {
+        try {
+            Class<?> clazz = Class.forName(getNoGenericClassName(expectType));
+            Object target = clazz.newInstance();
+
+            Field[] fromFields = input.getClass().getDeclaredFields();
+            for (Field fromField : fromFields) {
+                fromField.setAccessible(true);
+                String fromName = fromField.getName();
+                Object fromValue = fromField.get(input);
+                try {
+                    Field toField = clazz.getDeclaredField(fromName);
+                    toField.setAccessible(true);
+                    toField.set(target, parse(fromValue, getListFullTypeName(toField)));
+                } catch (NoSuchFieldException ignored) {
+                }
+            }
+            input = target;
+        } catch (JSONException ignored) {
         }
         return input;
     }
@@ -208,7 +247,7 @@ public class ValueParser {
 
     // eg => List<Simple>
     @SuppressWarnings("all")
-    private static String getFullTypeName(Field f) {
+    private static String getListFullTypeName(Field f) {
         String type = f.getType().getName();
         Class fieldType = f.getType();
         if (fieldType.isAssignableFrom(List.class)) {

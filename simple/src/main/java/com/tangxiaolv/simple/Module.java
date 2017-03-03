@@ -25,17 +25,17 @@ public class Module {
     }
 
     @RouterPath("/openOne2")
-    public void open2(String name, int age, String scheme, final RPromise promise) {
-        promise.resolve(null);
+    public void open2(A entity, final RPromise promise) {
+        promise.resolve(entity.toString());
     }
 
     @RouterPath("/entity")
-    public void open3(Entity entity, RPromise promise) {
+    public void open3(A entity, RPromise promise) {
         promise.resolve(entity.toString());
     }
 
     @RouterPath("/list")
-    public void open3(List<Entity> params, RPromise promise) {
+    public void open3(List<A> params, RPromise promise) {
         promise.resolve(params.toString());
     }
 

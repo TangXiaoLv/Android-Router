@@ -3,11 +3,8 @@ package com.tangxiaolv.simple;
 
 import com.google.gson.Gson;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.tangxiaolv.router.AndroidRouter;
@@ -16,18 +13,13 @@ import com.tangxiaolv.router.Resolve;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.ArrayMap;
-import android.util.JsonToken;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import static android.R.attr.type;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,19 +44,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String url = input.getText().toString();
                 if (TextUtils.isEmpty(url)) {
-                    Entity entity = new Entity("1", 2, false, 4);
-                    ArrayList<Entity_1> list = new ArrayList<>();
-                    list.add(new Entity_1("1", 2, false, 4));
-                    list.add(new Entity_1("1", 2, false, 4));
-                    list.add(new Entity_1("1", 2, false, 4));
-                    entity.setKey5(list);
+                    A a = new A("1", 2, false, 4);
+                    ArrayList<B> list = new ArrayList<>();
+                    list.add(new B("1", 2, false, 4));
+                    list.add(new B("1", 2, false, 4));
+                    list.add(new B("1", 2, false, 4));
+                    a.setKey5(list);
 
-                    Entity_2 entity_2 = new Entity_2("1", 2, false, 4);
-                    entity_2.setKey5(list);
-                    entity.setKey6(entity_2);
+                    C c = new C("1", 2, false, 4);
+                    c.setKey5(list);
+                    a.setKey6(c);
 
                     HashMap<String, Object> map = new HashMap<>();
-                    map.put("entity", entity);
+                    map.put("entity", a);
                     url = "toon://one/entity?params=" + new Gson().toJson(map);
                     // url = "toon://one/list?params=" + new Gson().toJson(list);
                     input.setText(url);
@@ -105,7 +97,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Map<String, Object> params = new HashMap<>();
-                params.put("activity", MainActivity.this);
+
+                B b = new B("1", 2, false, 4);
+                ArrayList<A> list = new ArrayList<>();
+                list.add(new A("1", 2, false, 4));
+                list.add(new A("1", 2, false, 4));
+                list.add(new A("1", 2, false, 4));
+                b.setKey5(list);
+                b.setKey6(new D("1", 2, false, 4));
+                params.put("entity", b);
                 AndroidRouter.open("toon", "one", "/openOne2", params).call(new Resolve() {
                     @Override
                     public void call(Object object) {
