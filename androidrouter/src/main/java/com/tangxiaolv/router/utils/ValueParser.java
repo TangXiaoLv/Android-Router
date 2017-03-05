@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Parse tool of type, input type to expected type.
+ * Parse tool parameter, input type to expected type.
  */
 public class ValueParser {
 

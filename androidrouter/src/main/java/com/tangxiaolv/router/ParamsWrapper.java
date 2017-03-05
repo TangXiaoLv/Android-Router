@@ -12,6 +12,11 @@ import org.json.JSONObject;
 
 import static android.R.attr.value;
 
+/**
+ * Params wrap
+ *
+ * {@link Asker}
+ */
 public class ParamsWrapper {
 
     private static final String _PARAMS_ = "_params_";

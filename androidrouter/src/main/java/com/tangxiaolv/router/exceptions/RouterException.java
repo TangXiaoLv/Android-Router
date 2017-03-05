@@ -1,6 +1,9 @@
 
 package com.tangxiaolv.router.exceptions;
 
+/**
+ * Router Exception
+ */
 public class RouterException extends Exception {
 
     public RouterException() {

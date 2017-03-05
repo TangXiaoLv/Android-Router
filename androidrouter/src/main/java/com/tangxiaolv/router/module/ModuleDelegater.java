@@ -7,17 +7,26 @@ import java.util.Map;
 
 import com.tangxiaolv.router.ParamsWrapper;
 import com.tangxiaolv.router.exceptions.NotFoundPathException;
+import com.tangxiaolv.router.exceptions.RouterRemoteException;
 import com.tangxiaolv.router.exceptions.ValueParseException;
 import com.tangxiaolv.router.utils.ValueParser;
 
+import static android.R.attr.path;
+
+/**
+ * Invoked by mirror impl {@link com.tangxiaolv.router.interfaces.IMirror}
+ */
 class ModuleDelegater {
 
     static final String _METHOD = "_METHOD";
     static final String _ARGS = "_AGRS";
     static final String _TYPES = "_TYPES";
 
-    static void invoke(String path, ParamsWrapper params, Object target,
-                       Map<String, Object> mapping) throws ValueParseException, InvocationTargetException, IllegalAccessException {
+    static void invoke(String path, ParamsWrapper params, Object target, Map<String, Object> mapping)
+            throws
+            ValueParseException,
+            InvocationTargetException,
+            IllegalAccessException{
         Method method = (Method) mapping.get(path + _METHOD);
         if (method == null) {
             throw new NotFoundPathException("path not found: " + path);

@@ -1,5 +1,8 @@
 package com.tangxiaolv.router.exceptions;
 
+/**
+ * Router params parser exception {@link com.tangxiaolv.router.utils.ValueParser}
+ */
 public class ValueParseException extends Exception {
 
     public ValueParseException() {

@@ -6,43 +6,59 @@ import android.content.Context;
 import com.tangxiaolv.annotations.RouterModule;
 import com.tangxiaolv.annotations.RouterPath;
 import com.tangxiaolv.router.AndroidRouter;
-import com.tangxiaolv.router.CPromise;
 import com.tangxiaolv.router.VPromise;
+import com.tangxiaolv.router.exceptions.RouterException;
+import com.tangxiaolv.router.interfaces.IRouter;
 import com.tangxiaolv.simple.entity.A;
+import com.tangxiaolv.simple.entity.B;
 
 import java.util.List;
 
-/*android://main?params=json*/
 @RouterModule(scheme = "android", host = "main")
-public class MainModule {
+public class MainModule implements IRouter {
 
-    //TODO 打包参数
-
+    /**
+     * no path router.
+     *
+     * Router => android://main
+     *
+     * @param context {@link android.app.Application}
+     * @param scheme  router scheme
+     * @param promise {@link VPromise}
+     */
     @RouterPath
     public void def(Context context, String scheme, VPromise promise) {
-        promise.resolve(scheme);
+        promise.resolve("from def ");
+
+        String tag = promise.getTag();
+        AndroidRouter.findPromiseByTag(tag).reject(new RouterException());
     }
 
-    @RouterPath("/activity/LocalActivity")
+    /*Router => android://main/activity/localActivity*/
+    @RouterPath("/activity/localActivity")
     public void openLocalActivity(String scheme, Context context, VPromise promise) {
     }
 
-    @RouterPath("/params/")
-    public void open3(A entity, VPromise promise) {
-        promise.resolve(entity.toString());
+    /**
+     * from jsonObject
+     *
+     * Router => android://main/params/localActivity?params={'f':1,'i':2,'l':3,'d':4,'b':true}
+     */
+    @RouterPath("/params/basis")
+    public void paramsBasis(float f, int i, long l, double d, boolean b,
+                            String scheme, Context context, VPromise promise) {
     }
 
-    @RouterPath("/params/")
-    public void open3(List<A> _params_, VPromise promise) {
-        promise.resolve(_params_.toString());
+    @RouterPath("/params/complex")
+    public void paramsComplex(B b, List<A> _params_, VPromise promise) {
     }
 
-    @RouterPath("/pakegeParames")
-    public void open3() {
-        String tag = AndroidRouter.open("www:///").getTag();
+    @RouterPath("/parames/pakege")
+    public void paramsPakege() {
+    }
 
-        CPromise open = AndroidRouter.open("www:///");
-        VPromise vPromise = AndroidRouter.popPromiseByTag(tag);
-
+    //from jsonArray
+    @RouterPath("/jsonArray")
+    public void jsonArray(List<A> _params_, VPromise promise) {
     }
 }

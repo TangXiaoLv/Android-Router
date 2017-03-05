@@ -1,6 +1,9 @@
 
 package com.tangxiaolv.router.exceptions;
 
+/**
+ * Router Exception: undefined router
+ */
 public class NotFoundRouterException extends Exception {
 
 

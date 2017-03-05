@@ -1,7 +1,7 @@
 package com.tangxiaolv.router;
 
 /**
- * Promise {@link Promise#call} Proxy
+ * Proxy of {@link Promise}
  */
 public class CPromise {
 
@@ -25,9 +25,5 @@ public class CPromise {
 
     public void call(Resolve resolve, Reject reject) {
         target.call(resolve, reject);
-    }
-
-    public String getTag() {
-        return target.getTag();
     }
 }

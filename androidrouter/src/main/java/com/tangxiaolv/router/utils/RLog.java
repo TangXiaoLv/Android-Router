@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.tangxiaolv.router.BuildConfig;
 
+/**
+ * Router log
+ */
 public final class RLog {
     private static final String TAG = "AndroidRouter";
     private static boolean DEBUG = BuildConfig.DEBUG;

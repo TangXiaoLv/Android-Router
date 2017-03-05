@@ -6,6 +6,9 @@ import android.text.TextUtils;
 
 import com.tangxiaolv.router.exceptions.RouterException;
 
+/**
+ * Manage router send and receive.
+ */
 class Promise {
 
     private final Asker asker;
@@ -20,18 +23,36 @@ class Promise {
         if (asker != null) asker.setPromise(this);
     }
 
+    /**
+     * No want to receive.
+     */
     void call() {
         call(null, null);
     }
 
+    /**
+     * Send router.Only receive success.
+     *
+     * @param resolve {@link Promise}
+     */
     void call(Resolve resolve) {
         call(resolve, null);
     }
 
+    /**
+     * Send router.Only receive fail.
+     *
+     * @param reject {@link Promise}
+     */
     void call(Reject reject) {
         call(null, reject);
     }
 
+    /**
+     * Send router.receive success and fail.
+     *
+     * @param resolve {@link Promise}
+     */
     void call(Resolve resolve, Reject reject) {
         this.resolve = resolve;
         this.reject = reject;
@@ -76,6 +97,11 @@ class Promise {
         return mVPromise;
     }
 
+    /**
+     * Used by {@link AndroidRouter#findPromiseByTag(String)}
+     *
+     * @return Tag of {@link Promise}
+     */
     String getTag() {
         if (TextUtils.isEmpty(tag)) {
             tag = RouterHelper.getInstance().genPromiseTag();

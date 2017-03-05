@@ -6,6 +6,9 @@ import com.tangxiaolv.router.interfaces.IMirror;
 
 import java.util.HashMap;
 
+/**
+ * Cache pool of {@link Promise} and {@link IMirror}
+ */
 class RouterCachePool {
 
     private final LruCache<String, IMirror> mirrorPool = new LruCache<>(20);

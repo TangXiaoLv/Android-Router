@@ -22,7 +22,7 @@ buildscript {
 
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
 }
 
@@ -43,7 +43,7 @@ ext {
 
     publishedGroupId = group
     libraryName = project.property('LIBRARY_NAME')
-    artifact = project.property('ARTIFACT_ID')//必须跟Model名一样
+    artifact = project.property('ARTIFACT_ID')
 
     libraryDescription = project.property('LIBRARY_DESCRIPTION')
 

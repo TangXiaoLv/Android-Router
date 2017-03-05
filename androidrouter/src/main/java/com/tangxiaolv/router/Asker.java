@@ -16,6 +16,9 @@ import android.text.TextUtils;
 
 import org.json.JSONException;
 
+/**
+ * Parse url and invoke {@link IMirror}
+ */
 class Asker {
 
     private static final String MIRROR_PREFIX = "com.tangxiaolv.router.module.Mirror_";
@@ -28,6 +31,9 @@ class Asker {
     private Promise promise;
     private Exception _e;
 
+    /**
+     * @param url scheme://host/path?params=json
+     */
     Asker(String url) {
         parse(url);
     }
@@ -38,8 +44,8 @@ class Asker {
             return;
         }
         this.scheme = scheme;
-        this.host = host.toLowerCase();
-        this.path = path == null ? "" : path.toLowerCase();
+        this.host = host.toLowerCase();//ignore case
+        this.path = path == null ? "" : path.toLowerCase();//ignore case
         this.params = params;
     }
 
@@ -53,8 +59,8 @@ class Asker {
             String decodeUrl = URLDecoder.decode(url, "utf-8");
             Uri uri = Uri.parse(decodeUrl);
             scheme = uri.getScheme();
-            host = uri.getHost().toLowerCase();
-            path = uri.getPath() == null ? "" : uri.getPath().toLowerCase();
+            host = uri.getHost().toLowerCase();//ignore case
+            path = uri.getPath() == null ? "" : uri.getPath().toLowerCase();//ignore case
             String s = uri.toString();
             int index = s.indexOf(URL_PARAMS);
             if (index != -1) {
@@ -65,6 +71,10 @@ class Asker {
         }
     }
 
+
+    /**
+     * real send router
+     */
     void request() {
         if (_e == null) {
             searchAndInvoke();
@@ -106,13 +116,11 @@ class Asker {
     }
 
     private void reject(Exception e) {
-        if (promise != null) {
-            promise.reject(e);
-        }
+        promise.reject(e);
     }
 
     private String getUrl() {
-        String param = params == null ? "" : params.toString();
-        return scheme + "://" + host + "/" + path + URL_PARAMS + param;
+        String param = params == null ? "" : URL_PARAMS + params.toString();
+        return scheme + "://" + host + "/" + path + param;
     }
 }

@@ -8,25 +8,52 @@ import android.text.TextUtils;
 /**
  * Android Router Facade.
  *
- * <p>scheme://host/path?params=json
+ * Protocol Format => scheme://host/path?params=json
  */
 public final class AndroidRouter {
 
+
+    /**
+     * Open url, usually invoked externally. like from browser.
+     *
+     * @param url scheme://host/path?params=json
+     * @return {@link CPromise}
+     */
     public static CPromise open(String url) {
         Promise promise = new Promise(new Asker(url));
         return new CPromise(promise);
     }
 
+    /**
+     * Usually invoked inner.
+     *
+     * @param scheme The scheme of protocol
+     * @param host   The host of protocol
+     * @param path   The path of protocol
+     * @param params The path of params
+     * @return {@link CPromise}
+     */
     public static CPromise open(String scheme, String host, String path, Map<String, Object> params) {
         Promise promise = new Promise(new Asker(scheme, host, path, params));
         return new CPromise(promise);
     }
 
-    public static VPromise popPromiseByTag(String tag) {
+    /**
+     * Find from cache pool
+     *
+     * @param tag The tag of {@link Promise}
+     * @return {@link VPromise} if not find, return null.
+     */
+    public static VPromise findPromiseByTag(String tag) {
         if (TextUtils.isEmpty(tag)) return null;
         return RouterHelper.getInstance().popPromiseByTag(tag);
     }
 
+    /**
+     * Remove from cache pool
+     *
+     * @param tag The tag of {@link Promise}
+     */
     public static void removePromiseByTag(String tag) {
         RouterHelper.getInstance().removePromiseByTag(tag);
     }

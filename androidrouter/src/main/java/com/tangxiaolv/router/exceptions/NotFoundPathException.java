@@ -1,6 +1,9 @@
 
 package com.tangxiaolv.router.exceptions;
 
+/**
+ * Router Exception: undefined path
+ */
 public class NotFoundPathException extends IllegalArgumentException {
 
 
