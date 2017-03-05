@@ -10,6 +10,10 @@ import java.util.Map;
 import com.tangxiaolv.router.AndroidRouter;
 import com.tangxiaolv.router.Reject;
 import com.tangxiaolv.router.Resolve;
+import com.tangxiaolv.simple.entity.A;
+import com.tangxiaolv.simple.entity.B;
+import com.tangxiaolv.simple.entity.C;
+import com.tangxiaolv.simple.entity.D;
 
 import android.os.Build;
 import android.os.Bundle;

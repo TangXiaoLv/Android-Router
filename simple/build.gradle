@@ -29,7 +29,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.google.code.gson:gson:2.7'
 
-    compile project(':AndroidRouter')
-    annotationProcessor project(':AndroidRouter-compiler')
+    compile project(':androidrouter')
+    annotationProcessor project(':androidrouter-compiler')
 
 }

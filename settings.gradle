@@ -1,1 +1,5 @@
-include ':simple', ':AndroidRouter', ':AndroidRouter-compiler', ':AndroidRouter-annotations', ':simple-lib'
+include ':simple'
+include ':androidrouter'
+include ':androidrouter-compiler'
+include ':androidrouter-annotations'
+include ':simple-lib'
