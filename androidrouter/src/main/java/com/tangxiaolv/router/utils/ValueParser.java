@@ -1,7 +1,7 @@
 
 package com.tangxiaolv.router.utils;
 
-import com.tangxiaolv.router.exceptions.ValueParserException;
+import com.tangxiaolv.router.exceptions.ValueParseException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,20 +13,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Helper for value to parse expected type.
+ * Parse tool of type, input type to expected type.
  */
 public class ValueParser {
 
     /**
      * parse value to expect type.
      *
-     * @param input        input
+     * @param input        passed value
      * @param expectedType expected type. like 'java.lang.Integer'
-     * @return expected value
+     * @return expected expected value
+     * @throws ValueParseException parse exception
      */
-    public static Object parse(Object input, String expectedType) throws ValueParserException {
+    public static Object parse(Object input, String expectedType) throws ValueParseException {
         if ("int".equals(expectedType) || "java.lang.Integer".equals(expectedType)) {
             input = toInteger(input, 0);
         } else if ("boolean".equals(expectedType) || "java.lang.Boolean".equals(expectedType)) {
@@ -118,18 +120,17 @@ public class ValueParser {
     }
 
     // maybe List<?>
-    private static Object toList(Object input, String expectType) throws ValueParserException {
+    private static Object toList(Object input, String expectType) throws ValueParseException {
         try {
             if (input instanceof String || input instanceof JSONArray) {
-                JSONArray jArray = input instanceof String ? new JSONArray((String) input)
-                        : (JSONArray) input;
-                String genericity = getListGeneric(expectType);
+                JSONArray jArray = input instanceof String ? new JSONArray((String) input) : (JSONArray) input;
+                String generic = getListGeneric(expectType);
                 ArrayList<Object> list = new ArrayList<>(jArray.length());
                 int length = jArray.length();
                 for (int i = 0; i < length; i++) {
                     Object o = jArray.get(i);
-                    if (genericity.length() > 0) {
-                        list.add(parse(o, genericity));
+                    if (generic.length() > 0) {
+                        list.add(parse(o, generic));
                     } else {
                         list.add(o);
                     }
@@ -144,7 +145,7 @@ public class ValueParser {
                 input = target;
             }
         } catch (JSONException e) {
-            throw new ValueParserException(" parse expected value fail.", e);
+            throw new ValueParseException("parse to " + expectType + " type fail.", e);
         }
         return input;
     }
@@ -152,8 +153,7 @@ public class ValueParser {
     private static Object toMap(Object input, String expectType) {
         if (input instanceof String || input instanceof JSONObject) {
             try {
-                JSONObject jObj = input instanceof String ? new JSONObject((String) input)
-                        : (JSONObject) input;
+                JSONObject jObj = input instanceof String ? new JSONObject((String) input) : (JSONObject) input;
                 HashMap<String, Object> map = new HashMap<>(jObj.length());
                 Iterator<String> it = jObj.keys();
                 while (it.hasNext()) {
@@ -168,18 +168,20 @@ public class ValueParser {
         return input;
     }
 
-    private static Object toTargetObj(Object input, String expectType) throws ValueParserException {
+    private static Object toTargetObj(Object input, String expectType) throws ValueParseException {
         if (input instanceof String || input instanceof JSONObject) {
             input = parseJsonToObj(input, expectType);
+        } else if (input instanceof Map) {
+            input = parseMapToTarget(input, expectType);
         } else if (input != null && !expectType.equalsIgnoreCase(input.getClass().getName())) {
             input = parseObjToTarget(input, expectType);
         }
         return input;
     }
 
-    //json => obj
+    //from json => to obj
     @SuppressWarnings("all")
-    private static Object parseJsonToObj(Object input, String expectType) throws ValueParserException {
+    private static Object parseJsonToObj(Object input, String expectType) throws ValueParseException {
         try {
             JSONObject jObj = input instanceof String ? new JSONObject((String) input) : (JSONObject) input;
             Class<?> clazz = Class.forName(getNoGenericTypeName(expectType));
@@ -189,25 +191,43 @@ public class ValueParser {
                 try {
                     String key = it.next();
                     Field f = clazz.getDeclaredField(key);
-                    if (f != null) {
-                        String name = f.getName();
-                        String type = getTypeNameWhithGeneric(f);
-                        f.setAccessible(true);
-                        f.set(target, parse(jObj.get(name), type));
-                    }
+                    String name = f.getName();
+                    String type = getTypeNameWhithGeneric(f);
+                    f.setAccessible(true);
+                    f.set(target, parse(jObj.get(name), type));
                 } catch (JSONException ignored) {
                 } catch (NoSuchFieldException ignored) {
                 }
             }
             input = target;
         } catch (Exception e) {
-            throw new ValueParserException(" parse expected value fail.", e);
+            throw new ValueParseException("parse to " + expectType + " type fail.", e);
+        }
+        return input;
+    }
+
+    //from params => to obj
+    private static Object parseMapToTarget(Object input, String expectType) throws ValueParseException {
+        try {
+            Class<?> clazz = Class.forName(getNoGenericTypeName(expectType));
+            Object target = clazz.newInstance();
+            Field[] toFields = clazz.getDeclaredFields();
+            Map params = (Map) input;
+            for (Field toF : toFields) {
+                String toKey = toF.getName();
+                Object fromValue = params.get(toKey);
+                toF.setAccessible(true);
+                toF.set(target, parse(fromValue, getTypeNameWhithGeneric(toF)));
+            }
+            input = target;
+        } catch (Exception e) {
+            throw new ValueParseException("parse to " + expectType + " type fail.", e);
         }
         return input;
     }
 
     //from obj => to obj
-    private static Object parseObjToTarget(Object input, String expectType) throws ValueParserException {
+    private static Object parseObjToTarget(Object input, String expectType) throws ValueParseException {
         try {
             Class<?> clazz = Class.forName(getNoGenericTypeName(expectType));
             Object target = clazz.newInstance();
@@ -225,7 +245,7 @@ public class ValueParser {
             }
             input = target;
         } catch (Exception e) {
-            throw new ValueParserException(" parse expected value fail.", e);
+            throw new ValueParseException("parse to " + expectType + " type fail.", e);
         }
         return input;
     }
@@ -253,7 +273,7 @@ public class ValueParser {
     }
 
 
-    // eg => List<Simple>
+    // eg: List<Simple>
     @SuppressWarnings("all")
     private static String getTypeNameWhithGeneric(Field f) {
         String type = f.getType().getName();

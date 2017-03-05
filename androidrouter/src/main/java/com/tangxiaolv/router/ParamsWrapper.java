@@ -1,6 +1,7 @@
 
 package com.tangxiaolv.router;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,17 +10,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ParamsWrapper extends HashMap<String, Object> {
+import static android.R.attr.value;
 
-    private static final String __PARAMS__ = "__params__";
+public class ParamsWrapper {
+
+    private static final String _PARAMS_ = "_params_";
     private Map params;
 
     ParamsWrapper(Object params) throws JSONException {
-        if (params instanceof String) {
-            String json = (String) params;
+        if (params instanceof Map) {
+            this.params = (Map) params;
+        } else if (params instanceof String) {
+            Map<String, Object> m = new HashMap<>();
+            String json = params.toString();
             // JSONArray
             if (json.charAt(0) == '[' && json.charAt(json.length() - 1) == ']') {
-                put(__PARAMS__, new JSONArray(json));
+                m.put(_PARAMS_, new JSONArray(json));
                 return;
             }
             JSONObject jObj = new JSONObject(json);
@@ -28,31 +34,27 @@ public class ParamsWrapper extends HashMap<String, Object> {
                 String key = it.next();
                 Object value = jObj.get(key);
                 //TODO maybe need parse
-                // if (value instanceof Double || value instanceof Float) {
-                // BigDecimal db = new BigDecimal(value.toString());
-                // value = db.toPlainString();
-                // }
-                put(key, value);
+                if (value instanceof Double || value instanceof Float) {
+                    BigDecimal db = new BigDecimal(value.toString());
+                    value = db.toPlainString();
+                }
+                m.put(key, value);
             }
-        } else if (params instanceof Map) {
-            this.params = (Map) params;
+            this.params = m;
         }
     }
 
-    @Override
     public Object get(Object key) {
-        if (params != null) {
-            return params.get(key);
+        if (key instanceof String && _PARAMS_.equals(key)) {
+            return params;
         }
-        return super.get(key);
+        return params == null ? null : params.get(key);
     }
 
     @SuppressWarnings("all")
-    @Override
-    public Object put(String key, Object value) {
-        if (params != null) {
-            return params.put(key, value);
-        }
-        return super.put(key, value);
+    public void put(String key, Object value) {
+        if (params != null)
+            params.put(key, value);
+
     }
 }

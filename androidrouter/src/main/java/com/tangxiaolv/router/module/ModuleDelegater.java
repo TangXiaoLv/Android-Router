@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.tangxiaolv.router.ParamsWrapper;
 import com.tangxiaolv.router.exceptions.NotFoundPathException;
-import com.tangxiaolv.router.exceptions.ValueParserException;
+import com.tangxiaolv.router.exceptions.ValueParseException;
 import com.tangxiaolv.router.utils.ValueParser;
 
 class ModuleDelegater {
@@ -17,7 +17,7 @@ class ModuleDelegater {
     static final String _TYPES = "_TYPES";
 
     static void invoke(String path, ParamsWrapper params, Object target,
-                       Map<String, Object> mapping) throws ValueParserException, InvocationTargetException, IllegalAccessException {
+                       Map<String, Object> mapping) throws ValueParseException, InvocationTargetException, IllegalAccessException {
         Method method = (Method) mapping.get(path + _METHOD);
         if (method == null) {
             throw new NotFoundPathException("path not found: " + path);

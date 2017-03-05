@@ -22,7 +22,7 @@ public final class AndroidRouter {
         return new CPromise(promise);
     }
 
-    public static RPromise popPromiseByTag(String tag) {
+    public static VPromise popPromiseByTag(String tag) {
         if (TextUtils.isEmpty(tag)) return null;
         return RouterHelper.getInstance().popPromiseByTag(tag);
     }

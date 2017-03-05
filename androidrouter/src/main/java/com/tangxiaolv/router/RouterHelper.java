@@ -23,7 +23,7 @@ final class RouterHelper {
         return Lazy.sRouterHelper;
     }
 
-    RPromise popPromiseByTag(String tag) {
+    VPromise popPromiseByTag(String tag) {
         return cachePool.popPromise(tag);
     }
 
@@ -31,7 +31,7 @@ final class RouterHelper {
         cachePool.removePromiseByTag(tag);
     }
 
-    void addToPromisePool(String tag, RPromise p) {
+    void addToPromisePool(String tag, VPromise p) {
         cachePool.addToPromisePool(tag, p);
     }
 

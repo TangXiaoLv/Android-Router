@@ -3,11 +3,11 @@ package com.tangxiaolv.router;
 /**
  * Promise {@link Promise#reject} {@link Promise#resolve} Proxy
  */
-public class RPromise {
+public class VPromise {
 
     private Promise target;
 
-    RPromise(Promise target) {
+    VPromise(Promise target) {
         this.target = target;
     }
 

@@ -9,14 +9,14 @@ import com.tangxiaolv.router.exceptions.RouterException;
 class Promise {
 
     private final Asker asker;
-    private final RPromise mRPromise;
+    private final VPromise mVPromise;
     private Resolve resolve;
     private Reject reject;
     private String tag;
 
     Promise(Asker asker) {
         this.asker = asker;
-        this.mRPromise = new RPromise(this);
+        this.mVPromise = new VPromise(this);
         if (asker != null) asker.setPromise(this);
     }
 
@@ -72,14 +72,14 @@ class Promise {
         }
     }
 
-    RPromise getRPromise() {
-        return mRPromise;
+    VPromise getRPromise() {
+        return mVPromise;
     }
 
     String getTag() {
         if (TextUtils.isEmpty(tag)) {
             tag = RouterHelper.getInstance().genPromiseTag();
-            RouterHelper.getInstance().addToPromisePool(tag, mRPromise);
+            RouterHelper.getInstance().addToPromisePool(tag, mVPromise);
         }
         return tag;
     }
