@@ -1,5 +1,8 @@
 package com.tangxiaolv.router.utils;
 
+/**
+ * Record router time from[call] => to [resolve/reject]
+ */
 public class PromiseTimer {
 
     private long start;

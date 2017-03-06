@@ -46,7 +46,7 @@ class ModuleDelegater {
                 method.invoke(target, arr);
                 return;
             }
-            method.invoke(target, ValueParser.parse(args, types));
+            method.invoke(target, ValueParser.parse(params.get(args), types));
             return;
         }
         method.invoke(target);

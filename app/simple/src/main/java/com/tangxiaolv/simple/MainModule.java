@@ -7,6 +7,7 @@ import android.content.Intent;
 import com.tangxiaolv.annotations.RouterModule;
 import com.tangxiaolv.annotations.RouterPath;
 import com.tangxiaolv.router.VPromise;
+import com.tangxiaolv.router.exceptions.RouterRemoteException;
 import com.tangxiaolv.router.interfaces.IRouter;
 import com.tangxiaolv.simple.entity.A;
 import com.tangxiaolv.simple.entity.B;
@@ -81,5 +82,10 @@ public class MainModule implements IRouter {
     @RouterPath("/differentTypes")
     public void differentTypes(A a, List<A> listA, String scheme, VPromise promise) {
         promise.resolve("from scheme: [" + scheme + "] " + "path: [/differentTypes]");
+    }
+
+    @RouterPath("/throwError")
+    public void throwError(VPromise promise) {
+        promise.reject(new RouterRemoteException("I'm error................."));
     }
 }

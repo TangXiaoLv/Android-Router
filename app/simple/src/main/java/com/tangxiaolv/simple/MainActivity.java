@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView router6 = (TextView) findViewById(R.id.router6);
         final TextView router7 = (TextView) findViewById(R.id.router7);
         final TextView router8 = (TextView) findViewById(R.id.router8);
+        final TextView router9 = (TextView) findViewById(R.id.router9);
         final EditText input = (EditText) findViewById(R.id.input);
         final Button go = (Button) findViewById(R.id.go);
 
@@ -210,6 +211,20 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }, new Reject() {
+                    @Override
+                    public void call(Exception e) {
+                        title.setText(e.toString());
+                    }
+                });
+            }
+        });
+
+        /*android://main/throwError*/
+        router9.setText("android://main/throwError");
+        router9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AndroidRouter.open(router9.getText().toString()).call(new Reject() {
                     @Override
                     public void call(Exception e) {
                         title.setText(e.toString());
