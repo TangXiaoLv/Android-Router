@@ -26,7 +26,7 @@
     * From Object A => To Object B
     * From List< A> => To Object List< B> 
 
-组件化架构图
+组件化路由图
 ---
 
 <img src="img/1.png" width = "824" height = "528"/>
