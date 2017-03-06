@@ -9,7 +9,7 @@ package com.tangxiaolv.router;
 public interface Resolve {
 
     /**
-     * return result
+     * Return result,Called in main thread.
      *
      * @param type   type of result
      * @param result result

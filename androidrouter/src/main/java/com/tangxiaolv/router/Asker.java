@@ -83,7 +83,7 @@ class Asker {
     }
 
     private void searchAndInvoke() {
-        RLog.d("send router url: " + getUrl());
+        //RLog.d("send router url: " + getUrl());
         String mirror = MIRROR_PREFIX + scheme + "_" + host;
         try {
             Class<?> clazz = Class.forName(mirror);

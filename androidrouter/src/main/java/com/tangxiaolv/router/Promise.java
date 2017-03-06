@@ -62,7 +62,16 @@ class Promise {
     void call(Resolve resolve, Reject reject) {
         this.resolve = resolve;
         this.reject = reject;
-        if (asker != null) asker.request();
+        if (Looper.getMainLooper() == Looper.myLooper()) {
+            asker.request();
+        } else {
+            RouterHelper.HANDLER.post(new Runnable() {
+                @Override
+                public void run() {
+                    asker.request();
+                }
+            });
+        }
     }
 
     void resolve(final String type, final Object result) {

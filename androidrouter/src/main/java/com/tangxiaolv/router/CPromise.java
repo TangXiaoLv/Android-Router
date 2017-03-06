@@ -27,7 +27,12 @@ public class CPromise {
         target.call(resolve, reject);
     }
 
-    public CPromise showTime(){
+    /**
+     * show route time consume
+     *
+     * @return {@link Promise}
+     */
+    public CPromise showTime() {
         target.showTime();
         return this;
     }

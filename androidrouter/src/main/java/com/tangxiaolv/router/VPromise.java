@@ -26,6 +26,8 @@ public class VPromise {
 
     /**
      * return exception
+     *
+     * @param e {@link com.tangxiaolv.router.exceptions.RouterRemoteException}
      */
     public void reject(Exception e) {
         target.reject(e);

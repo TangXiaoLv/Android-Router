@@ -3,8 +3,6 @@ package com.tangxiaolv.router.utils;
 
 import android.util.Log;
 
-import com.tangxiaolv.router.BuildConfig;
-
 /**
  * Router log
  */

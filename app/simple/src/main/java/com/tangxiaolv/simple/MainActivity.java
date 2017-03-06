@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AndroidRouter.open(router1.getText().toString()).call(new Resolve() {
                     @Override
-                    public void call(Object result) {
+                    public void call(String type, Object result) {
                         title.setText(result.toString());
                     }
                 }, new Reject() {
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AndroidRouter.open(router2.getText().toString()).call(new Resolve() {
                     @Override
-                    public void call(Object result) {
+                    public void call(String type, Object result) {
                         title.setText(result.toString());
                     }
                 }, new Reject() {
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AndroidRouter.open(router3.getText().toString()).call(new Resolve() {
                     @Override
-                    public void call(Object result) {
+                    public void call(String type, Object result) {
                         title.setText(result.toString());
                     }
                 }, new Reject() {
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                         .showTime()
                         .call(new Resolve() {
                             @Override
-                            public void call(Object result) {
+                            public void call(String type, Object result) {
                                 title.setText(result.toString());
                             }
                         }, new Reject() {
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                         .showTime()
                         .call(new Resolve() {
                             @Override
-                            public void call(Object result) {
+                            public void call(String type, Object result) {
                                 title.setText(result.toString());
                             }
                         }, new Reject() {
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                         .showTime()
                         .call(new Resolve() {
                             @Override
-                            public void call(Object result) {
+                            public void call(String type, Object result) {
                                 title.setText(result.toString());
                             }
                         }, new Reject() {
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                         .showTime()
                         .call(new Resolve() {
                             @Override
-                            public void call(Object result) {
+                            public void call(String type, Object result) {
                                 title.setText(result.toString());
                             }
                         }, new Reject() {
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AndroidRouter.open(router8.getText().toString()).call(new Resolve() {
                     @Override
-                    public void call(Object result) {
+                    public void call(String type, Object result) {
                         Toast.makeText(MainActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }, new Reject() {
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 String url = input.getText().toString();
                 AndroidRouter.open(url).call(new Resolve() {
                     @Override
-                    public void call(Object object) {
+                    public void call(String type, Object object) {
                         title.setText(object.toString());
                     }
                 }, new Reject() {

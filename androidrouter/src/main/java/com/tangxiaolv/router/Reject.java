@@ -9,7 +9,7 @@ package com.tangxiaolv.router;
 public interface Reject {
 
     /**
-     * Returns the error.
+     * Returns the error,Called in main thread.
      *
      * @param e {@link com.tangxiaolv.router.exceptions.RouterRemoteException}
      */

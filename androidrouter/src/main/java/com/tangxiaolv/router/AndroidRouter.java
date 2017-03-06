@@ -10,7 +10,7 @@ import android.text.TextUtils;
 /**
  * Android Router Facade.
  *
- * Protocol Format => scheme://host/path?params=json
+ * Protocol Format: scheme://host/path?params=json
  */
 public final class AndroidRouter {
 
