@@ -1,4 +1,5 @@
 # Android-Router
+[English](https://github.com/TangXiaoLv/Android-Router/blob/master/README.md) | 中文
 <img src="img/2.png" width = "660" height = "300"/>
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
@@ -14,7 +15,7 @@
 
 特性
 ---
-- 编译时注入
+- 编译时处理注解生成模板代码
 - 路由过程抛出的异常集中处理
 - 任意参数类型回传
 - 运行时动态参数类型解析，支持不同类型传值
@@ -121,6 +122,19 @@ public class MainModule implements IRouter {
         promise.reject(new RouterRemoteException("I'm error................."));
     }
 }
+
+//支持接收多scheme
+@RouterModule(scheme = "android|remote", host = "lib")
+public class RemoteModule implements IRouter {
+
+    @RouterPath("/openRemoteActivity")
+    public void openRemoteActivity(Application context, String scheme, VPromise promise) {
+        Intent intent = new Intent(context, RemoteActivity.class);
+        intent.putExtra("tag", promise.getTag());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+}
 ```
 ###第二步:调用协议
 ```
@@ -140,8 +154,14 @@ AndroidRouter.open("android://main/activity/localActivity").call(new Resolve() {
     
 //方式二
  AndroidRouter.open("android", "main", "/differentTypes", null)
-    .showTime()//开启本次路由调用耗时时间
+    .showTime()//显示本次调用时间
     .call();//忽略返回值和错误
+```
+###混淆
+```
+//配置混淆
+-keep class * implements com.tangxiaolv.router.interfaces.IMirror{*;}
+-keep class * implements com.tangxiaolv.router.interfaces.IRouter{*;}
 ```
 
 License

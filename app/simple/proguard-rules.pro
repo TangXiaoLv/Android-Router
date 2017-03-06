@@ -15,3 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class * implements com.tangxiaolv.router.interfaces.IMirror{*;}
+-keep class * implements com.tangxiaolv.router.interfaces.IRouter{*;}
