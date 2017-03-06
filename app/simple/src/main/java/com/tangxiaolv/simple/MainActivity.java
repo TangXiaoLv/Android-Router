@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.tangxiaolv.router.AndroidRouter;
 import com.tangxiaolv.router.Reject;
 import com.tangxiaolv.router.Resolve;
+import com.tangxiaolv.simple.entity.A;
 import com.tangxiaolv.simple.entity.B;
 
 import java.util.ArrayList;
@@ -102,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
         router4.setText("android://main/params/complex?params=" +
                 "{'b':{" +
                 "'key1':'Hi','key2':1,'key3':'true','key4':2," +
-                "key5:[1,2,3],key6:{'key1':'Hello','key2':1}}," +
-                "'listC':[1,2,3]}");
+                "key5:[{'key1':'haha'},{'key1':hehe},{'key1':'wawa'}],key6:{'key1':'Hello','key2':1}}," +
+                "'listC':[{'key1':'haha'},{'key1':hehe},{'key1':'wawa'}]}");
         router4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 "'b':{" +
                 "'key1':'Hi','key2':1,'key3':'true','key4':2," +
                 "key5:[1,2,3],key6:{'key1':'Hello','key2':1}}," +
-                "'listC':[1,2,3]}");
+                "'listC':[{'key1':'haha'},{'key1':hehe},{'key1':'wawa'}]}");
         router5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         /*android://main/jsonArray?params=[1,2,3]}*/
-        router6.setText("android://main/jsonArray?params=[1,2,3]");
+        router6.setText("android://main/jsonArray?params=[{'key1':'haha'},{'key1':hehe},{'key1':'wawa'}]");
         router6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +178,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("a", new B("Hi", 1, true, 2));
+                B b = new B("Hi", 1, true, 2);
+                ArrayList<A> key5 = new ArrayList<>();
+                key5.add(new A("Hi", 1, true, 2));
+                key5.add(new A("Hi", 1, true, 2));
+                key5.add(new A("Hi", 1, true, 2));
+                b.setKey5(key5);
+                map.put("a", b);
 
                 ArrayList<B> listB = new ArrayList<>();
                 listB.add(new B("Hi", 1, true, 2));
