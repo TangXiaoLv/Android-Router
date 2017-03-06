@@ -65,17 +65,17 @@ class Promise {
         if (asker != null) asker.request();
     }
 
-    void resolve(final Object result) {
+    void resolve(final String type, final Object result) {
         showToast();
         if (resolve == null)
             return;
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            resolve.call(result);
+            resolve.call(type, result);
         } else {
             RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
-                    resolve.call(result);
+                    resolve.call(type, result);
                 }
             });
         }

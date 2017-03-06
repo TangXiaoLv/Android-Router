@@ -17,10 +17,11 @@ public class VPromise {
     /**
      * return result
      *
+     * @param type   type of result
      * @param result The result of whatever you want.
      */
-    public void resolve(Object result) {
-        target.resolve(result);
+    public void resolve(String type, Object result) {
+        target.resolve(type, result);
     }
 
     /**

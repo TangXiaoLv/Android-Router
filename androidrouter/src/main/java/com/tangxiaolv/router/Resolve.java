@@ -8,5 +8,11 @@ package com.tangxiaolv.router;
  */
 public interface Resolve {
 
-    void call(Object result);
+    /**
+     * return result
+     *
+     * @param type   type of result
+     * @param result result
+     */
+    void call(String type, Object result);
 }

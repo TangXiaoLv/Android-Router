@@ -177,20 +177,23 @@ public class MainActivity extends AppCompatActivity {
         router7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String, Object> map = new HashMap<>();
+                //first params
                 B b = new B("Hi", 1, true, 2);
                 ArrayList<A> key5 = new ArrayList<>();
                 key5.add(new A("Hi", 1, true, 2));
                 key5.add(new A("Hi", 1, true, 2));
                 key5.add(new A("Hi", 1, true, 2));
                 b.setKey5(key5);
-                map.put("a", b);
 
+                //second params
                 ArrayList<B> listB = new ArrayList<>();
                 listB.add(new B("Hi", 1, true, 2));
                 listB.add(new B("Hi", 1, true, 2));
                 listB.add(new B("Hi", 1, true, 2));
+
+                HashMap<String, Object> map = new HashMap<>();
                 map.put("listA", listB);
+                map.put("a", b);
                 AndroidRouter.open("android", "main", "/differentTypes", map)
                         .showTime()
                         .call(new Resolve() {

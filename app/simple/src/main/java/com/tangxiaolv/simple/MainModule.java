@@ -30,7 +30,7 @@ public class MainModule implements IRouter {
      */
     @RouterPath
     public void def(Application context, String scheme, VPromise promise) {
-        promise.resolve("from scheme: [" + scheme + "] " + "path: []");
+        promise.resolve("","from scheme: [" + scheme + "] " + "path: []");
     }
 
     /**
@@ -53,7 +53,7 @@ public class MainModule implements IRouter {
     @RouterPath("/params/basis")
     public void paramsBasis(float f, int i, long l, double d, boolean b,
                             String scheme, VPromise promise) {
-        promise.resolve("from scheme: [" + scheme + "] " + "path: [/params/basis]");
+        promise.resolve("","from scheme: [" + scheme + "] " + "path: [/params/basis]");
     }
 
     /**
@@ -63,25 +63,25 @@ public class MainModule implements IRouter {
      */
     @RouterPath("/params/complex")
     public void paramsComplex(B b, List<C> listC, String scheme, VPromise promise) {
-        promise.resolve("from scheme: [" + scheme + "] " + "path: [/params/complex]");
+        promise.resolve("","from scheme: [" + scheme + "] " + "path: [/params/complex]");
     }
 
     //from jsonObject => to object
     @RouterPath("/jsonObject")
     public void paramsPakege(Package _params_, String scheme, VPromise promise) {
-        promise.resolve("from scheme: [" + scheme + "] " + "path: [/jsonObject]");
+        promise.resolve("","from scheme: [" + scheme + "] " + "path: [/jsonObject]");
     }
 
     //from jsonArray => to list
     @RouterPath("/jsonArray")
     public void jsonArray(List<A> _params_, String scheme, VPromise promise) {
-        promise.resolve("from scheme: [" + scheme + "] " + "path: [/jsonArray]");
+        promise.resolve("","from scheme: [" + scheme + "] " + "path: [/jsonArray]");
     }
 
     //eg: from A => to B
     @RouterPath("/differentTypes")
     public void differentTypes(A a, List<A> listA, String scheme, VPromise promise) {
-        promise.resolve("from scheme: [" + scheme + "] " + "path: [/differentTypes]");
+        promise.resolve("","from scheme: [" + scheme + "] " + "path: [/differentTypes]");
     }
 
     @RouterPath("/throwError")
