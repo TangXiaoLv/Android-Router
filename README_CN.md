@@ -47,7 +47,7 @@ dependencies {
 ###第一步:给自定义Module配置注解协议
 ```java
 /**
- * Support parameter types
+ * 支持的参数类型
  *
  * float
  * int
@@ -58,13 +58,14 @@ dependencies {
  * List<?>
  * Map<String,Object>
  * custom object
+ * 
+ * 默认传递Application context, String scheme, VPromise promise
  */
 @RouterModule(scheme = "android", host = "main")
 public class MainModule implements IRouter {
 
 
     //Route => android://main
-    //默认传递Application context, String scheme, VPromise promise
     @RouterPath
     public void def(Application context, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: []");
@@ -80,7 +81,7 @@ public class MainModule implements IRouter {
         context.startActivity(intent);
     }
 
-    //Take out the value from json object
+    //从json object中取值
     //Route => android://main/params/basis?params={'f':1,'i':2,'l':3,'d':4,'b':true}
     @RouterPath("/params/basis")
     public void paramsBasis(float f, int i, long l, double d, boolean b,
@@ -88,36 +89,35 @@ public class MainModule implements IRouter {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/params/basis]");
     }
 
-    //Take out the value from json object
+    //从json object中取值
     //Route => android://main/params/complex?params={'b':{},'listC':[]}
     @RouterPath("/params/complex")
     public void paramsComplex(B b, List<C> listC, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/params/complex]");
     }
 
-    //from json object => to object
-    //key name must be "_params_"
+    //将json对象中的全部数据转化成自定义对象,key必须是_params_
     @RouterPath("/jsonObject")
     public void paramsPakege(Package _params_, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/jsonObject]");
     }
 
-    //from json array => to list
-    //key name must be "_params_"
+    //将json数组中的全部数据转化成List,key必须是_params_
     @RouterPath("/jsonArray")
     public void jsonArray(List<A> _params_, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/jsonArray]");
     }
 
     //eg: from A => to B
+    //不同类型对象传递,对象中的基本类型参数key和类型必须一致
     @RouterPath("/differentTypes")
     public void differentTypes(A a, List<A> listA, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/differentTypes]");
     }
 
+    //返回错误推荐使用RouterRemoteException
     @RouterPath("/throwError")
     public void throwError(VPromise promise) {
-        //返回错误推荐使用RouterRemoteException
         promise.reject(new RouterRemoteException("I'm error................."));
     }
 }
