@@ -35,9 +35,28 @@ Gradle
 ---
 ```
 //Add dependencies inside application/library.
+//android plugin version > 2.2+
 dependencies {
     compile 'com.library.tangxiaolv:androidrouter:1.0.1'
     annotationProcessor 'com.library.tangxiaolv:androidrouter-compiler:1.0.0
+}
+
+//android plugin version < 2.2
+apply plugin: 'com.neenbedankt.android-apt'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+    }
+}
+
+dependencies {
+    compile 'com.library.tangxiaolv:androidrouter:1.0.1'
+    apt 'com.library.tangxiaolv:androidrouter-compiler:1.0.0
 }
 ```
 
