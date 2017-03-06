@@ -4,6 +4,7 @@ package com.tangxiaolv.router;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -17,20 +18,22 @@ import static android.R.attr.value;
  *
  * {@link Asker}
  */
-public class ParamsWrapper {
+public class ParamsWrapper{
 
-    private static final String _PARAMS_ = "_params_";
-    private Map params;
+    public static final String _PARAMS_ = "_params_";
+    private Map params = new HashMap<>();
 
+    @SuppressWarnings("all")
     ParamsWrapper(Object params) throws JSONException {
-        if (params instanceof Map) {
+        if (params instanceof Map) {//inner jsonObject
             this.params = (Map) params;
+        } else if (params instanceof List) {//inner jsonArray
+            this.params.put(_PARAMS_, params);
         } else if (params instanceof String) {
-            Map<String, Object> m = new HashMap<>();
             String json = params.toString();
             // JSONArray
             if (json.charAt(0) == '[' && json.charAt(json.length() - 1) == ']') {
-                m.put(_PARAMS_, new JSONArray(json));
+                this.params.put(_PARAMS_, new JSONArray(json));
                 return;
             }
             JSONObject jObj = new JSONObject(json);
@@ -43,9 +46,8 @@ public class ParamsWrapper {
                     BigDecimal db = new BigDecimal(value.toString());
                     value = db.toPlainString();
                 }
-                m.put(key, value);
+                this.params.put(key, value);
             }
-            this.params = m;
         }
     }
 
@@ -53,7 +55,7 @@ public class ParamsWrapper {
         if (key instanceof String && _PARAMS_.equals(key)) {
             return params;
         }
-        return params == null ? null : params.get(key);
+        return params.get(key);
     }
 
     @SuppressWarnings("all")

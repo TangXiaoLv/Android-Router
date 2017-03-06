@@ -1,5 +1,5 @@
-include ':simple'
+include ':app:simple'
+include ':app:simple-lib'
 include ':androidrouter'
 include ':androidrouter-compiler'
 include ':androidrouter-annotations'
-include ':simple-lib'

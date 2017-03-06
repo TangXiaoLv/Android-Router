@@ -1,8 +1,10 @@
 
 package com.tangxiaolv.router;
 
+import java.util.List;
 import java.util.Map;
 
+import android.net.Uri;
 import android.text.TextUtils;
 
 /**
@@ -30,10 +32,38 @@ public final class AndroidRouter {
      * @param scheme The scheme of protocol
      * @param host   The host of protocol
      * @param path   The path of protocol
-     * @param params The path of params
+     * @param params The jsonObject params of protocol
      * @return {@link CPromise}
      */
     public static CPromise open(String scheme, String host, String path, Map<String, Object> params) {
+        Promise promise = new Promise(new Asker(scheme, host, path, params));
+        return new CPromise(promise);
+    }
+
+    /**
+     * Usually invoked inner.
+     *
+     * @param scheme The scheme of protocol
+     * @param host   The host of protocol
+     * @param path   The path of protocol
+     * @param params The jsonArray params of protocol
+     * @return {@link CPromise}
+     */
+    public static CPromise open(String scheme, String host, String path, List params) {
+        Promise promise = new Promise(new Asker(scheme, host, path, params));
+        return new CPromise(promise);
+    }
+
+    /**
+     * Usually invoked inner.
+     *
+     * @param scheme The scheme of protocol
+     * @param host   The host of protocol
+     * @param path   The path of protocol
+     * @param params The json params of protocol
+     * @return {@link CPromise}
+     */
+    public static CPromise open(String scheme, String host, String path, String params) {
         Promise promise = new Promise(new Asker(scheme, host, path, params));
         return new CPromise(promise);
     }

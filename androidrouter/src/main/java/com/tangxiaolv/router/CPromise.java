@@ -26,4 +26,9 @@ public class CPromise {
     public void call(Resolve resolve, Reject reject) {
         target.call(resolve, reject);
     }
+
+    public CPromise showTime(){
+        target.showTime();
+        return this;
+    }
 }

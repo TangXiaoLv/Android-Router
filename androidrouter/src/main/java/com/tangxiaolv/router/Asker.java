@@ -3,7 +3,6 @@ package com.tangxiaolv.router;
 
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
-import java.util.Map;
 
 import com.tangxiaolv.router.exceptions.NotFoundRouterException;
 import com.tangxiaolv.router.exceptions.RouterException;
@@ -38,7 +37,7 @@ class Asker {
         parse(url);
     }
 
-    Asker(String scheme, String host, String path, Map params) {
+    Asker(String scheme, String host, String path, Object params) {
         if (TextUtils.isEmpty(host) || TextUtils.isEmpty(scheme)) {
             reject(new RouterException("scheme or host isEmpty."));
             return;
@@ -106,7 +105,7 @@ class Asker {
     private ParamsWrapper createParamsWrapper(Object params) throws JSONException {
         ParamsWrapper wrapper = new ParamsWrapper(params);
         wrapper.put("scheme", scheme);
-        wrapper.put("promise", promise.getRPromise());
+        wrapper.put("promise", promise.getVPromise());
         wrapper.put("context", ReflectTool.getApplication());
         return wrapper;
     }

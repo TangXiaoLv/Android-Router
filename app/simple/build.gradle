@@ -26,8 +26,10 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    compile project(':app:simple-lib')
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.google.code.gson:gson:2.7'
+
 
     compile project(':androidrouter')
     annotationProcessor project(':androidrouter-compiler')

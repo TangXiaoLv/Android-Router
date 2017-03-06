@@ -2,8 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-        >
+            android:layout_height="match_parent">
 
     <LinearLayout
             android:id="@+id/activity_main"
@@ -23,36 +22,49 @@
                 android:id="@+id/router1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="toon://one/openOne?params={'key1':1,'key2':'2'}"/>
+                android:layout_marginBottom="8dp"/>
 
         <TextView
                 android:id="@+id/router2"
                 android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="toon://one/openOne2"/>
+                android:layout_height="wrap_content"/>
 
         <TextView
                 android:id="@+id/router3"
                 android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="toon://one"/>
+                android:layout_height="wrap_content"/>
 
         <TextView
                 android:id="@+id/router4"
                 android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="toon://one?params={'key1':'1','key2':true}"/>
+                android:layout_height="wrap_content"/>
 
         <TextView
                 android:id="@+id/router5"
                 android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="toon2://one?params={'key1':'1','key2':'true'}"/>
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:id="@+id/router6"
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:id="@+id/router7"
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:id="@+id/router8"
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         <LinearLayout
                 android:layout_width="match_parent"

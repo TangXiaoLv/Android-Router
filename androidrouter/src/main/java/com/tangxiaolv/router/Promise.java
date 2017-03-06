@@ -3,8 +3,13 @@ package com.tangxiaolv.router;
 
 import android.os.Looper;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.tangxiaolv.router.exceptions.RouterException;
+import com.tangxiaolv.router.utils.PromiseTimer;
+import com.tangxiaolv.router.utils.ReflectTool;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * Manage router send and receive.
@@ -16,6 +21,7 @@ class Promise {
     private Resolve resolve;
     private Reject reject;
     private String tag;
+    private PromiseTimer timer;
 
     Promise(Asker asker) {
         this.asker = asker;
@@ -49,7 +55,7 @@ class Promise {
     }
 
     /**
-     * Send router.receive success and fail.
+     * Send router. Receive success and fail.
      *
      * @param resolve {@link Promise}
      */
@@ -60,6 +66,7 @@ class Promise {
     }
 
     void resolve(final Object result) {
+        showToast();
         if (resolve == null)
             return;
         if (Looper.myLooper() == Looper.getMainLooper()) {
@@ -75,6 +82,7 @@ class Promise {
     }
 
     void reject(Exception e) {
+        showToast();
         if (e == null)
             e = new RouterException("unkownException");
         e.printStackTrace();
@@ -93,7 +101,17 @@ class Promise {
         }
     }
 
-    VPromise getRPromise() {
+    void showTime() {
+        timer = new PromiseTimer();
+    }
+
+    private void showToast() {
+        if (timer != null)
+            Toast.makeText(ReflectTool.getApplication(), timer.getTime(), Toast.LENGTH_SHORT).show();
+    }
+
+
+    VPromise getVPromise() {
         return mVPromise;
     }
 

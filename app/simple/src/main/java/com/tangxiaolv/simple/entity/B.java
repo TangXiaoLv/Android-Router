@@ -1,21 +1,24 @@
 
 package com.tangxiaolv.simple.entity;
 
+import com.tangxiaolv.router.interfaces.IRouter;
+
 import java.util.List;
 
-public class C {
+public class B implements IRouter {
 
     private String key1;
     private int key2;
     private boolean key3;
     private float key4;
-    private List<B> key5;
+    private List<A> key5;
     private D key6;
 
-    public C() {
+    public B() {
+        //must have empty params construction.
     }
 
-    public C(String key1, int key2, boolean key3, float key4) {
+    public B(String key1, int key2, boolean key3, float key4) {
         this.key1 = key1;
         this.key2 = key2;
         this.key3 = key3;
@@ -54,11 +57,11 @@ public class C {
         this.key4 = key4;
     }
 
-    public List<B> getKey5() {
+    public List<A> getKey5() {
         return key5;
     }
 
-    public void setKey5(List<B> key5) {
+    public void setKey5(List<A> key5) {
         this.key5 = key5;
     }
 
