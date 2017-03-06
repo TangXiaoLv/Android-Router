@@ -62,8 +62,8 @@ dependencies {
 
 Getting Started
 ---
-Note：Android-Router 
-Protocol Format: scheme://host/path?params=json
+Note：Android-Router Protocol Format: scheme://host/path?params=json 
+
 *scheme[1] host[1] path[2] params[2] 1:required 2:option*
 
 ###Step 1:Setup router module.
