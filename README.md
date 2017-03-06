@@ -6,7 +6,7 @@ English | [中文](https://github.com/TangXiaoLv/Android-Router/blob/master/READ
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
 |version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
-High-performance, flexible, easy-to-use lightweight Android component-based framework, Used to solve the interdependence of complex projects,A single module is conducive to independent development and maintenance.
+High-performance, flexible, easy-to-use lightweight Android component-based framework, Used to solve the interdependence of complex projects, A single module is conducive to independent development and maintenance.
 
 Goal
 ---
