@@ -63,6 +63,7 @@ dependencies {
 快速入门
 ---
 注：使用本框架需要遵守标准协议格式：scheme://host/path?params=json
+
 *scheme[1] host[1] path[2] params[2] 1:必须 2:可选*
 
 ###第一步:给自定义Module配置注解协议
