@@ -5,7 +5,7 @@ English | [中文](https://github.com/TangXiaoLv/Android-Router/blob/master/READ
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
+|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.2) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.2/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
 High-performance, flexible, easy-to-use lightweight Android component-based framework, Used to solve the interdependence of complex projects, A single module is conducive to independent development and maintenance.
 
 Goal
@@ -37,8 +37,8 @@ Gradle
 //Add dependencies inside application/library.
 //android plugin version > 2.2+
 dependencies {
-    compile 'com.library.tangxiaolv:androidrouter:1.0.1'
-    annotationProcessor 'com.library.tangxiaolv:androidrouter-compiler:1.0.0'
+    compile 'com.library.tangxiaolv:androidrouter:1.0.2'
+    annotationProcessor 'com.library.tangxiaolv:androidrouter-compiler:1.0.0
 }
 
 //android plugin version < 2.2
@@ -55,8 +55,8 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.library.tangxiaolv:androidrouter:1.0.1'
-    apt 'com.library.tangxiaolv:androidrouter-compiler:1.0.0'
+    compile 'com.library.tangxiaolv:androidrouter:1.0.2'
+    apt 'com.library.tangxiaolv:androidrouter-compiler:1.0.0
 }
 ```
 
