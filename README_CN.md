@@ -113,18 +113,21 @@ public class MainModule implements IRouter {
 
     //从json object中取值
     //Route => android://main/params/complex?params={'b':{},'listC':[]}
+    //自定义对象需要实现IRouter,并且需要空参数构造函数
     @RouterPath("/params/complex")
     public void paramsComplex(B b, List<C> listC, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/params/complex]");
     }
 
     //将json对象中的全部数据转化成自定义对象,key必须是_params_
+    //自定义对象需要实现IRouter,并且需要空参数构造函数
     @RouterPath("/jsonObject")
     public void paramsPakege(Package _params_, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/jsonObject]");
     }
 
     //将json数组中的全部数据转化成List,key必须是_params_
+    //自定义对象需要实现IRouter,并且需要空参数构造函数
     @RouterPath("/jsonArray")
     public void jsonArray(List<A> _params_, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/jsonArray]");
@@ -132,6 +135,7 @@ public class MainModule implements IRouter {
 
     //eg: from A => to B
     //不同类型对象传递,对象中的基本类型参数key和类型必须一致
+    //自定义对象需要实现IRouter,并且需要空参数构造函数
     @RouterPath("/differentTypes")
     public void differentTypes(A a, List<A> listA, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/differentTypes]");
@@ -174,8 +178,10 @@ AndroidRouter.open("android://main/activity/localActivity").call(new Resolve() {
     });
     
 //方式二
- AndroidRouter.open("android", "main", "/differentTypes", null)
+ AndroidRouter.open("android", "main", "/differentTypes")
     .showTime()//显示本次调用时间
+    .callOnThread()//调用在子线程
+    .returnOnMainThread()//回调在主线程
     .call();//忽略返回值和错误
 ```
 ###混淆

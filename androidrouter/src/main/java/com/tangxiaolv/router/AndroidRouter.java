@@ -27,6 +27,19 @@ public final class AndroidRouter {
     }
 
     /**
+     * Usually invoked inner, Empty params.
+     *
+     * @param scheme The scheme of protocol
+     * @param host   The host of protocol
+     * @param path   The path of protocol
+     * @return {@link CPromise}
+     */
+    public static CPromise open(String scheme, String host, String path) {
+        Promise promise = new Promise(new Asker(scheme, host, path, null));
+        return new CPromise(promise);
+    }
+
+    /**
      * Usually invoked inner.
      *
      * @param scheme The scheme of protocol

@@ -1,7 +1,6 @@
 
 package com.tangxiaolv.router;
 
-import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -9,12 +8,36 @@ import com.tangxiaolv.router.exceptions.RouterException;
 import com.tangxiaolv.router.utils.PromiseTimer;
 import com.tangxiaolv.router.utils.ReflectTool;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
 /**
  * Manage router send and receive.
  */
 class Promise {
+
+    /**
+     * Call on main thread.{@link Promise#call(Resolve, Reject)}
+     */
+    public static final int FLAG_CALL_MAIN = 1 << 1;
+
+    /**
+     * Call on thread.{@link Promise#call(Resolve, Reject)}
+     */
+    public static final int FLAG_CALL_THREAD = 1 << 2;
+
+    /**
+     * return on main thread.
+     *
+     * {@link Promise#resolve(String, Object)}
+     * {@link Promise#reject(Exception)}}
+     */
+    public static final int FLAG_RETURN_MIAN = 1 << 3;
+
+    /**
+     * return on thread.
+     *
+     * {@link Promise#resolve(String, Object)}
+     * {@link Promise#reject(Exception)}}
+     */
+    public static final int FLAG_RETURN_THREAD = 1 << 4;
 
     private final Asker asker;
     private final VPromise mVPromise;
@@ -22,6 +45,7 @@ class Promise {
     private Reject reject;
     private String tag;
     private PromiseTimer timer;
+    private int flagMark = 0;
 
     Promise(Asker asker) {
         this.asker = asker;
@@ -62,15 +86,22 @@ class Promise {
     void call(Resolve resolve, Reject reject) {
         this.resolve = resolve;
         this.reject = reject;
-        if (Looper.getMainLooper() == Looper.myLooper()) {
-            asker.request();
-        } else {
+        if ((flagMark & FLAG_CALL_MAIN) != 0) {
             RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
                     asker.request();
                 }
             });
+        } else if ((flagMark & FLAG_CALL_THREAD) != 0) {
+            RouterHelper.EXECUTOR.execute(new Runnable() {
+                @Override
+                public void run() {
+                    asker.request();
+                }
+            });
+        } else {
+            asker.request();
         }
     }
 
@@ -78,15 +109,22 @@ class Promise {
         showToast();
         if (resolve == null)
             return;
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            resolve.call(type, result);
-        } else {
+        if ((flagMark & FLAG_RETURN_MIAN) != 0) {
             RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
                     resolve.call(type, result);
                 }
             });
+        } else if ((flagMark & FLAG_RETURN_THREAD) != 0) {
+            RouterHelper.EXECUTOR.execute(new Runnable() {
+                @Override
+                public void run() {
+                    resolve.call(type, result);
+                }
+            });
+        } else {
+            resolve.call(type, result);
         }
     }
 
@@ -97,16 +135,23 @@ class Promise {
         e.printStackTrace();
         if (reject == null)
             return;
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            reject.call(e);
-        } else {
-            final Exception _e = e;
+        final Exception _e = e;
+        if ((flagMark & FLAG_RETURN_MIAN) != 0) {
             RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
                     reject.call(_e);
                 }
             });
+        } else if ((flagMark & FLAG_RETURN_THREAD) != 0) {
+            RouterHelper.EXECUTOR.execute(new Runnable() {
+                @Override
+                public void run() {
+                    reject.call(_e);
+                }
+            });
+        } else {
+            reject.call(e);
         }
     }
 
@@ -115,13 +160,22 @@ class Promise {
     }
 
     private void showToast() {
-        if (timer != null)
-            Toast.makeText(ReflectTool.getApplication(), timer.getTime(), Toast.LENGTH_SHORT).show();
+        if (timer != null) {
+            RouterHelper.HANDLER.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(ReflectTool.getApplication(), timer.getTime(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
-
 
     VPromise getVPromise() {
         return mVPromise;
+    }
+
+    void setThreadFlag(int flag) {
+        this.flagMark |= flag;
     }
 
     /**

@@ -174,8 +174,10 @@ AndroidRouter.open("android://main/activity/localActivity").call(new Resolve() {
     });
 
 //or
-AndroidRouter.open("android", "main", "/differentTypes", null)
+AndroidRouter.open("android", "main", "/differentTypes")
     .showTime()//Show time
+    .callOnThread()
+    .returnOnMainThread()
     .call();//Igone result and error.
 ```
 ###Proguard

@@ -7,12 +7,18 @@ import android.os.SystemClock;
 
 import com.tangxiaolv.router.interfaces.IMirror;
 
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 final class RouterHelper {
 
     static final Handler HANDLER = new Handler(Looper.getMainLooper());
+    static ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
     private final RouterCachePool cachePool = new RouterCachePool();
 
     private RouterHelper() {
+        EXECUTOR.allowCoreThreadTimeOut(true);
     }
 
     private static class Lazy {
