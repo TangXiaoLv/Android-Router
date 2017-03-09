@@ -103,7 +103,7 @@ public class MainModule implements IRouter {
     }
     
     //if return type != void, The promise will be auto called.
-    .@RouterPath("/autoReturn")
+    @RouterPath("/autoReturn")
     public String autoReturn(String scheme) {
         return "I'm auto return!!!!! ";
     }
