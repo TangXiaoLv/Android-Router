@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView router7 = (TextView) findViewById(R.id.router7);
         final TextView router8 = (TextView) findViewById(R.id.router8);
         final TextView router9 = (TextView) findViewById(R.id.router9);
+        final TextView router10 = (TextView) findViewById(R.id.router10);
         final EditText input = (EditText) findViewById(R.id.input);
         final Button go = (Button) findViewById(R.id.go);
 
@@ -217,26 +218,43 @@ public class MainActivity extends AppCompatActivity {
         router8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidRouter.open(router8.getText().toString()).call(new Resolve() {
+                AndroidRouter.open(router8.getText().toString())
+                        .returnOnMainThread()
+                        .call(new Resolve() {
+                            @Override
+                            public void call(String type, Object result) {
+                                Toast.makeText(MainActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }, new Reject() {
+                            @Override
+                            public void call(Exception e) {
+                                title.setText(e.toString());
+                            }
+                        });
+            }
+        });
+
+
+        /*android://main/autoReturn*/
+        router9.setText("android://main/autoReturn");
+        router9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AndroidRouter.open(router9.getText().toString()).call(new Resolve() {
                     @Override
                     public void call(String type, Object result) {
-                        Toast.makeText(MainActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }, new Reject() {
-                    @Override
-                    public void call(Exception e) {
-                        title.setText(e.toString());
+                        title.setText(result.toString());
                     }
                 });
             }
         });
 
         /*android://main/throwError*/
-        router9.setText("android://main/throwError");
-        router9.setOnClickListener(new View.OnClickListener() {
+        router10.setText("android://main/throwError");
+        router10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidRouter.open(router9.getText().toString()).call(new Reject() {
+                AndroidRouter.open(router10.getText().toString()).call(new Reject() {
                     @Override
                     public void call(Exception e) {
                         title.setText(e.toString());

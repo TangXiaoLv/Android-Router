@@ -96,6 +96,12 @@ public class MainModule implements IRouter {
         promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/differentTypes]");
     }
 
+    //if return type != void, auto return value by call promise
+    @RouterPath("/autoReturn")
+    public String autoReturn(String scheme) {
+        return "I'm auto return!!!!! ";
+    }
+
     @RouterPath("/throwError")
     public void throwError(VPromise promise) {
         promise.reject(new RouterRemoteException("I'm error................."));

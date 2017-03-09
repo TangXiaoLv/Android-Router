@@ -86,11 +86,16 @@ dependencies {
 @RouterModule(scheme = "android", host = "main")
 public class MainModule implements IRouter {
 
-
     //Route => android://main
     @RouterPath
     public void def(Application context, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: []");
+    }
+    
+    //如果返回值不是void类型，当return时会自动调用promise返回
+    @RouterPath("/autoReturn")
+    public String autoReturn(String scheme) {
+        return "I'm auto return!!!!! ";
     }
 
     //Route => android://main/activity/localActivity
@@ -165,7 +170,10 @@ public class RemoteModule implements IRouter {
 ```
 //任意地方调用
 //方式一
-AndroidRouter.open("android://main/activity/localActivity").call(new Resolve() {
+AndroidRouter.open("android://main/activity/localActivity")
+    .callOnSubThread()//调用在子线程
+    .returnOnMainThread()//回调在主线程
+    .call(new Resolve() {
         @Override
         public void call(String type, Object result) {
             //获取返回值
@@ -174,14 +182,12 @@ AndroidRouter.open("android://main/activity/localActivity").call(new Resolve() {
         @Override
         public void call(Exception e) {
             //所有路由过程中的异常都会回调到这里
-        }
-    });
+    }
+});
     
 //方式二
  AndroidRouter.open("android", "main", "/differentTypes")
     .showTime()//显示本次调用时间
-    .callOnThread()//调用在子线程
-    .returnOnMainThread()//回调在主线程
     .call();//忽略返回值和错误
 ```
 ###混淆

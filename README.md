@@ -92,6 +92,12 @@ public class MainModule implements IRouter {
     public void def(Application context, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: []");
     }
+    
+    //if return type != void, The promise will auto call when return
+    @RouterPath("/autoReturn")
+    public String autoReturn(String scheme) {
+        return "I'm auto return!!!!! ";
+    }
 
     //Route => android://main/activity/localActivity
     @RouterPath("/activity/localActivity")
@@ -161,7 +167,10 @@ public class RemoteModule implements IRouter {
 ```
 ###Step 2:Invoke
 ```
-AndroidRouter.open("android://main/activity/localActivity").call(new Resolve() {
+AndroidRouter.open("android://main/activity/localActivity")
+    .callOnThread()
+    .returnOnMainThread()
+    .call(new Resolve() {
         @Override
         public void call(String type, Object result) {
             //Receive result
@@ -171,13 +180,11 @@ AndroidRouter.open("android://main/activity/localActivity").call(new Resolve() {
         public void call(Exception e) {
             //All routing errors are callback here.
         }
-    });
+});
 
 //or
 AndroidRouter.open("android", "main", "/differentTypes")
     .showTime()//Show time
-    .callOnThread()
-    .returnOnMainThread()
     .call();//Igone result and error.
 ```
 ###Proguard
