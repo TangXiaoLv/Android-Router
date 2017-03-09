@@ -1,17 +1,15 @@
 
 package com.tangxiaolv.router.module;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Map;
-
 import com.tangxiaolv.router.ParamsWrapper;
+import com.tangxiaolv.router.VPromise;
 import com.tangxiaolv.router.exceptions.NotFoundPathException;
-import com.tangxiaolv.router.exceptions.RouterRemoteException;
 import com.tangxiaolv.router.exceptions.ValueParseException;
 import com.tangxiaolv.router.utils.ValueParser;
 
-import static android.R.attr.path;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * Invoked by mirror impl {@link com.tangxiaolv.router.interfaces.IMirror}
@@ -26,7 +24,7 @@ class ModuleDelegater {
             throws
             ValueParseException,
             InvocationTargetException,
-            IllegalAccessException{
+            IllegalAccessException {
         Method method = (Method) mapping.get(path + _METHOD);
         if (method == null) {
             throw new NotFoundPathException("path not found: " + path);
@@ -43,12 +41,19 @@ class ModuleDelegater {
                 for (int i = 0; i < agrNames.length; i++) {
                     arr[i] = ValueParser.parse(params.get(agrNames[i]), typeNames[i]);
                 }
-                method.invoke(target, arr);
+                autoReturn(params, method, method.invoke(target, arr));
                 return;
             }
-            method.invoke(target, ValueParser.parse(params.get(args), types));
+            autoReturn(params, method, method.invoke(target, ValueParser.parse(params.get(args), types)));
             return;
         }
-        method.invoke(target);
+        autoReturn(params, method, method.invoke(target));
+    }
+
+    private static void autoReturn(ParamsWrapper params, Method method, Object result) {
+        String returnType = method.getReturnType().getName();
+        if (!"void".equals(returnType)) {
+            ((VPromise) params.get("promise")).resolve("Object", result);
+        }
     }
 }

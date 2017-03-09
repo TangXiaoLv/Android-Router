@@ -11,18 +11,42 @@ public class CPromise {
         this.target = target;
     }
 
+    /**
+     * Start route.Empty callback
+     *
+     * @return {@link CPromise}
+     */
     public CPromise call() {
         return call(null, null);
     }
 
+    /**
+     * Start route.
+     *
+     * @param resolve Result callback
+     * @return @return {@link CPromise}
+     */
     public CPromise call(Resolve resolve) {
         return call(resolve, null);
     }
 
+    /**
+     * Start route
+     *
+     * @param reject Exception callback
+     * @return @return {@link CPromise}
+     */
     public CPromise call(Reject reject) {
         return call(null, reject);
     }
 
+    /**
+     * Start route
+     *
+     * @param resolve Result callback
+     * @param reject  Exception callback
+     * @return @return {@link CPromise}
+     */
     public CPromise call(Resolve resolve, Reject reject) {
         target.call(resolve, reject);
         return this;
@@ -39,22 +63,34 @@ public class CPromise {
         return this;
     }
 
+    /**
+     * Call on main thread.
+     */
     public CPromise callOnMainThread() {
         target.setThreadFlag(Promise.FLAG_CALL_MAIN);
         return this;
     }
 
-    public CPromise callOnThread() {
+    /**
+     * Call on Sub-thread.
+     */
+    public CPromise callOnSubThread() {
         target.setThreadFlag(Promise.FLAG_CALL_THREAD);
         return this;
     }
 
+    /**
+     * Return on main thread.
+     */
     public CPromise returnOnMainThread() {
         target.setThreadFlag(Promise.FLAG_RETURN_MIAN);
         return this;
     }
 
-    public CPromise returnOnThread() {
+    /**
+     * Return on Sub-thread.
+     */
+    public CPromise returnOnSubThread() {
         target.setThreadFlag(Promise.FLAG_RETURN_THREAD);
         return this;
     }

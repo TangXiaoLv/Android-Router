@@ -73,11 +73,11 @@ public final class AndroidRouter {
      * @param scheme The scheme of protocol
      * @param host   The host of protocol
      * @param path   The path of protocol
-     * @param params The json params of protocol
+     * @param json The json params of protocol
      * @return {@link CPromise}
      */
-    public static CPromise open(String scheme, String host, String path, String params) {
-        Promise promise = new Promise(new Asker(scheme, host, path, params));
+    public static CPromise open(String scheme, String host, String path, String json) {
+        Promise promise = new Promise(new Asker(scheme, host, path, json));
         return new CPromise(promise);
     }
 

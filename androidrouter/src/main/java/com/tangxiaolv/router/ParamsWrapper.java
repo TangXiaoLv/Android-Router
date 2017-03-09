@@ -1,20 +1,18 @@
 
 package com.tangxiaolv.router;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import static android.R.attr.value;
-
 /**
- * Params wrap
+ * Params wrapper
  *
  * {@link Asker}
  */
@@ -23,7 +21,7 @@ public class ParamsWrapper{
     public static final String _PARAMS_ = "_params_";
     private Map params = new HashMap<>();
 
-    @SuppressWarnings("all")
+    @SuppressWarnings("unchecked")
     ParamsWrapper(Object params) throws JSONException {
         if (params instanceof Map) {//inner jsonObject
             this.params = (Map) params;
@@ -62,6 +60,5 @@ public class ParamsWrapper{
     public void put(String key, Object value) {
         if (params != null)
             params.put(key, value);
-
     }
 }

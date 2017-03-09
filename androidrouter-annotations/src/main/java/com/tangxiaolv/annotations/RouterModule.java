@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * Route protocol format
  *
- * scheme://host/path?params=josn
+ * scheme://host/path?params=json
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)

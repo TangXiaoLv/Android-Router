@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 map.put("a", b);
                 AndroidRouter.open("android", "main", "/differentTypes", map)
                         .showTime()
-                        .callOnThread()
+                        .callOnSubThread()
                         .returnOnMainThread()
                         .call(new Resolve() {
                             @Override
