@@ -102,8 +102,8 @@ public class MainModule implements IRouter {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: []");
     }
     
-    //if return type != void, The promise will auto call when return
-    @RouterPath("/autoReturn")
+    //if return type != void, The promise will be auto called.
+    .@RouterPath("/autoReturn")
     public String autoReturn(String scheme) {
         return "I'm auto return!!!!! ";
     }
@@ -177,7 +177,7 @@ public class RemoteModule implements IRouter {
 ###Step 2:Invoke
 ```
 AndroidRouter.open("android://main/activity/localActivity")
-    .callOnThread()
+    .callOnSubThread()
     .returnOnMainThread()
     .call(new Resolve() {
         @Override
