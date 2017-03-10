@@ -3,6 +3,7 @@ package com.tangxiaolv.simple;
 
 import android.app.Application;
 import android.content.Intent;
+import android.os.SystemClock;
 
 import com.tangxiaolv.annotations.RouterModule;
 import com.tangxiaolv.annotations.RouterPath;
@@ -105,5 +106,15 @@ public class MainModule implements IRouter {
     @RouterPath("/throwError")
     public void throwError(VPromise promise) {
         promise.reject(new RouterRemoteException("I'm error................."));
+    }
+
+    @RouterPath("/getValue")
+    public void getValue(VPromise promise) {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        promise.resolve("", "I'm sleep 3 sec!!!");
     }
 }

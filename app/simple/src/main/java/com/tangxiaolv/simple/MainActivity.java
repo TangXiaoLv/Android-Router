@@ -30,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         title = (TextView) findViewById(R.id.title);
+
+        final EditText input = (EditText) findViewById(R.id.input);
+        final Button go = (Button) findViewById(R.id.go);
+
         final TextView router1 = (TextView) findViewById(R.id.router1);
         final TextView router2 = (TextView) findViewById(R.id.router2);
         final TextView router3 = (TextView) findViewById(R.id.router3);
@@ -40,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView router8 = (TextView) findViewById(R.id.router8);
         final TextView router9 = (TextView) findViewById(R.id.router9);
         final TextView router10 = (TextView) findViewById(R.id.router10);
-        final EditText input = (EditText) findViewById(R.id.input);
-        final Button go = (Button) findViewById(R.id.go);
+        final TextView router11 = (TextView) findViewById(R.id.router11);
 
         /*android://main*/
         router1.setText("android://main");
@@ -235,7 +238,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        /*android://main/autoReturn*/
         router9.setText("android://main/autoReturn");
         router9.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*android://main/throwError*/
         router10.setText("android://main/throwError");
         router10.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,6 +261,17 @@ public class MainActivity extends AppCompatActivity {
                         title.setText(e.toString());
                     }
                 });
+            }
+        });
+
+        //Await the result returned.It will block thread.
+        router11.setText("android://main/getValue");
+        router11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Await the result returned.It will block thread.
+                Object value = AndroidRouter.open(router11.getText().toString()).getValue();
+                title.setText(value.toString());
             }
         });
 

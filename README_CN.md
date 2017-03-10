@@ -5,12 +5,13 @@
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.3) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.3/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
+|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.4) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.4/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
 高性能，灵活，简单易用的轻量级Android组件化协议框架，用来解决复杂工程的互相依赖，解耦出的单个模块有利于独立开发和维护。
 
 Update Log
 ---
 ```
+1.0.4: 支持阻塞式返回值。
 1.0.3: 支持当有返回值时自动回调promise返回。
 1.0.2: 支持线程切换。
 1.0.1: 性能优化。
@@ -46,8 +47,8 @@ Gradle
 //需要在各自的application/library 中添加依赖
 //android plugin version > 2.2+
 dependencies {
-    compile 'com.library.tangxiaolv:androidrouter:1.0.3'
-    annotationProcessor 'com.library.tangxiaolv:androidrouter-compiler:1.0.0
+    compile 'com.library.tangxiaolv:androidrouter:x.x.x'
+    annotationProcessor 'com.library.tangxiaolv:androidrouter-compiler:x.x.x'
 }
 
 //android plugin version < 2.2
@@ -64,8 +65,8 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.library.tangxiaolv:androidrouter:1.0.3'
-    apt 'com.library.tangxiaolv:androidrouter-compiler:1.0.0
+    compile 'com.library.tangxiaolv:androidrouter:x.x.x'
+    apt 'com.library.tangxiaolv:androidrouter-compiler:x.x.x'
 }
 ```
 
@@ -165,7 +166,6 @@ public class MainModule implements IRouter {
 //支持接收多scheme
 @RouterModule(scheme = "android|remote", host = "lib")
 public class RemoteModule implements IRouter {
-
     @RouterPath("/openRemoteActivity")
     public void openRemoteActivity(Application context, String scheme, VPromise promise) {
         Intent intent = new Intent(context, RemoteActivity.class);
@@ -198,6 +198,10 @@ AndroidRouter.open("android://main/activity/localActivity")
  AndroidRouter.open("android", "main", "/differentTypes")
     .showTime()//显示本次调用时间
     .call();//忽略返回值和错误
+    
+//方式三
+//阻塞式拿返回值
+Object value = AndroidRouter.open("android://main/getValue").getValue();
 ```
 ###混淆
 ```

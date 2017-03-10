@@ -1,11 +1,10 @@
 
 package com.tangxiaolv.router;
 
+import android.text.TextUtils;
+
 import java.util.List;
 import java.util.Map;
-
-import android.net.Uri;
-import android.text.TextUtils;
 
 /**
  * Android Router Facade.

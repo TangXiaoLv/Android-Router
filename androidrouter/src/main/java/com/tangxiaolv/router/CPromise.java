@@ -1,5 +1,9 @@
 package com.tangxiaolv.router;
 
+import com.tangxiaolv.router.exceptions.RouterRemoteException;
+
+import java.util.concurrent.CountDownLatch;
+
 /**
  * Proxy of {@link Promise}
  */
@@ -50,6 +54,51 @@ public class CPromise {
     public CPromise call(Resolve resolve, Reject reject) {
         target.call(resolve, reject);
         return this;
+    }
+
+    /**
+     * Await the result returned.It will block thread.
+     *
+     * @see CPromise#getValue(Reject reject)
+     */
+    public Object getValue() {
+        return getValue(null);
+    }
+
+    /**
+     * Await the result returned.It will block thread.
+     *
+     * @param reject {@link Reject}
+     * @return result from remote.
+     */
+    public Object getValue(final Reject reject) {
+        final Object[] arr = new Object[1];
+        final CountDownLatch latch = new CountDownLatch(1);
+        target.call(new Resolve() {
+            @Override
+            public void call(String type, Object result) {
+                arr[0] = result;
+                latch.countDown();
+            }
+        }, new Reject() {
+            @Override
+            public void call(Exception e) {
+                if (reject != null) {
+                    reject.call(e);
+                }
+                latch.countDown();
+            }
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            if (reject != null) {
+                reject.call(new RouterRemoteException("getValue fail.", e));
+            }
+        }
+
+        return arr[0];
     }
 
     /**
