@@ -28,7 +28,7 @@ public class CPromise {
      * Start route.
      *
      * @param resolve Result callback
-     * @return @return {@link CPromise}
+     * @return {@link CPromise}
      */
     public CPromise call(Resolve resolve) {
         return call(resolve, null);
@@ -38,7 +38,7 @@ public class CPromise {
      * Start route
      *
      * @param reject Exception callback
-     * @return @return {@link CPromise}
+     * @return {@link CPromise}
      */
     public CPromise call(Reject reject) {
         return call(null, reject);
@@ -49,7 +49,7 @@ public class CPromise {
      *
      * @param resolve Result callback
      * @param reject  Exception callback
-     * @return @return {@link CPromise}
+     * @return {@link CPromise}
      */
     public CPromise call(Resolve resolve, Reject reject) {
         target.call(resolve, reject);
@@ -59,6 +59,7 @@ public class CPromise {
     /**
      * Await the result returned.It will block thread.
      *
+     * @return result
      * @see CPromise#getValue(Reject reject)
      */
     public Object getValue() {
@@ -69,7 +70,7 @@ public class CPromise {
      * Await the result returned.It will block thread.
      *
      * @param reject {@link Reject}
-     * @return result from remote.
+     * @return result
      */
     public Object getValue(final Reject reject) {
         final Object[] arr = new Object[1];
@@ -102,10 +103,11 @@ public class CPromise {
     }
 
     /**
-     * Return the mock result.
+     * Mock result.
      *
      * @param type   mock type
      * @param result mock result
+     * @return {@link CPromise}
      */
     public CPromise mockResolve(String type, Object result) {
         target.resolve(type, result);
@@ -114,6 +116,8 @@ public class CPromise {
 
     /**
      * Call on main thread.
+     *
+     * @return {@link CPromise}
      */
     public CPromise callOnMainThread() {
         target.setThreadFlag(Promise.FLAG_CALL_MAIN);
@@ -122,6 +126,8 @@ public class CPromise {
 
     /**
      * Call on Sub-thread.
+     *
+     * @return {@link CPromise}
      */
     public CPromise callOnSubThread() {
         target.setThreadFlag(Promise.FLAG_CALL_THREAD);
@@ -129,7 +135,9 @@ public class CPromise {
     }
 
     /**
-     * Return on main thread.
+     * Callback on main thread.
+     *
+     * @return {@link CPromise}
      */
     public CPromise returnOnMainThread() {
         target.setThreadFlag(Promise.FLAG_RETURN_MIAN);
@@ -137,7 +145,9 @@ public class CPromise {
     }
 
     /**
-     * Return on Sub-thread.
+     * Callback on Sub-thread.
+     *
+     * @return {@link CPromise}
      */
     public CPromise returnOnSubThread() {
         target.setThreadFlag(Promise.FLAG_RETURN_THREAD);
