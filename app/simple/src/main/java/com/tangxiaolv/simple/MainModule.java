@@ -17,6 +17,8 @@ import com.tangxiaolv.simple.entity.Package;
 
 import java.util.List;
 
+import static android.R.attr.scheme;
+
 /**
  * Support parameter types
  *
@@ -26,9 +28,11 @@ import java.util.List;
  * double
  * boolean
  * String
+ *
+ * Array
  * List<?>
  * Map<String,Object>
- * custom object
+ * Custom object
  */
 @RouterModule(scheme = "android", host = "main")
 public class MainModule implements IRouter {
@@ -64,8 +68,8 @@ public class MainModule implements IRouter {
      * Route => android://main/params/basis?params={'f':1,'i':2,'l':3,'d':4,'b':true}
      */
     @RouterPath("/params/basis")
-    public void paramsBasis(float f, int i, long l, double d, boolean b,
-                            String scheme, VPromise promise) {
+    public void paramsBasis(String scheme, VPromise promise,
+                            float f, int i, long l, double d, boolean b) {
         promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/params/basis]");
     }
 
@@ -75,25 +79,25 @@ public class MainModule implements IRouter {
      * Route => android://main/params/complex?params={'b':{},'listC':[]}
      */
     @RouterPath("/params/complex")
-    public void paramsComplex(B b, List<C> listC, String scheme, VPromise promise) {
+    public void paramsComplex(String scheme, VPromise promise, B b, List<C> listC) {
         promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/params/complex]");
     }
 
     //from json object => to object
     @RouterPath("/jsonObject")
-    public void paramsPakege(Package _params_, String scheme, VPromise promise) {
+    public void paramsPakege(String scheme, VPromise promise, Package _params_) {
         promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/jsonObject]");
     }
 
     //from json array => to list
     @RouterPath("/jsonArray")
-    public void jsonArray(List<A> _params_, String scheme, VPromise promise) {
+    public void jsonArray(String scheme, VPromise promise, List<A> _params_) {
         promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/jsonArray]");
     }
 
     //eg: from A => to B
     @RouterPath("/differentTypes")
-    public void differentTypes(A a, List<A> listA, String scheme, VPromise promise) {
+    public void differentTypes(String scheme, VPromise promise, A a, List<A> listA, C[] c, String... names) {
         promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/differentTypes]");
     }
 

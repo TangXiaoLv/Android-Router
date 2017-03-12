@@ -154,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         /*android://main/jsonArray?params=[1,2,3]}*/
         router6.setText("android://main/jsonArray?params=[{'key1':'haha'},{'key1':hehe},{'key1':'wawa'}]");
         router6.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         router7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //first params
+                //B => A
                 B b = new B("Hi", 1, true, 2);
                 ArrayList<A> key5 = new ArrayList<>();
                 key5.add(new A("Hi", 1, true, 2));
@@ -189,15 +188,27 @@ public class MainActivity extends AppCompatActivity {
                 key5.add(new A("Hi", 1, true, 2));
                 b.setKey5(key5);
 
-                //second params
+                //List<B> => List<A>
                 ArrayList<B> listB = new ArrayList<>();
                 listB.add(new B("Hi", 1, true, 2));
                 listB.add(new B("Hi", 1, true, 2));
                 listB.add(new B("Hi", 1, true, 2));
 
+                //A[] => C[]
+                A[] arr = new A[]{
+                        new A("Hi,fromA", 1, true, 2),
+                        new A("Hi,fromA", 1, true, 2),
+                        new A("Hi,fromA", 1, true, 2)
+                };
+
+                //String...
+                String[] names = new String[]{"jack", "bill", "hafman"};
+
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("listA", listB);
                 map.put("a", b);
+                map.put("c", arr);
+                map.put("names", names);
                 AndroidRouter.open("android", "main", "/differentTypes", map)
                         .showTime()
                         .callOnSubThread()
@@ -236,7 +247,6 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
-
 
         router9.setText("android://main/autoReturn");
         router9.setOnClickListener(new View.OnClickListener() {

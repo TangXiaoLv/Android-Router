@@ -12,6 +12,6 @@ public class PromiseTimer {
     }
 
     public String getTime() {
-        return String.valueOf(System.currentTimeMillis() - start);
+        return String.valueOf(System.currentTimeMillis() - start) + "ms";
     }
 }

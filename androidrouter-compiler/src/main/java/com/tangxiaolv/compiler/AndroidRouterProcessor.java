@@ -104,8 +104,7 @@ public class AndroidRouterProcessor extends AbstractProcessor {
         printMessage(Diagnostic.Kind.NOTE, message, args);
     }
 
-    private void printMessage(Diagnostic.Kind kind, String message,
-                              Object[] args) {
+    private void printMessage(Diagnostic.Kind kind, String message, Object[] args) {
         if (args.length > 0) {
             message = String.format(message, args);
         }
@@ -125,8 +124,7 @@ public class AndroidRouterProcessor extends AbstractProcessor {
         return javaFiles;
     }
 
-    private void parseRouterModule(Element moduleEle, List<? extends Element> allEle,
-                                   List<JavaFile> javaFiles) {
+    private void parseRouterModule(Element moduleEle, List<? extends Element> allEle, List<JavaFile> javaFiles) {
         RouterModule moduleAnno = moduleEle.getAnnotation(RouterModule.class);
         String schemes = moduleAnno.scheme();
         String host = moduleAnno.host().toLowerCase();
@@ -135,8 +133,7 @@ public class AndroidRouterProcessor extends AbstractProcessor {
 
         // constructor build
         MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder();
-        constructorBuilder.addModifiers(Modifier.PUBLIC)
-                .addException(Exception.class);
+        constructorBuilder.addModifiers(Modifier.PUBLIC).addException(Exception.class);
 
         // constructor body
         ClassName original = ClassName.get(elementUtils.getPackageOf(moduleEle).toString(),
@@ -154,23 +151,25 @@ public class AndroidRouterProcessor extends AbstractProcessor {
 
             String agrs = ((ExecutableElement) elm).getParameters().toString();
             String types = "";
-            String methodParams = elm.toString();
-            int start = methodParams.indexOf("(");
-            int end = methodParams.indexOf(")");
+            String methodFullTypes = elm.toString();
+            int start = methodFullTypes.indexOf("(");
+            int end = methodFullTypes.indexOf(")");
             if (end - start > 1) {
                 // open1(java.lang.String,com.tangxiaolv.router.Promise) =>
                 // ,java.lang.String.class,com.tangxiaolv.router.Promise.class))
-                types = methodParams.substring(start + 1, end);
-                methodParams = "," + getFullTypesString(types) + "))";
+                types = methodFullTypes.substring(start + 1, end);
+                if (types.lastIndexOf("...") != -1)
+                    types = types.replace("...", "[]");
+                methodFullTypes = "," + getFullTypesString(types) + "))";
             } else {
-                methodParams = "))";
+                methodFullTypes = "))";
             }
 
             String methodKey = pathAnno.value().toLowerCase();
             String methodName = elm.getSimpleName().toString();
             // add method
             constructorBuilder.addStatement(
-                    "mapping.put($S + $T._METHOD, original.getClass().getMethod($S" + methodParams,
+                    "mapping.put($S + $T._METHOD, original.getClass().getMethod($S" + methodFullTypes,
                     methodKey,
                     MODULE_DELEGATER,
                     methodName);

@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -15,8 +16,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static android.R.id.list;
 
 /**
  * Parse tool parameter, from type to expected type.
@@ -42,6 +41,8 @@ public class ValueParser {
             from = toDouble(from, 0d);
         } else if ("float".equals(expectedType) || "java.lang.Float".equals(expectedType)) {
             from = toFloat(from, 0f);
+        } else if (expectedType.contains("[]")) {
+            from = toArray(from, expectedType);
         } else if (expectedType.contains("java.util.List")) {
             from = toList(from, expectedType);
         } else if (expectedType.contains("java.util.Map")) {
@@ -122,12 +123,47 @@ public class ValueParser {
         return defVal;
     }
 
-    // maybe List<?>
-    private static Object toList(Object from, String expectType) throws ValueParseException {
+    @SuppressWarnings("all")
+    private static Object toArray(Object from, String expectedType) throws ValueParseException {
         try {
             if (from instanceof String || from instanceof JSONArray) {
                 JSONArray jArray = from instanceof String ? new JSONArray((String) from) : (JSONArray) from;
-                String generic = getListGeneric(expectType);
+                String arrayType = expectedType.replace("[]", "");
+                Object[] targetArr = (Object[]) Array.newInstance(Class.forName(arrayType), jArray.length());
+                int length = jArray.length();
+                for (int i = 0; i < length; i++) {
+                    Object o = jArray.get(i);
+                    targetArr[i] = parse(o, arrayType);
+                }
+                from = targetArr;
+            } else if (from != null && from.getClass().getName().contains("[")) {
+                Object[] origin = (Object[]) from;
+                String arrayType = expectedType.replace("[]", "");
+                Object[] targetArr = (Object[]) Array.newInstance(Class.forName(arrayType), origin.length);
+                Object first = origin[0];
+                if (first != null && !first.getClass().getName().equals(arrayType)) {
+                    for (int i = 0; i < origin.length; i++) {
+                        targetArr[i] = parse(origin[i], arrayType);
+                    }
+                } else {
+                    targetArr = origin;
+                }
+                from = targetArr;
+            }
+        } catch (JSONException e) {
+            throw new ValueParseException("parse to " + expectedType + " type fail.", e);
+        } catch (ClassNotFoundException e) {
+            throw new ValueParseException("parse to " + expectedType + " type fail.", e);
+        }
+        return from;
+    }
+
+    // maybe List<?>
+    private static Object toList(Object from, String expectedType) throws ValueParseException {
+        try {
+            if (from instanceof String || from instanceof JSONArray) {
+                JSONArray jArray = from instanceof String ? new JSONArray((String) from) : (JSONArray) from;
+                String generic = getListGeneric(expectedType);
                 ArrayList<Object> list = new ArrayList<>(jArray.length());
                 int length = jArray.length();
                 for (int i = 0; i < length; i++) {
@@ -141,21 +177,21 @@ public class ValueParser {
                 from = list;
             } else if (from instanceof List) {
                 List origin = (List) from;
-                List<Object> target = new ArrayList<>();
-                String listGeneric = getListGeneric(expectType);
+                List<Object> target = new ArrayList<>(origin.size());
+                String listGeneric = getListGeneric(expectedType);
                 Object first = origin.get(0);
                 if (first != null && !first.getClass().getName().equalsIgnoreCase(listGeneric)) {
                     for (Object o : origin) {
-                        target.add(parseObjToTarget(o, listGeneric));
+                        target.add(parse(o, listGeneric));
                     }
                 }
                 from = target;
             } else if (from instanceof Map) {
                 Object params = ((Map) from).get(ParamsWrapper._PARAMS_);
-                from = parse(params, expectType);
+                from = parse(params, expectedType);
             }
         } catch (JSONException e) {
-            throw new ValueParseException("parse to " + expectType + " type fail.", e);
+            throw new ValueParseException("parse to " + expectedType + " type fail.", e);
         }
         return from;
     }
@@ -282,7 +318,6 @@ public class ValueParser {
         }
         return className;
     }
-
 
     // eg: List<Simple>
     @SuppressWarnings("all")
