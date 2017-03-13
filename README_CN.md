@@ -88,6 +88,9 @@ dependencies {
  * double
  * boolean
  * String
+ *
+ * Array
+ * Varargs
  * List<?>
  * Map<String,Object>
  * custom object
