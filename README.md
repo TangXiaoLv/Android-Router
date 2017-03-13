@@ -88,6 +88,9 @@ Note：Android-Router Protocol Format: scheme://host/path?params=json
  * double
  * boolean
  * String
+ *
+ * Array
+ * Varargs
  * List<?>
  * Map<String,Object>
  * custom object
