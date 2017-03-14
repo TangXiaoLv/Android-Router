@@ -145,10 +145,8 @@ public class ValueParser {
                     for (int i = 0; i < origin.length; i++) {
                         targetArr[i] = parse(origin[i], arrayType);
                     }
-                } else {
-                    targetArr = origin;
+                    from = targetArr;
                 }
-                from = targetArr;
             }
         } catch (JSONException e) {
             throw new ValueParseException("parse to " + expectedType + " type fail.", e);
@@ -184,8 +182,8 @@ public class ValueParser {
                     for (Object o : origin) {
                         target.add(parse(o, listGeneric));
                     }
+                    from = target;
                 }
-                from = target;
             } else if (from instanceof Map) {
                 Object params = ((Map) from).get(ParamsWrapper._PARAMS_);
                 from = parse(params, expectedType);
