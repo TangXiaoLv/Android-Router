@@ -120,6 +120,6 @@ class Asker {
 
     private String getUrl() {
         String param = params == null ? "" : URL_PARAMS + params.toString();
-        return scheme + "://" + host + "/" + path + param;
+        return scheme + "://" + host + path + param;
     }
 }
