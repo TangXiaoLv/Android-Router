@@ -5,12 +5,13 @@ English | [中文](https://github.com/TangXiaoLv/Android-Router/blob/master/READ
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.6) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.6/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
+|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.7) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.7/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
 High-performance, flexible, easy-to-use lightweight Android component-based framework, Used to solve the interdependence of complex projects, A single module is conducive to independent development and maintenance.
 
 Update Log
 ---
 ```
+1.0.7: Fix system params passed exception.
 1.0.6: Fix known issues.
 1.0.5: Support array params and extend params.
 1.0.4: Support await the result return.It will block thread.
@@ -154,13 +155,14 @@ public class MainModule implements IRouter {
     }
 
     //eg: from A => to B
-    //If passed different type of object.The basic params name and type must be the same.
+    //Note:The primitive params name and type must be the same.
+    //Note:Both need implements IRouter and have empty constructor.
     @RouterPath("/differentTypes")
     public void differentTypes(A a, List<A> listA, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/differentTypes]");
     }
 
-    //If you want to return an error.Recommend use RouterRemoteException
+    //If you want to return an error. Recommend use RouterRemoteException
     @RouterPath("/throwError")
     public void throwError(VPromise promise) {
         promise.reject(new RouterRemoteException("I'm error................."));

@@ -5,12 +5,13 @@
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.6) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.6/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
+|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.7) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.7/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
 高性能，灵活，简单易用的轻量级Android组件化协议框架，用来解决复杂工程的互相依赖，解耦出的单个模块有利于独立开发和维护。
 
 Update Log
 ---
 ```
+1.0.7: 修复系统类参数传递异常。
 1.0.6: 修复一些已知问题。
 1.0.5: 支持数组类型参数和可变参数。
 1.0.4: 支持阻塞式返回值。
@@ -154,8 +155,8 @@ public class MainModule implements IRouter {
     }
 
     //eg: from A => to B
-    //不同类型对象传递,对象中的基本类型参数key和类型必须一致
-    //自定义对象需要实现IRouter,并且需要空参数构造函数
+    //注意：不同类型对象传递,对象中的基本类型参数key和类型必须一致
+    //注意：2边对象需要实现IRouter,并且需要空参数构造函数
     @RouterPath("/differentTypes")
     public void differentTypes(A a, List<A> listA, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: [/differentTypes]");

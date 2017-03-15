@@ -3,6 +3,7 @@ package com.tangxiaolv.router.utils;
 
 import com.tangxiaolv.router.ParamsWrapper;
 import com.tangxiaolv.router.exceptions.ValueParseException;
+import com.tangxiaolv.router.interfaces.IRouter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -217,7 +218,7 @@ public class ValueParser {
             from = parseJsonToObj(from, expectType);
         } else if (from instanceof Map) {
             from = parseMapToTarget(from, expectType);
-        } else if (from != null && !expectType.equalsIgnoreCase(from.getClass().getName())) {
+        } else if (from instanceof IRouter && !expectType.equalsIgnoreCase(from.getClass().getName())) {
             from = parseObjToTarget(from, expectType);
         }
         return from;
