@@ -6,13 +6,7 @@ package com.tangxiaolv.router;
  *
  * @see Promise
  */
-public interface Resolve {
+public interface Resolve<T> {
 
-    /**
-     * Return result,Called in main thread.
-     *
-     * @param type   type of result
-     * @param result result
-     */
-    void call(String type, Object result);
+    void call(T result);
 }

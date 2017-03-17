@@ -14,11 +14,14 @@ import android.widget.Toast;
 import com.tangxiaolv.router.AndroidRouter;
 import com.tangxiaolv.router.Reject;
 import com.tangxiaolv.router.Resolve;
+import com.tangxiaolv.router.operators.Func;
 import com.tangxiaolv.simple.entity.A;
 import com.tangxiaolv.simple.entity.B;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.tangxiaolv.router.AndroidRouter.open;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView router9 = (TextView) findViewById(R.id.router9);
         final TextView router10 = (TextView) findViewById(R.id.router10);
         final TextView router11 = (TextView) findViewById(R.id.router11);
+        final TextView router12 = (TextView) findViewById(R.id.router12);
 
         /*android://main*/
         router1.setText("android://main");
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AndroidRouter.open(router1.getText().toString()).call(new Resolve() {
                     @Override
-                    public void call(String type, Object result) {
+                    public void call(Object result) {
                         title.setText(result.toString());
                     }
                 }, new Reject() {
@@ -70,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
         router2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidRouter.open(router2.getText().toString()).call(new Resolve() {
+                open(router2.getText().toString()).call(new Resolve() {
                     @Override
-                    public void call(String type, Object result) {
+                    public void call(Object result) {
                         title.setText(result.toString());
                     }
                 }, new Reject() {
@@ -89,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
         router3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidRouter.open(router3.getText().toString()).call(new Resolve() {
+                open(router3.getText().toString()).call(new Resolve() {
                     @Override
-                    public void call(String type, Object result) {
+                    public void call(Object result) {
                         title.setText(result.toString());
                     }
                 }, new Reject() {
@@ -112,11 +116,11 @@ public class MainActivity extends AppCompatActivity {
         router4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidRouter.open(router4.getText().toString())
+                open(router4.getText().toString())
                         .showTime()
                         .call(new Resolve() {
                             @Override
-                            public void call(String type, Object result) {
+                            public void call(Object result) {
                                 title.setText(result.toString());
                             }
                         }, new Reject() {
@@ -138,11 +142,11 @@ public class MainActivity extends AppCompatActivity {
         router5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidRouter.open(router5.getText().toString())
+                open(router5.getText().toString())
                         .showTime()
                         .call(new Resolve() {
                             @Override
-                            public void call(String type, Object result) {
+                            public void call(Object result) {
                                 title.setText(result.toString());
                             }
                         }, new Reject() {
@@ -159,11 +163,11 @@ public class MainActivity extends AppCompatActivity {
         router6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidRouter.open(router6.getText().toString())
+                open(router6.getText().toString())
                         .showTime()
                         .call(new Resolve() {
                             @Override
-                            public void call(String type, Object result) {
+                            public void call(Object result) {
                                 title.setText(result.toString());
                             }
                         }, new Reject() {
@@ -209,13 +213,10 @@ public class MainActivity extends AppCompatActivity {
                 map.put("a", b);
                 map.put("c", arr);
                 map.put("names", names);
-                AndroidRouter.open("android", "main", "/differentTypes", map)
-                        .showTime()
-                        .callOnSubThread()
-                        .returnOnMainThread()
-                        .call(new Resolve() {
+                open("android", "main", "/differentTypes", map).showTime().callOnSubThread().returnOnMainThread()
+                        .call(new Resolve<String>() {
                             @Override
-                            public void call(String type, Object result) {
+                            public void call(String result) {
                                 title.setText(result.toString());
                             }
                         }, new Reject() {
@@ -232,11 +233,11 @@ public class MainActivity extends AppCompatActivity {
         router8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidRouter.open(router8.getText().toString())
+                open(router8.getText().toString())
                         .returnOnMainThread()
                         .call(new Resolve() {
                             @Override
-                            public void call(String type, Object result) {
+                            public void call(Object result) {
                                 Toast.makeText(MainActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
                             }
                         }, new Reject() {
@@ -252,9 +253,9 @@ public class MainActivity extends AppCompatActivity {
         router9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidRouter.open(router9.getText().toString()).call(new Resolve() {
+                open(router9.getText().toString()).call(new Resolve() {
                     @Override
-                    public void call(String type, Object result) {
+                    public void call(Object result) {
                         title.setText(result.toString());
                     }
                 });
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
         router10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidRouter.open(router10.getText().toString()).call(new Reject() {
+                open(router10.getText().toString()).call(new Reject() {
                     @Override
                     public void call(Exception e) {
                         title.setText(e.toString());
@@ -280,8 +281,46 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Await the result returned.It will block thread.
-                Object value = AndroidRouter.open(router11.getText().toString()).getValue();
+                Object value = open(router11.getText().toString()).getValue();
                 title.setText(value.toString());
+            }
+        });
+
+        //process result with reactive.
+        router12.setText("android://main/reactive");
+        router12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                open(router12.getText().toString())
+                        .call(new Func<String, Integer>() {
+                            @Override
+                            public Integer call(String s) {
+                                return 1;
+                            }
+                        })
+                        .then(new Func<Integer, Double>() {
+                            @Override
+                            public Double call(Integer integer) {
+                                return 2.0;
+                            }
+                        })
+                        .then(new Func<Double, String>() {
+                            @Override
+                            public String call(Double ddouble) {
+                                return "I'm reactive!";
+                            }
+                        })
+                        .done(new Resolve<String>() {
+                            @Override
+                            public void call(String result) {
+                                title.setText(result);
+                            }
+                        }, new Reject() {
+                            @Override
+                            public void call(Exception e) {
+                                title.setText(e.toString());
+                            }
+                        });
             }
         });
 
@@ -290,9 +329,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String url = input.getText().toString();
-                AndroidRouter.open(url).call(new Resolve() {
+                open(url).call(new Resolve() {
                     @Override
-                    public void call(String type, Object object) {
+                    public void call(Object object) {
                         title.setText(object.toString());
                     }
                 }, new Reject() {

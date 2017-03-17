@@ -22,17 +22,9 @@ import static android.R.attr.scheme;
 /**
  * Support parameter types
  *
- * float
- * int
- * long
- * double
- * boolean
- * String
+ * float int long double boolean String
  *
- * Array
- * List<?>
- * Map<String,Object>
- * Custom object
+ * Array List<?> Map<String,Object> Custom object
  */
 @RouterModule(scheme = "android", host = "main")
 public class MainModule implements IRouter {
@@ -47,7 +39,7 @@ public class MainModule implements IRouter {
      */
     @RouterPath
     public void def(Application context, String scheme, VPromise promise) {
-        promise.resolve("", "from scheme: [" + scheme + "] " + "path: []");
+        promise.resolve("from scheme: [" + scheme + "] " + "path: []");
     }
 
     /**
@@ -70,7 +62,7 @@ public class MainModule implements IRouter {
     @RouterPath("/params/basis")
     public void paramsBasis(String scheme, VPromise promise,
                             float f, int i, long l, double d, boolean b) {
-        promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/params/basis]");
+        promise.resolve("from scheme: [" + scheme + "] " + "path: [/params/basis]");
     }
 
     /**
@@ -80,25 +72,25 @@ public class MainModule implements IRouter {
      */
     @RouterPath("/params/complex")
     public void paramsComplex(String scheme, VPromise promise, B b, List<C> listC) {
-        promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/params/complex]");
+        promise.resolve("from scheme: [" + scheme + "] " + "path: [/params/complex]");
     }
 
     //from json object => to object
     @RouterPath("/jsonObject")
     public void paramsPakege(String scheme, VPromise promise, Package _params_) {
-        promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/jsonObject]");
+        promise.resolve("from scheme: [" + scheme + "] " + "path: [/jsonObject]");
     }
 
     //from json array => to list
     @RouterPath("/jsonArray")
     public void jsonArray(String scheme, VPromise promise, List<A> _params_) {
-        promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/jsonArray]");
+        promise.resolve("from scheme: [" + scheme + "] " + "path: [/jsonArray]");
     }
 
     //eg: from A => to B
     @RouterPath("/differentTypes")
     public void differentTypes(String scheme, VPromise promise, A a, List<A> listA, C[] c, String... names) {
-        promise.resolve("", "from scheme: [" + scheme + "] " + "path: [/differentTypes]");
+        promise.resolve("from scheme: [" + scheme + "] " + "path: [/differentTypes]");
     }
 
     //if return type != void, auto return value by call promise
@@ -119,6 +111,11 @@ public class MainModule implements IRouter {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        promise.resolve("", "I'm sleep 3 sec!!!");
+        promise.resolve("I'm sleep 3 sec!!!");
+    }
+
+    @RouterPath("/reactive")
+    public void reactive(VPromise promise) {
+        promise.resolve("I'm from reactive!!!!!");
     }
 }

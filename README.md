@@ -5,13 +5,14 @@ English | [中文](https://github.com/TangXiaoLv/Android-Router/blob/master/READ
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.7) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.7/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
+|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=2.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter/2.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
 
 High-performance, flexible, easy-to-use lightweight Android component-based framework, Used to solve the interdependence of complex projects, A single module is conducive to independent development and maintenance.
 
 Update Log
 ---
 ```
+2.0.0: Resolve callback support generic, Support reactive programming, Remove resolve.call 'type' param. 
 1.0.7: Fix system params passed exception.
 1.0.6: Fix known issues.
 1.0.5: Support array params and extend params.
@@ -168,6 +169,11 @@ public class MainModule implements IRouter {
     public void throwError(VPromise promise) {
         promise.reject(new RouterRemoteException("I'm error................."));
     }
+    
+    @RouterPath("/reactive")
+        public void reactive(VPromise promise) {
+            promise.resolve("I'm from reactive!!!!!");
+    }
 }
 
 //Support multiple scheme.
@@ -185,7 +191,8 @@ public class RemoteModule implements IRouter {
 ```
 ###Step 2:Invoke
 ```
-AndroidRouter.open("android://main/activity/localActivity")
+AndroidRouter
+    .open("android://main/activity/localActivity")
     .callOnSubThread()
     .returnOnMainThread()
     .call(new Resolve() {
@@ -201,13 +208,46 @@ AndroidRouter.open("android://main/activity/localActivity")
 });
 
 //or
-AndroidRouter.open("android", "main", "/differentTypes")
+AndroidRouter
+    .open("android", "main", "/differentTypes")
     .showTime()//Show time
     .call();//Igone result and error.
     
 //or
 //Await the result returned.It will block thread.
-Object value = AndroidRouter.open(router11.getText().toString()).getValue();
+Object value = AndroidRouter.open("android://main/getValue").getValue();
+
+//or
+AndroidRouter.open("android://main/reactive")
+    .call(new Func<String, Integer>() {
+        @Override
+        public Integer call(String s) {
+            return 1;
+        }
+    })
+    .then(new Func<Integer, Double>() {
+        @Override
+        public Double call(Integer integer) {
+            return 2.0;
+        }
+    })
+    .then(new Func<Double, String>() {
+        @Override
+        public String call(Double ddouble) {
+            return "I'm reactive!";
+        }
+    })
+    .done(new Resolve<String>() {
+        @Override
+        public void call(String result) {
+            title.setText(result);
+        }
+    }, new Reject() {
+        @Override
+        public void call(Exception e) {
+            title.setText(e.toString());
+        }
+    });
 ```
 ###Proguard
 ```

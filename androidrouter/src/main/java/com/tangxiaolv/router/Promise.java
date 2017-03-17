@@ -11,33 +11,31 @@ import com.tangxiaolv.router.utils.ReflectTool;
 /**
  * Manage router send and receive.
  */
-class Promise {
+public class Promise {
 
     /**
      * Call on main thread.{@link Promise#call(Resolve, Reject)}
      */
-    static final int FLAG_CALL_MAIN = 1 << 1;
+    public static final int FLAG_CALL_MAIN = 1 << 1;
 
     /**
      * Call on thread.{@link Promise#call(Resolve, Reject)}
      */
-    static final int FLAG_CALL_THREAD = 1 << 2;
+    public static final int FLAG_CALL_THREAD = 1 << 2;
 
     /**
      * return on main thread.
      *
-     * {@link Promise#resolve(String, Object)}
-     * {@link Promise#reject(Exception)}}
+     * {@link Promise#resolve(Object)} {@link Promise#reject(Exception)}}
      */
-    static final int FLAG_RETURN_MIAN = 1 << 3;
+    public static final int FLAG_RETURN_MIAN = 1 << 3;
 
     /**
      * return on thread.
      *
-     * {@link Promise#resolve(String, Object)}
-     * {@link Promise#reject(Exception)}}
+     * {@link Promise#resolve(Object)} {@link Promise#reject(Exception)}}
      */
-    static final int FLAG_RETURN_THREAD = 1 << 4;
+    public static final int FLAG_RETURN_THREAD = 1 << 4;
 
     private final Asker asker;
     private final VPromise mVPromise;
@@ -54,36 +52,11 @@ class Promise {
     }
 
     /**
-     * No want to receive.
-     */
-    void call() {
-        call(null, null);
-    }
-
-    /**
-     * Send router.Only receive success.
-     *
-     * @param resolve {@link Promise}
-     */
-    void call(Resolve resolve) {
-        call(resolve, null);
-    }
-
-    /**
-     * Send router.Only receive fail.
-     *
-     * @param reject {@link Promise}
-     */
-    void call(Reject reject) {
-        call(null, reject);
-    }
-
-    /**
      * Send router. Receive success and fail.
      *
      * @param resolve {@link Promise}
      */
-    void call(Resolve resolve, Reject reject) {
+    public void call(Resolve resolve, Reject reject) {
         this.resolve = resolve;
         this.reject = reject;
 
@@ -113,7 +86,8 @@ class Promise {
         }
     }
 
-    void resolve(final String type, final Object result) {
+    @SuppressWarnings("unchecked")
+    void resolve(final Object result) {
         showToast();
         if (resolve == null)
             return;
@@ -123,7 +97,11 @@ class Promise {
             RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
-                    resolve.call(type, result);
+                    try {
+                        resolve.call(result);
+                    } catch (Exception e) {
+                        reject(e);
+                    }
                 }
             });
         }
@@ -133,14 +111,22 @@ class Promise {
             RouterHelper.EXECUTOR.execute(new Runnable() {
                 @Override
                 public void run() {
-                    resolve.call(type, result);
+                    try {
+                        resolve.call(result);
+                    } catch (Exception e) {
+                        reject(e);
+                    }
                 }
             });
         }
 
         //call on current thread
         else {
-            resolve.call(type, result);
+            try {
+                resolve.call(result);
+            } catch (Exception e) {
+                reject(e);
+            }
         }
     }
 
@@ -179,7 +165,7 @@ class Promise {
         }
     }
 
-    void showTime() {
+    public void showTime() {
         timer = new PromiseTimer();
     }
 
@@ -197,7 +183,7 @@ class Promise {
         return mVPromise;
     }
 
-    void setThreadFlag(int flag) {
+    public void setThreadFlag(int flag) {
         this.flagMark |= flag;
     }
 

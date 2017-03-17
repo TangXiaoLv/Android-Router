@@ -28,7 +28,7 @@ public class RemoteActivity extends Activity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        promise.resolve("","I'm from remote");
+                        promise.resolve("I'm from remote");
                     }
                 }).start();
                 finish();

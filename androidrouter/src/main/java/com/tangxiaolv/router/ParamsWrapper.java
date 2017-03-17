@@ -12,11 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Params wrapper
- *
- * {@link Asker}
+ * Params wrapper.The middle data map between from and to.
  */
-public class ParamsWrapper{
+public class ParamsWrapper {
 
     public static final String _PARAMS_ = "_params_";
     private Map params = new HashMap<>();
@@ -58,7 +56,6 @@ public class ParamsWrapper{
 
     @SuppressWarnings("all")
     public void put(String key, Object value) {
-        if (params != null)
-            params.put(key, value);
+        params.put(key, value);
     }
 }

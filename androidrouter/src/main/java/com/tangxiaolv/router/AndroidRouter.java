@@ -3,6 +3,8 @@ package com.tangxiaolv.router;
 
 import android.text.TextUtils;
 
+import com.tangxiaolv.router.operators.CPromise;
+
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +22,9 @@ public final class AndroidRouter {
      * @param url scheme://host/path?params=json
      * @return {@link CPromise}
      */
-    public static CPromise open(String url) {
+    public static <R> CPromise<R> open(String url) {
         Promise promise = new Promise(new Asker(url));
-        return new CPromise(promise);
+        return new CPromise<>(promise);
     }
 
     /**
@@ -33,9 +35,9 @@ public final class AndroidRouter {
      * @param path   The path of protocol
      * @return {@link CPromise}
      */
-    public static CPromise open(String scheme, String host, String path) {
+    public static <R> CPromise<R> open(String scheme, String host, String path) {
         Promise promise = new Promise(new Asker(scheme, host, path, null));
-        return new CPromise(promise);
+        return new CPromise<>(promise);
     }
 
     /**
@@ -47,9 +49,9 @@ public final class AndroidRouter {
      * @param params The jsonObject params of protocol
      * @return {@link CPromise}
      */
-    public static CPromise open(String scheme, String host, String path, Map<String, Object> params) {
+    public static <R> CPromise<R> open(String scheme, String host, String path, Map<String, Object> params) {
         Promise promise = new Promise(new Asker(scheme, host, path, params));
-        return new CPromise(promise);
+        return new CPromise<>(promise);
     }
 
     /**
@@ -61,9 +63,9 @@ public final class AndroidRouter {
      * @param params The jsonArray params of protocol
      * @return {@link CPromise}
      */
-    public static CPromise open(String scheme, String host, String path, List params) {
+    public static <R> CPromise<R> open(String scheme, String host, String path, List params) {
         Promise promise = new Promise(new Asker(scheme, host, path, params));
-        return new CPromise(promise);
+        return new CPromise<>(promise);
     }
 
     /**
@@ -72,12 +74,12 @@ public final class AndroidRouter {
      * @param scheme The scheme of protocol
      * @param host   The host of protocol
      * @param path   The path of protocol
-     * @param json The json params of protocol
+     * @param json   The json params of protocol
      * @return {@link CPromise}
      */
-    public static CPromise open(String scheme, String host, String path, String json) {
+    public static <R> CPromise<R> open(String scheme, String host, String path, String json) {
         Promise promise = new Promise(new Asker(scheme, host, path, json));
-        return new CPromise(promise);
+        return new CPromise<>(promise);
     }
 
     /**
