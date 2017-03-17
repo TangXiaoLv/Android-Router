@@ -171,8 +171,8 @@ public class MainModule implements IRouter {
     }
     
     @RouterPath("/reactive")
-        public void reactive(VPromise promise) {
-            promise.resolve("I'm from reactive!!!!!");
+    public void reactive(VPromise promise) {
+        promise.resolve("I'm from reactive!!!!!");
     }
 }
 
