@@ -5,12 +5,13 @@
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=1.0.7) ](https://bintray.com/tangxiaolv/maven/androidrouter/1.0.7/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
+|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=2.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter/2.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
 高性能，灵活，简单易用的轻量级Android组件化协议框架，用来解决复杂工程的互相依赖，解耦出的单个模块有利于独立开发和维护。
 
 Update Log
 ---
 ```
+2.0.0: 支持泛型返回值,支持响应式处理回调函数。
 1.0.7: 修复系统类参数传递异常。
 1.0.6: 修复一些已知问题。
 1.0.5: 支持数组类型参数和可变参数。
@@ -167,6 +168,11 @@ public class MainModule implements IRouter {
     public void throwError(VPromise promise) {
         promise.reject(new RouterRemoteException("I'm error................."));
     }
+    
+    @RouterPath("/reactive")
+    public void reactive(VPromise promise) {
+        promise.resolve("I'm from reactive!!!!!");
+    }
 }
 
 //支持接收多scheme
@@ -208,6 +214,38 @@ AndroidRouter.open("android://main/activity/localActivity")
 //方式三
 //阻塞式拿返回值
 Object value = AndroidRouter.open("android://main/getValue").getValue();
+
+//方式四:响应式处理
+AndroidRouter.open("android://main/reactive")
+    .call(new Func<String, Integer>() {
+        @Override
+        public Integer call(String s) {
+            return 1;
+        }
+    })
+    .then(new Func<Integer, Double>() {
+        @Override
+        public Double call(Integer integer) {
+            return 2.0;
+        }
+    })
+    .then(new Func<Double, String>() {
+        @Override
+        public String call(Double ddouble) {
+            return "I'm reactive!";
+        }
+    })
+    .done(new Resolve<String>() {
+        @Override
+        public void call(String result) {
+            title.setText(result);
+        }
+    }, new Reject() {
+        @Override
+        public void call(Exception e) {
+            title.setText(e.toString());
+        }
+    });
 ```
 ###混淆
 ```

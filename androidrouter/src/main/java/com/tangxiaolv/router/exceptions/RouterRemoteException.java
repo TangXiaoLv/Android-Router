@@ -5,8 +5,27 @@ package com.tangxiaolv.router.exceptions;
  */
 public class RouterRemoteException extends Exception {
 
+    private int code;
+
+    private String message;
+
     public RouterRemoteException() {
         super();
+    }
+
+    public RouterRemoteException(int code, String message) {
+        super(message);
+        this.code = code;
+    }
+
+    public RouterRemoteException(int code, String message, Throwable cause) {
+        super(message, cause);
+        this.code = code;
+    }
+
+    public RouterRemoteException(int code, Throwable cause) {
+        super(cause);
+        this.code = code;
     }
 
     public RouterRemoteException(String message) {
@@ -19,5 +38,22 @@ public class RouterRemoteException extends Exception {
 
     public RouterRemoteException(Throwable cause) {
         super(cause);
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

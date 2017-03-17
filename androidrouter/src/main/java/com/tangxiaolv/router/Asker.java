@@ -1,19 +1,18 @@
 
 package com.tangxiaolv.router;
 
-import java.lang.reflect.Method;
-import java.net.URLDecoder;
+import android.net.Uri;
+import android.text.TextUtils;
 
 import com.tangxiaolv.router.exceptions.NotFoundRouterException;
 import com.tangxiaolv.router.exceptions.RouterException;
 import com.tangxiaolv.router.interfaces.IMirror;
-import com.tangxiaolv.router.utils.RLog;
 import com.tangxiaolv.router.utils.ReflectTool;
 
-import android.net.Uri;
-import android.text.TextUtils;
-
 import org.json.JSONException;
+
+import java.lang.reflect.Method;
+import java.net.URLDecoder;
 
 /**
  * Parse url and invoke {@link IMirror}
