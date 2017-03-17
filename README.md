@@ -188,6 +188,7 @@ public class RemoteModule implements IRouter {
     }
 }
 ```
+
 ###Step 2:Invoke
 ```
 AndroidRouter
@@ -248,12 +249,14 @@ AndroidRouter.open("android://main/reactive")
         }
     });
 ```
+
 ###Proguard
 ```
 //Add proguard-rules
 -keep class * implements com.tangxiaolv.router.interfaces.IMirror{*;}
 -keep class * implements com.tangxiaolv.router.interfaces.IRouter{*;}
 ```
+
 License
 ---
     Copyright 2017 TangXiaoLv

@@ -7,8 +7,6 @@ public class RouterRemoteException extends Exception {
 
     private int code;
 
-    private String message;
-
     public RouterRemoteException() {
         super();
     }
@@ -46,14 +44,5 @@ public class RouterRemoteException extends Exception {
 
     public void setCode(int code) {
         this.code = code;
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

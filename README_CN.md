@@ -187,6 +187,7 @@ public class RemoteModule implements IRouter {
     }
 }
 ```
+
 ###第二步:调用协议
 ```
 //任意地方调用
@@ -247,6 +248,7 @@ AndroidRouter.open("android://main/reactive")
         }
     });
 ```
+
 ###混淆
 ```
 //配置混淆
