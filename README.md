@@ -81,7 +81,7 @@ Note：Android-Router Protocol Format: scheme://host/path?params=json
 
 *scheme[1] host[1] path[2] params[2] 1:required 2:option*
 
-###Step 1:Setup router module.
+**Step 1:Setup router module**
 ```java
 /**
  * Supported parameter types
@@ -189,7 +189,8 @@ public class RemoteModule implements IRouter {
     }
 }
 ```
-###Step 2:Invoke
+
+**Step 2:Invoke**
 ```
 AndroidRouter
     .open("android://main/activity/localActivity")
@@ -249,12 +250,14 @@ AndroidRouter.open("android://main/reactive")
         }
     });
 ```
-###Proguard
+
+**Proguard**
 ```
 //Add proguard-rules
 -keep class * implements com.tangxiaolv.router.interfaces.IMirror{*;}
 -keep class * implements com.tangxiaolv.router.interfaces.IRouter{*;}
 ```
+
 License
 ---
     Copyright 2017 TangXiaoLv
