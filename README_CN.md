@@ -81,7 +81,7 @@ dependencies {
 
 *scheme[1] host[1] path[2] params[2] 1:必须 2:可选*
 
-###第一步:给自定义Module配置注解协议
+**第一步:给自定义Module配置注解协议**
 ```java
 /**
  * 支持的参数类型
@@ -189,7 +189,7 @@ public class RemoteModule implements IRouter {
 }
 ```
 
-###第二步:调用协议
+**第二步:调用协议**
 ```
 //任意地方调用
 //方式一
@@ -250,7 +250,7 @@ AndroidRouter.open("android://main/reactive")
     });
 ```
 
-###混淆
+**混淆**
 ```
 //配置混淆
 -keep class * implements com.tangxiaolv.router.interfaces.IMirror{*;}
