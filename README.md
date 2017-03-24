@@ -13,6 +13,7 @@ Update Log
 ---
 ```
 2.0.0: Resolve callback support generic, Support reactive programming, Remove resolve.call 'type' param. 
+-----2.0+ new feature dont support 1.0+
 1.0.7: Fix system params passed exception.
 1.0.6: Fix known issues.
 1.0.5: Support array params and extend params.
