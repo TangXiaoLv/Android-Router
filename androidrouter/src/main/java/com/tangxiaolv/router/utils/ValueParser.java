@@ -1,6 +1,8 @@
 
 package com.tangxiaolv.router.utils;
 
+import android.text.TextUtils;
+
 import com.tangxiaolv.router.ParamsWrapper;
 import com.tangxiaolv.router.exceptions.ValueParseException;
 import com.tangxiaolv.router.interfaces.IRouter;
@@ -11,7 +13,6 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ public class ValueParser {
      * @throws ValueParseException parse exception
      */
     public static Object parse(Object from, String expectedType) throws ValueParseException {
+        if (TextUtils.isEmpty(expectedType)) return from;
         if ("int".equals(expectedType) || "java.lang.Integer".equals(expectedType)) {
             from = toInteger(from, 0);
         } else if ("boolean".equals(expectedType) || "java.lang.Boolean".equals(expectedType)) {
@@ -42,7 +44,7 @@ public class ValueParser {
             from = toDouble(from, 0d);
         } else if ("float".equals(expectedType) || "java.lang.Float".equals(expectedType)) {
             from = toFloat(from, 0f);
-        } else if (expectedType.contains("[]")) {
+        } else if (expectedType.contains("[")) {
             from = toArray(from, expectedType);
         } else if (expectedType.contains("java.util.List")) {
             from = toList(from, expectedType);
@@ -128,31 +130,43 @@ public class ValueParser {
     private static Object toArray(Object from, String expectedType) throws ValueParseException {
         try {
             if (from instanceof String || from instanceof JSONArray) {
-                JSONArray jArray = from instanceof String ? new JSONArray((String) from) : (JSONArray) from;
-                String arrayType = expectedType.replace("[]", "");
-                Object[] targetArr = (Object[]) Array.newInstance(Class.forName(arrayType), jArray.length());
+                JSONArray jArray;
+                if (from instanceof JSONArray) {
+                    jArray = (JSONArray) from;
+                } else {
+                    //checked string format
+                    if (!isJson(from.toString())) {
+                        throw new ValueParseException("Expected array type,The input string must jsonArray.");
+                    }
+                    jArray = new JSONArray((String) from);
+                }
+
+                String type = getExpectedArrayType(expectedType);
+                Object target = newArray(type, jArray.length());
                 int length = jArray.length();
                 for (int i = 0; i < length; i++) {
-                    Object o = jArray.get(i);
-                    targetArr[i] = parse(o, arrayType);
+                    setArray(target, type, i, jArray.get(i));
                 }
-                from = targetArr;
-            } else if (from != null && from.getClass().getName().contains("[")) {
+                from = target;
+            }
+
+            //Instance array to expected array
+            else if (from != null &&
+                    from.getClass().isArray() &&
+                    !from.getClass().getCanonicalName().equals(expectedType)) {
                 Object[] origin = (Object[]) from;
-                String arrayType = expectedType.replace("[]", "");
-                Object[] targetArr = (Object[]) Array.newInstance(Class.forName(arrayType), origin.length);
-                Object first = origin[0];
-                if (first != null && !first.getClass().getName().equals(arrayType)) {
+                String type = getExpectedArrayType(expectedType);
+                Object firstEle = origin.length == 0 ? null : origin[0];
+                if (firstEle != null && !firstEle.getClass().getCanonicalName().equals(type)) {
+                    Object target = newArray(type, origin.length);
                     for (int i = 0; i < origin.length; i++) {
-                        targetArr[i] = parse(origin[i], arrayType);
+                        setArray(target, type, i, origin[i]);
                     }
-                    from = targetArr;
+                    from = target;
                 }
             }
-        } catch (JSONException e) {
-            throw new ValueParseException("parse to " + expectedType + " type fail.", e);
-        } catch (ClassNotFoundException e) {
-            throw new ValueParseException("parse to " + expectedType + " type fail.", e);
+        } catch (Exception e) {
+            throw new ValueParseException(from.getClass().getCanonicalName() + " parse to " + expectedType + " type fail.", e);
         }
         return from;
     }
@@ -167,11 +181,7 @@ public class ValueParser {
                 int length = jArray.length();
                 for (int i = 0; i < length; i++) {
                     Object o = jArray.get(i);
-                    if (generic.length() > 0) {
-                        list.add(parse(o, generic));
-                    } else {
-                        list.add(o);
-                    }
+                    list.add(parse(o, generic));
                 }
                 from = list;
             } else if (from instanceof List) {
@@ -179,7 +189,7 @@ public class ValueParser {
                 List<Object> target = new ArrayList<>(origin.size());
                 String listGeneric = getListGeneric(expectedType);
                 Object first = origin.get(0);
-                if (first != null && !first.getClass().getName().equalsIgnoreCase(listGeneric)) {
+                if (first != null && !first.getClass().getCanonicalName().equalsIgnoreCase(listGeneric)) {
                     for (Object o : origin) {
                         target.add(parse(o, listGeneric));
                     }
@@ -196,8 +206,8 @@ public class ValueParser {
     }
 
     private static Object toMap(Object from, String expectType) {
-        if (from instanceof String || from instanceof JSONObject) {
-            try {
+        try {
+            if (from instanceof String || from instanceof JSONObject) {
                 JSONObject jObj = from instanceof String ? new JSONObject((String) from) : (JSONObject) from;
                 HashMap<String, Object> map = new HashMap<>(jObj.length());
                 Iterator<String> it = jObj.keys();
@@ -207,27 +217,49 @@ public class ValueParser {
                     map.put(key, v);
                 }
                 from = map;
-            } catch (Exception ignored) {
             }
+        } catch (Exception ignored) {
         }
         return from;
     }
 
     private static Object toTargetObj(Object from, String expectType) throws ValueParseException {
         if (from instanceof String || from instanceof JSONObject) {
-            from = parseJsonToObj(from, expectType);
+            from = parseJsonToTarget(from, expectType);
         } else if (from instanceof Map) {
             from = parseMapToTarget(from, expectType);
-        } else if (from instanceof IRouter && !expectType.equalsIgnoreCase(from.getClass().getName())) {
+        } else if (canToParse(from, expectType) &&
+                !expectType.equalsIgnoreCase(from.getClass().getCanonicalName())) {
             from = parseObjToTarget(from, expectType);
         }
         return from;
     }
 
+    private static boolean canToParse(Object from, String expectType) {
+        try {
+            if (!(from instanceof IRouter)) return false;
+
+            Class<?>[] interfaces = Class.forName(expectType).getInterfaces();
+            boolean hasIRouter = false;
+            if (interfaces.length != 0) {
+                for (Class<?> i : interfaces) {
+                    if (IRouter.class.getCanonicalName().equals(i.getCanonicalName())) {
+                        hasIRouter = true;
+                        break;
+                    }
+                }
+            }
+            return hasIRouter;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
     //from json => to obj
     @SuppressWarnings("all")
-    private static Object parseJsonToObj(Object from, String expectType) throws ValueParseException {
+    private static Object parseJsonToTarget(Object from, String expectType) throws ValueParseException {
         try {
+            if (!isJson(from.toString())) return from;
             JSONObject jObj = from instanceof String ? new JSONObject((String) from) : (JSONObject) from;
             Class<?> clazz = Class.forName(getNoGenericTypeName(expectType));
             Object target = clazz.newInstance();
@@ -237,7 +269,7 @@ public class ValueParser {
                     String key = it.next();
                     Field f = clazz.getDeclaredField(key);
                     String name = f.getName();
-                    String type = getTypeNameWhithGeneric(f);
+                    String type = ReflectTool.getFieldTypeWithGeneric(f);
                     f.setAccessible(true);
                     f.set(target, parse(jObj.get(name), type));
                 } catch (JSONException ignored) {
@@ -263,7 +295,7 @@ public class ValueParser {
                 String toKey = toF.getName();
                 Object fromValue = params.get(toKey);
                 toF.setAccessible(true);
-                toF.set(target, parse(fromValue, getTypeNameWhithGeneric(toF)));
+                toF.set(target, parse(fromValue, ReflectTool.getFieldTypeWithGeneric(toF)));
             }
             from = target;
         } catch (Exception e) {
@@ -285,7 +317,7 @@ public class ValueParser {
                     fromField.setAccessible(true);
                     Object fromValue = fromField.get(from);
                     toF.setAccessible(true);
-                    toF.set(target, parse(fromValue, getTypeNameWhithGeneric(toF)));
+                    toF.set(target, parse(fromValue, ReflectTool.getFieldTypeWithGeneric(toF)));
                 } catch (NoSuchFieldException ignored) {
                 }
             }
@@ -297,10 +329,7 @@ public class ValueParser {
     }
 
     private static String getListGeneric(String type) {
-        if (type.contains("<")) {
-            return type.substring(type.indexOf("<") + 1, type.indexOf(">"));
-        }
-        return "";
+        return type.contains("<") ? type.substring(type.indexOf("<") + 1, type.indexOf(">")) : "";
     }
 
     private static String[] getMapGenericity(String type) {
@@ -318,20 +347,51 @@ public class ValueParser {
         return className;
     }
 
-    // eg: List<Simple>
-    @SuppressWarnings("all")
-    private static String getTypeNameWhithGeneric(Field f) {
-        String type = f.getType().getName();
-        Class fieldType = f.getType();
-        if (fieldType.isAssignableFrom(List.class)) {
-            ParameterizedType pt = null;
-            try {
-                pt = (ParameterizedType) f.getGenericType();
-                String genericType = ((Class) pt.getActualTypeArguments()[0]).getName();
-                return type + "<" + genericType + ">";
-            } catch (ClassCastException ignored) {
-            }
+    private static boolean isJson(String str) {
+        return (str.contains("{") && str.lastIndexOf("}") != -1) ||
+                (str.contains("[") && str.lastIndexOf("]") != -1);
+    }
+
+    private static String getExpectedArrayType(String expectedType) {
+        if (expectedType.contains("[]")) {
+            expectedType = expectedType.replace("[]", "");
         }
-        return type;
+        return expectedType;
+    }
+
+    private static Object newArray(String arrayType, int length) throws ClassNotFoundException {
+        Object arr;
+        if ("int".equals(arrayType)) {
+            arr = new int[length];
+        } else if ("boolean".equals(arrayType)) {
+            arr = new boolean[length];
+        } else if ("long".equals(arrayType)) {
+            arr = new long[length];
+        } else if ("double".equals(arrayType)) {
+            arr = new double[length];
+        } else if ("float".equals(arrayType)) {
+            arr = new float[length];
+        } else if ("java.lang.String".equals(arrayType)) {
+            arr = new String[length];
+        } else {
+            arr = Array.newInstance(Class.forName(arrayType), length);
+        }
+        return arr;
+    }
+
+    private static void setArray(Object array, String arrayType, int index, Object value) throws ValueParseException {
+        if ("int".equals(arrayType)) {
+            Array.setInt(array, index, (Integer) parse(value, arrayType));
+        } else if ("boolean".equals(arrayType)) {
+            Array.setBoolean(array, index, (Boolean) parse(value, arrayType));
+        } else if ("long".equals(arrayType)) {
+            Array.setLong(array, index, (Long) parse(value, arrayType));
+        } else if ("double".equals(arrayType)) {
+            Array.setDouble(array, index, (Double) parse(value, arrayType));
+        } else if ("float".equals(arrayType)) {
+            Array.setFloat(array, index, (Float) parse(value, arrayType));
+        } else {
+            Array.set(array, index, parse(value, arrayType));
+        }
     }
 }

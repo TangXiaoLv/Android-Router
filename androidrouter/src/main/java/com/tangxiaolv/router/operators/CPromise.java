@@ -88,9 +88,9 @@ public class CPromise<T> {
     public <R> R getValue(final Reject reject) {
         final Object[] arr = new Object[1];
         final CountDownLatch latch = new CountDownLatch(1);
-        target.call(new Resolve<T>() {
+        target.call(new Resolve<R>() {
             @Override
-            public void call(T result) {
+            public void call(R result) {
                 arr[0] = result;
                 latch.countDown();
             }

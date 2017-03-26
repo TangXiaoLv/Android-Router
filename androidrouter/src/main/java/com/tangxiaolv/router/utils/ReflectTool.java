@@ -8,6 +8,8 @@ import android.content.Context;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class ReflectTool {
 
@@ -16,7 +18,7 @@ public class ReflectTool {
 
     /**
      * Get Application by reflect
-     * 
+     *
      * @return Application
      */
     public static Context getApplication() {
@@ -36,5 +38,50 @@ public class ReflectTool {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * Try to get first generic of object.
+     *
+     * @param t   any object.
+     * @param <T> input type
+     * @return generic type
+     */
+    public static <T> String getFirstGeneric(T t) {
+        ParameterizedType pt = null;
+        Type[] types = t.getClass().getGenericInterfaces();
+        if (types.length != 0) {
+            if (types[0] instanceof ParameterizedType) {
+                pt = (ParameterizedType) types[0];
+            }
+        } else {
+            Type type = t.getClass().getGenericSuperclass();
+            if (type instanceof ParameterizedType) {
+                pt = (ParameterizedType) type;
+            }
+        }
+
+        if (pt == null) return null;
+
+        Type[] actual = pt.getActualTypeArguments();
+        String unsafe = actual[0].toString();
+        String[] elms = unsafe.split(" ");/*maybe get generic mark, like E,T*/
+        String genericString = elms.length <= 1 ? unsafe : elms[1];
+        return genericString.length() < 4 ? null : genericString;
+    }
+
+    // eg: List<Simple>
+    @SuppressWarnings("all")
+    public static String getFieldTypeWithGeneric(Field f) {
+        Class fieldType = f.getType();
+        String type = fieldType.getCanonicalName();
+        if (fieldType.isAssignableFrom(List.class)) {
+            try {
+                ParameterizedType pt = (ParameterizedType) f.getGenericType();
+                return pt.toString();
+            } catch (ClassCastException ignored) {
+            }
+        }
+        return type;
     }
 }

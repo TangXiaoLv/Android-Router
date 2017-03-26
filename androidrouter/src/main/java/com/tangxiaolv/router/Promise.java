@@ -5,8 +5,10 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.tangxiaolv.router.exceptions.RouterException;
+import com.tangxiaolv.router.exceptions.ValueParseException;
 import com.tangxiaolv.router.utils.PromiseTimer;
 import com.tangxiaolv.router.utils.ReflectTool;
+import com.tangxiaolv.router.utils.ValueParser;
 
 /**
  * Manage router send and receive.
@@ -92,13 +94,23 @@ public class Promise {
         if (resolve == null)
             return;
 
+        Object expected = result;
+        try {
+            String firstGeneric = ReflectTool.getFirstGeneric(resolve);
+            expected = ValueParser.parse(result, firstGeneric);
+        } catch (ValueParseException e) {
+            reject(e);
+        }
+
+        final Object expectedResult = expected;
+
         //call on main thread
         if ((flagMark & FLAG_RETURN_MIAN) != 0) {
             RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        resolve.call(result);
+                        resolve.call(expectedResult);
                     } catch (Exception e) {
                         reject(e);
                     }
@@ -112,7 +124,7 @@ public class Promise {
                 @Override
                 public void run() {
                     try {
-                        resolve.call(result);
+                        resolve.call(expectedResult);
                     } catch (Exception e) {
                         reject(e);
                     }
@@ -123,7 +135,7 @@ public class Promise {
         //call on current thread
         else {
             try {
-                resolve.call(result);
+                resolve.call(expectedResult);
             } catch (Exception e) {
                 reject(e);
             }
