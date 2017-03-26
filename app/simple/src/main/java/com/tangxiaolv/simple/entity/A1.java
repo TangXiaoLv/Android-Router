@@ -4,7 +4,7 @@ import com.tangxiaolv.router.interfaces.IRouter;
 
 import java.util.List;
 
-public class A implements IRouter {
+public class A1 implements IRouter {
 
     //Primitive type
     private String str;
@@ -33,12 +33,8 @@ public class A implements IRouter {
     private Float[] ffloArr;
     private Boolean[] bboolArr;
 
-
     //Complex type
     private List<String> listStr;
-    private A1 obj;
-    private A1[] objArr;
-    private List<A1> objList;
 
     public String getStr() {
         return str;
@@ -142,30 +138,6 @@ public class A implements IRouter {
 
     public void setListStr(List<String> listStr) {
         this.listStr = listStr;
-    }
-
-    public A1 getObj() {
-        return obj;
-    }
-
-    public void setObj(A1 obj) {
-        this.obj = obj;
-    }
-
-    public A1[] getObjArr() {
-        return objArr;
-    }
-
-    public void setObjArr(A1[] objArr) {
-        this.objArr = objArr;
-    }
-
-    public List<A1> getObjList() {
-        return objList;
-    }
-
-    public void setObjList(List<A1> objList) {
-        this.objList = objList;
     }
 
     public Integer getIinte() {

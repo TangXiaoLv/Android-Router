@@ -1,6 +1,8 @@
 
 package com.tangxiaolv.simple;
 
+import com.google.gson.Gson;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -17,11 +19,19 @@ import com.tangxiaolv.router.Resolve;
 import com.tangxiaolv.router.operators.Func;
 import com.tangxiaolv.simple.entity.A;
 import com.tangxiaolv.simple.entity.B;
+import com.tangxiaolv.simple.entity.ObjGenerator;
 
+import junit.framework.Assert;
+
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import static android.R.attr.type;
 import static com.tangxiaolv.router.AndroidRouter.open;
+import static com.tangxiaolv.simple.R.id.router5;
+import static com.tangxiaolv.simple.entity.ObjGenerator.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView router10 = (TextView) findViewById(R.id.router10);
         final TextView router11 = (TextView) findViewById(R.id.router11);
         final TextView router12 = (TextView) findViewById(R.id.router12);
+        final TextView router13 = (TextView) findViewById(R.id.router13);
 
         /*android://main*/
         router1.setText("android://main");
@@ -107,75 +118,71 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*android://main/params/complex?params={'b':{},'listC':[]}*/
-        router4.setText("android://main/params/complex?params=" +
-                "{'b':{" +
-                "'key1':'Hi','key2':1,'key3':'true','key4':2," +
-                "key5:[{'key1':'haha'},{'key1':hehe},{'key1':'wawa'}],key6:{'key1':'Hello','key2':1}}," +
-                "'listC':[{'key1':'haha'},{'key1':hehe},{'key1':'wawa'}]}");
+        /*android://main/params/complex?params={'b':{},'listB':[]}*/
+        final String route4 = "android://main/params/complex?params=" +
+                "{" +
+                "'b':" + new Gson().toJson(getB()) +
+                ",'listB':" + new Gson().toJson(getListB()) +
+                "}";
+        router4.setText("android://main/params/complex?params={'b':{},'listB':[]}");
         router4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                open(router4.getText().toString())
-                        .showTime()
-                        .call(new Resolve() {
-                            @Override
-                            public void call(Object result) {
-                                title.setText(result.toString());
-                            }
-                        }, new Reject() {
-                            @Override
-                            public void call(Exception e) {
-                                title.setText(e.toString());
-                            }
-                        });
+                open(route4).showTime().call(new Resolve() {
+                    @Override
+                    public void call(Object result) {
+                        title.setText(result.toString());
+                    }
+                }, new Reject() {
+                    @Override
+                    public void call(Exception e) {
+                        title.setText(e.toString());
+                    }
+                });
             }
         });
 
         /*android://main/jsonObject?params={'f':1,'i':2,'l':3,'d':4,'b':true,'b':{},'listC':[]}*/
-        router5.setText("android://main/jsonObject?params=" +
-                "{'f':1,'i':2,'l':3,'d':4,'b':true," +
-                "'b':{" +
-                "'key1':'Hi','key2':1,'key3':'true','key4':2," +
-                "key5:[1,2,3],key6:{'key1':'Hello','key2':1}}," +
-                "'listC':[{'key1':'haha'},{'key1':hehe},{'key1':'wawa'}]}");
+        final String route5 = "android://main/jsonObject?params=" +
+                "{'f':1,'i':2,'l':3,'d':4,'b':true" +
+                ",'bObj':" + new Gson().toJson(getB()) +
+                ",'listB':" + new Gson().toJson(getListB()) +
+                "}";
+        router5.setText("android://main/jsonObject?params={'f':1,'i':2,'l':3,'d':4,'b':true,'bObj':{},'listB':[]}");
         router5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                open(router5.getText().toString())
-                        .showTime()
-                        .call(new Resolve() {
-                            @Override
-                            public void call(Object result) {
-                                title.setText(result.toString());
-                            }
-                        }, new Reject() {
-                            @Override
-                            public void call(Exception e) {
-                                title.setText(e.toString());
-                            }
-                        });
+                open(route5).showTime().call(new Resolve() {
+                    @Override
+                    public void call(Object result) {
+                        title.setText(result.toString());
+                    }
+                }, new Reject() {
+                    @Override
+                    public void call(Exception e) {
+                        title.setText(e.toString());
+                    }
+                });
             }
         });
 
-        /*android://main/jsonArray?params=[1,2,3]}*/
-        router6.setText("android://main/jsonArray?params=[{'key1':'haha'},{'key1':hehe},{'key1':'wawa'}]");
+        /*android://main/jsonArray?params=A[]*/
+        final String route6 = "android://main/jsonArray?params=" + new Gson().toJson(getA());
+        router6.setText("android://main/jsonArray?params=A[]");
         router6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                open(router6.getText().toString())
-                        .showTime()
-                        .call(new Resolve() {
-                            @Override
-                            public void call(Object result) {
-                                title.setText(result.toString());
-                            }
-                        }, new Reject() {
-                            @Override
-                            public void call(Exception e) {
-                                title.setText(e.toString());
-                            }
-                        });
+                open(route6).showTime().call(new Resolve() {
+                    @Override
+                    public void call(Object result) {
+                        title.setText(result.toString());
+                    }
+                }, new Reject() {
+                    @Override
+                    public void call(Exception e) {
+                        title.setText(e.toString());
+                    }
+                });
             }
         });
 
@@ -185,33 +192,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //B => A
-                B b = new B("Hi", 1, true, 2);
-                ArrayList<A> key5 = new ArrayList<>();
-                key5.add(new A("Hi", 1, true, 2));
-                key5.add(new A("Hi", 1, true, 2));
-                key5.add(new A("Hi", 1, true, 2));
-                b.setKey5(key5);
+                B b = getB();
 
                 //List<B> => List<A>
-                ArrayList<B> listB = new ArrayList<>();
-                listB.add(new B("Hi", 1, true, 2));
-                listB.add(new B("Hi", 1, true, 2));
-                listB.add(new B("Hi", 1, true, 2));
+                List<B> listB = getListB();
 
                 //A[] => C[]
-                A[] arr = new A[]{
-                        new A("Hi,fromA", 1, true, 2),
-                        new A("Hi,fromA", 1, true, 2),
-                        new A("Hi,fromA", 1, true, 2)
-                };
+                A[] arr = new A[]{getA(), getA(), getA()};
 
                 //String...
                 String[] names = new String[]{"jack", "bill", "hafman"};
 
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("listA", listB);
                 map.put("a", b);
-                map.put("c", arr);
+                map.put("listA", listB);
+                map.put("b", arr);
                 map.put("names", names);
                 open("android", "main", "/differentTypes", map).showTime().callOnSubThread().returnOnMainThread()
                         .call(new Resolve<String>() {
@@ -321,6 +316,27 @@ public class MainActivity extends AppCompatActivity {
                                 title.setText(e.toString());
                             }
                         });
+            }
+        });
+
+        final String route13 = "android://main/returnTypeCast?params=" +
+                "{'a':" + new Gson().toJson(getA())
+                + "}";
+        router13.setText("android://main/returnTypeCast?params=A");
+        router13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AndroidRouter.open(route13).call(new Resolve<B>() {
+                    @Override
+                    public void call(B result) {
+                        title.setText(B.class.getName());
+                    }
+                }, new Reject() {
+                    @Override
+                    public void call(Exception e) {
+                        title.setText(e.toString());
+                    }
+                });
             }
         });
 

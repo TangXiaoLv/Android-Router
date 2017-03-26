@@ -3,7 +3,6 @@ package com.tangxiaolv.simple;
 
 import android.app.Application;
 import android.content.Intent;
-import android.os.SystemClock;
 
 import com.tangxiaolv.annotations.RouterModule;
 import com.tangxiaolv.annotations.RouterPath;
@@ -12,12 +11,9 @@ import com.tangxiaolv.router.exceptions.RouterRemoteException;
 import com.tangxiaolv.router.interfaces.IRouter;
 import com.tangxiaolv.simple.entity.A;
 import com.tangxiaolv.simple.entity.B;
-import com.tangxiaolv.simple.entity.C;
 import com.tangxiaolv.simple.entity.Package;
 
 import java.util.List;
-
-import static android.R.attr.scheme;
 
 /**
  * Support parameter types
@@ -68,10 +64,10 @@ public class MainModule implements IRouter {
     /**
      * Take out the value from jsonObject
      *
-     * Route => android://main/params/complex?params={'b':{},'listC':[]}
+     * Route => android://main/params/complex?params={'b':{},'listB':[]}
      */
     @RouterPath("/params/complex")
-    public void paramsComplex(String scheme, VPromise promise, B b, List<C> listC) {
+    public void paramsComplex(String scheme, VPromise promise, B b, List<B> listB) {
         promise.resolve("from scheme: [" + scheme + "] " + "path: [/params/complex]");
     }
 
@@ -89,7 +85,7 @@ public class MainModule implements IRouter {
 
     //eg: from A => to B
     @RouterPath("/differentTypes")
-    public void differentTypes(String scheme, VPromise promise, A a, List<A> listA, C[] c, String... names) {
+    public void differentTypes(String scheme, VPromise promise, A a, List<A> listA, B[] b, String... names) {
         promise.resolve("from scheme: [" + scheme + "] " + "path: [/differentTypes]");
     }
 
@@ -117,5 +113,10 @@ public class MainModule implements IRouter {
     @RouterPath("/reactive")
     public void reactive(VPromise promise) {
         promise.resolve("I'm from reactive!!!!!");
+    }
+
+    @RouterPath("/returnTypeCast")
+    public void returnTypeCast(VPromise promise, A a) {
+        promise.resolve(a);
     }
 }

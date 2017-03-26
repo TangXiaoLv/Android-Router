@@ -1,75 +1,250 @@
-
 package com.tangxiaolv.simple.entity;
 
 import com.tangxiaolv.router.interfaces.IRouter;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class B implements IRouter {
+public class B implements Serializable, IRouter {
 
-    private String key1;
-    private int key2;
-    private boolean key3;
-    private float key4;
-    private List<A> key5;
-    private D key6;
+    //Primitive type
+    private String str;
+    private int inte;
+    private long lon;
+    private double doub;
+    private float flo;
+    private boolean bool;
 
-    public B() {
-        //must have empty params construction.
+    private String[] strArr;
+    private int[] inteArr;
+    private long[] lonArr;
+    private double[] doubArr;
+    private float[] floArr;
+    private boolean[] boolArr;
+
+    private Integer iinte;
+    private Long llon;
+    private Double ddoub;
+    private Float fflo;
+    private Boolean bbool;
+
+    private Integer[] iinteArr;
+    private Long[] llonArr;
+    private Double[] ddoubArr;
+    private Float[] ffloArr;
+    private Boolean[] bboolArr;
+
+    //Complex type
+    private List<String> listStr;
+    private B1 obj;
+    private B1[] objArr;
+    private List<B1> objList;
+
+    public String getStr() {
+        return str;
     }
 
-    public B(String key1, int key2, boolean key3, float key4) {
-        this.key1 = key1;
-        this.key2 = key2;
-        this.key3 = key3;
-        this.key4 = key4;
+    public void setStr(String str) {
+        this.str = str;
     }
 
-    public String getKey1() {
-        return key1;
+    public int getInte() {
+        return inte;
     }
 
-    public void setKey1(String key1) {
-        this.key1 = key1;
+    public void setInte(int inte) {
+        this.inte = inte;
     }
 
-    public int getKey2() {
-        return key2;
+    public long getLon() {
+        return lon;
     }
 
-    public void setKey2(int key2) {
-        this.key2 = key2;
+    public void setLon(long lon) {
+        this.lon = lon;
     }
 
-    public boolean isKey3() {
-        return key3;
+    public double getDoub() {
+        return doub;
     }
 
-    public void setKey3(boolean key3) {
-        this.key3 = key3;
+    public void setDoub(double doub) {
+        this.doub = doub;
     }
 
-    public float getKey4() {
-        return key4;
+    public float getFlo() {
+        return flo;
     }
 
-    public void setKey4(float key4) {
-        this.key4 = key4;
+    public void setFlo(float flo) {
+        this.flo = flo;
     }
 
-    public List<A> getKey5() {
-        return key5;
+    public boolean isBool() {
+        return bool;
     }
 
-    public void setKey5(List<A> key5) {
-        this.key5 = key5;
+    public void setBool(boolean bool) {
+        this.bool = bool;
     }
 
-    public D getKey6() {
-        return key6;
+    public String[] getStrArr() {
+        return strArr;
     }
 
-    public void setKey6(D key6) {
-        this.key6 = key6;
+    public void setStrArr(String[] strArr) {
+        this.strArr = strArr;
+    }
+
+    public int[] getInteArr() {
+        return inteArr;
+    }
+
+    public void setInteArr(int[] inteArr) {
+        this.inteArr = inteArr;
+    }
+
+    public long[] getLonArr() {
+        return lonArr;
+    }
+
+    public void setLonArr(long[] lonArr) {
+        this.lonArr = lonArr;
+    }
+
+    public double[] getDoubArr() {
+        return doubArr;
+    }
+
+    public void setDoubArr(double[] doubArr) {
+        this.doubArr = doubArr;
+    }
+
+    public float[] getFloArr() {
+        return floArr;
+    }
+
+    public void setFloArr(float[] floArr) {
+        this.floArr = floArr;
+    }
+
+    public boolean[] getBoolArr() {
+        return boolArr;
+    }
+
+    public void setBoolArr(boolean[] boolArr) {
+        this.boolArr = boolArr;
+    }
+
+    public List<String> getListStr() {
+        return listStr;
+    }
+
+    public void setListStr(List<String> listStr) {
+        this.listStr = listStr;
+    }
+
+    public B1 getObj() {
+        return obj;
+    }
+
+    public void setObj(B1 obj) {
+        this.obj = obj;
+    }
+
+    public B1[] getObjArr() {
+        return objArr;
+    }
+
+    public void setObjArr(B1[] objArr) {
+        this.objArr = objArr;
+    }
+
+    public List<B1> getObjList() {
+        return objList;
+    }
+
+    public void setObjList(List<B1> objList) {
+        this.objList = objList;
+    }
+
+    public Integer getIinte() {
+        return iinte;
+    }
+
+    public void setIinte(Integer iinte) {
+        this.iinte = iinte;
+    }
+
+    public Long getLlon() {
+        return llon;
+    }
+
+    public void setLlon(Long llon) {
+        this.llon = llon;
+    }
+
+    public Double getDdoub() {
+        return ddoub;
+    }
+
+    public void setDdoub(Double ddoub) {
+        this.ddoub = ddoub;
+    }
+
+    public Float getFflo() {
+        return fflo;
+    }
+
+    public void setFflo(Float fflo) {
+        this.fflo = fflo;
+    }
+
+    public Boolean getBbool() {
+        return bbool;
+    }
+
+    public void setBbool(Boolean bbool) {
+        this.bbool = bbool;
+    }
+
+    public Integer[] getIinteArr() {
+        return iinteArr;
+    }
+
+    public void setIinteArr(Integer[] iinteArr) {
+        this.iinteArr = iinteArr;
+    }
+
+    public Long[] getLlonArr() {
+        return llonArr;
+    }
+
+    public void setLlonArr(Long[] llonArr) {
+        this.llonArr = llonArr;
+    }
+
+    public Double[] getDdoubArr() {
+        return ddoubArr;
+    }
+
+    public void setDdoubArr(Double[] ddoubArr) {
+        this.ddoubArr = ddoubArr;
+    }
+
+    public Float[] getFfloArr() {
+        return ffloArr;
+    }
+
+    public void setFfloArr(Float[] ffloArr) {
+        this.ffloArr = ffloArr;
+    }
+
+    public Boolean[] getBboolArr() {
+        return bboolArr;
+    }
+
+    public void setBboolArr(Boolean[] bboolArr) {
+        this.bboolArr = bboolArr;
     }
 }

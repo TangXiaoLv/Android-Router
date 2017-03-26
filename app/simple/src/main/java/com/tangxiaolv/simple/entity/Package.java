@@ -12,18 +12,18 @@ public class Package implements IRouter {
     private double d;
     private boolean b = true;
     private B bObj;
-    private List<C> listC;
+    private List<B> listB;
 
     public Package() {
     }
 
-    public Package(float f, int i, long l, double d, boolean b, B bObj, List<C> listC) {
+    public Package(float f, int i, long l, double d, boolean b, B bObj, List<B> listB) {
         this.f = f;
         this.i = i;
         this.l = l;
         this.d = d;
         this.b = b;
         this.bObj = bObj;
-        this.listC = listC;
+        this.listB = listB;
     }
 }

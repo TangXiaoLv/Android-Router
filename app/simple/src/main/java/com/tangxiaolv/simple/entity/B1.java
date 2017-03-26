@@ -4,7 +4,7 @@ import com.tangxiaolv.router.interfaces.IRouter;
 
 import java.util.List;
 
-public class A implements IRouter {
+public class B1 implements IRouter {
 
     //Primitive type
     private String str;
@@ -33,12 +33,88 @@ public class A implements IRouter {
     private Float[] ffloArr;
     private Boolean[] bboolArr;
 
+    public Integer getIinte() {
+        return iinte;
+    }
+
+    public void setIinte(Integer iinte) {
+        this.iinte = iinte;
+    }
+
+    public Long getLlon() {
+        return llon;
+    }
+
+    public void setLlon(Long llon) {
+        this.llon = llon;
+    }
+
+    public Double getDdoub() {
+        return ddoub;
+    }
+
+    public void setDdoub(Double ddoub) {
+        this.ddoub = ddoub;
+    }
+
+    public Float getFflo() {
+        return fflo;
+    }
+
+    public void setFflo(Float fflo) {
+        this.fflo = fflo;
+    }
+
+    public Boolean getBbool() {
+        return bbool;
+    }
+
+    public void setBbool(Boolean bbool) {
+        this.bbool = bbool;
+    }
+
+    public Integer[] getIinteArr() {
+        return iinteArr;
+    }
+
+    public void setIinteArr(Integer[] iinteArr) {
+        this.iinteArr = iinteArr;
+    }
+
+    public Long[] getLlonArr() {
+        return llonArr;
+    }
+
+    public void setLlonArr(Long[] llonArr) {
+        this.llonArr = llonArr;
+    }
+
+    public Double[] getDdoubArr() {
+        return ddoubArr;
+    }
+
+    public void setDdoubArr(Double[] ddoubArr) {
+        this.ddoubArr = ddoubArr;
+    }
+
+    public Float[] getFfloArr() {
+        return ffloArr;
+    }
+
+    public void setFfloArr(Float[] ffloArr) {
+        this.ffloArr = ffloArr;
+    }
+
+    public Boolean[] getBboolArr() {
+        return bboolArr;
+    }
+
+    public void setBboolArr(Boolean[] bboolArr) {
+        this.bboolArr = bboolArr;
+    }
 
     //Complex type
     private List<String> listStr;
-    private A1 obj;
-    private A1[] objArr;
-    private List<A1> objList;
 
     public String getStr() {
         return str;
@@ -142,109 +218,5 @@ public class A implements IRouter {
 
     public void setListStr(List<String> listStr) {
         this.listStr = listStr;
-    }
-
-    public A1 getObj() {
-        return obj;
-    }
-
-    public void setObj(A1 obj) {
-        this.obj = obj;
-    }
-
-    public A1[] getObjArr() {
-        return objArr;
-    }
-
-    public void setObjArr(A1[] objArr) {
-        this.objArr = objArr;
-    }
-
-    public List<A1> getObjList() {
-        return objList;
-    }
-
-    public void setObjList(List<A1> objList) {
-        this.objList = objList;
-    }
-
-    public Integer getIinte() {
-        return iinte;
-    }
-
-    public void setIinte(Integer iinte) {
-        this.iinte = iinte;
-    }
-
-    public Long getLlon() {
-        return llon;
-    }
-
-    public void setLlon(Long llon) {
-        this.llon = llon;
-    }
-
-    public Double getDdoub() {
-        return ddoub;
-    }
-
-    public void setDdoub(Double ddoub) {
-        this.ddoub = ddoub;
-    }
-
-    public Float getFflo() {
-        return fflo;
-    }
-
-    public void setFflo(Float fflo) {
-        this.fflo = fflo;
-    }
-
-    public Boolean getBbool() {
-        return bbool;
-    }
-
-    public void setBbool(Boolean bbool) {
-        this.bbool = bbool;
-    }
-
-    public Integer[] getIinteArr() {
-        return iinteArr;
-    }
-
-    public void setIinteArr(Integer[] iinteArr) {
-        this.iinteArr = iinteArr;
-    }
-
-    public Long[] getLlonArr() {
-        return llonArr;
-    }
-
-    public void setLlonArr(Long[] llonArr) {
-        this.llonArr = llonArr;
-    }
-
-    public Double[] getDdoubArr() {
-        return ddoubArr;
-    }
-
-    public void setDdoubArr(Double[] ddoubArr) {
-        this.ddoubArr = ddoubArr;
-    }
-
-    public Float[] getFfloArr() {
-        return ffloArr;
-    }
-
-    public void setFfloArr(Float[] ffloArr) {
-        this.ffloArr = ffloArr;
-    }
-
-    public Boolean[] getBboolArr() {
-        return bboolArr;
-    }
-
-    public void setBboolArr(Boolean[] bboolArr) {
-        this.bboolArr = bboolArr;
     }
 }
