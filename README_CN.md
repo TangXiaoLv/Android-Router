@@ -178,22 +178,19 @@ public class RemoteModule implements IRouter {
 
 |from|-|to|desc|
 |:---|:---:|:---|:---|
-|context|→|context|`1.0.0+` 类型: Application [default]|
-|scheme|→|scheme|`1.0.0+` 类型: String(Router scheme) [default]|
-|promise|→|promise|`1.0.0+` 类型: VPromise (Used return) [default]|
 |float|⇌|float|`1.0.0+`|
 |int|⇌|int|`1.0.0+`|
 |long|⇌|long|`1.0.0+`|
 |double|⇌|double|`1.0.0+`|
 |boolean|⇌|boolean|`1.0.0+`|
 |String|⇌|String|`1.0.0+`|
-|Object A|⇌|Object A|`1.0.0+` From和To必须实现IRouter并且需要有空参数constructor|
-|Object A|⇌|Object B|`1.0.0+` From和To必须实现IRouter并且需要有空参数constructor|
+|Object A|⇌|Object A|`1.0.0+`|
+|Object A|⇌|Object B|`1.0.0+` 2边对象必须实现IRouter并且需要有空参数constructor|
 |A[]|⇌|A[]|`2.0.1+`|
-|A[]|⇌|B[]|`2.0.1+`|
+|A[]|⇌|B[]|`2.0.1+` 数组内对象2边必须实现IRouter并且需要有空参数constructor|
 |A[]|→|Varargs A|`2.0.1+` [1,2,3] → add(int... i)|
 |List< A>|⇌|List< A>|`1.0.0+` 接收者定义必须是List<?>接口类型 eg:List< A>|
-|List< A>|⇌|List< B>|`1.0.0+`|
+|List< A>|⇌|List< B>|`1.0.0+` 集合内对象2边必须实现IRouter并且需要有空参数constructor|
 |Json Object|⇌|Object|`1.0.0+`|
 |Json Object|→|Map< String,String>|`2.0.1+`|
 |Json Array|⇌|List< ?>|`1.0.0+`|
