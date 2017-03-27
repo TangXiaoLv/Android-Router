@@ -5,13 +5,14 @@ English | [中文](https://github.com/TangXiaoLv/Android-Router/blob/master/READ
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=2.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter/2.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
+|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=2.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter/2.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
 
 High-performance, flexible, easy-to-use lightweight Android component-based framework, Used to solve the interdependence of complex projects, A single module is conducive to independent development and maintenance.
 
 Update Log
 ---
 ```
+2.0.1: Support auto cast on return value, fix array cast exception. 
 2.0.0: Resolve callback support generic, Support reactive programming, Remove resolve.call 'type' param. 
 -----2.0+ new feature dont support 1.0+
 1.0.7: Fix system params passed exception.
@@ -84,29 +85,11 @@ Note：Android-Router Protocol Format: scheme://host/path?params=json
 
 **Step 1:Setup router module**
 ```java
-/**
- * Supported parameter types
- *
- * float
- * int
- * long
- * double
- * boolean
- * String
- *
- * Array
- * Varargs
- * List<?>
- * Map<String,Object>
- * custom object
- * 
- * default parameter: Application context, String scheme, VPromise promise
- */
 @RouterModule(scheme = "android", host = "main")
 public class MainModule implements IRouter {
 
-
     //Route => android://main
+    //default parameter: Application context, String scheme, VPromise promise
     @RouterPath
     public void def(Application context, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: []");
@@ -190,6 +173,30 @@ public class RemoteModule implements IRouter {
     }
 }
 ```
+
+**Supported parameter**
+
+|from|-|to|desc|
+|:---|:---:|:---|:---|
+|context|→|context|`version 1.0.0+` Type: Application [default]|
+|scheme|→|scheme|`version 1.0.0+` Type: String(Router scheme) [default]|
+|promise|→|promise|`version 1.0.0+` Type: VPromise (Used return) [default]|
+|float|⇌|float|`version 1.0.0+`|
+|int|⇌|int|`version 1.0.0+`|
+|long|⇌|long|`version 1.0.0+`|
+|double|⇌|double|`version 1.0.0+`|
+|boolean|⇌|boolean|`version 1.0.0+`|
+|String|⇌|String|`version 1.0.0+`|
+|Object A|⇌|Object A|`version 1.0.0+` From and To must implement IRouter and keep empty constructor|
+|Object A|⇌|Object B|`version 1.0.0+` From and To must implement IRouter and keep empty constructor|
+|A[]|⇌|A[]|`version 2.0.1+`|
+|A[]|⇌|B[]|`version 2.0.1+`|
+|A[]|→|Varargs A|`version 2.0.1+` [1,2,3] → add(int... i)|
+|List< A>|⇌|List< A>|`version 1.0.0+` Receiver must be defined as List<?> interface|
+|List< A>|⇌|List< B>|`version 1.0.0+`|
+|Json Object|⇌|Object|`version 1.0.0+`|
+|Json Object|⇌|Map< String,String>|Coming Soon|
+|Json Array|⇌|List< ?>|`version 1.0.0+`|
 
 **Step 2:Invoke**
 ```

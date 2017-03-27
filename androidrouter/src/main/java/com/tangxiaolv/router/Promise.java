@@ -89,7 +89,7 @@ public class Promise {
     }
 
     @SuppressWarnings("unchecked")
-    void resolve(final Object result) {
+    void resolve(Object result) {
         showToast();
         if (resolve == null)
             return;

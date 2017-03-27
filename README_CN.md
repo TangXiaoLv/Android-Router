@@ -5,14 +5,15 @@
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=2.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter/2.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
+|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=2.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter/2.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
 
 高性能，灵活，简单易用的轻量级Android组件化协议框架，用来解决复杂工程的互相依赖，解耦出的单个模块有利于独立开发和维护。
 
 Update Log
 ---
 ```
-2.0.0: 支持泛型返回值,支持响应式处理回调函数。
+2.0.1: 支持返回值对象不一致时自动转换，修复数组类型解析异常。
+2.0.0: 支持泛型返回值，支持响应式处理回调函数。
 -----2.0+新特性不支持1.0+
 1.0.7: 修复系统类参数传递异常。
 1.0.6: 修复一些已知问题。
@@ -84,28 +85,11 @@ dependencies {
 
 **第一步:给自定义Module配置注解协议**
 ```java
-/**
- * 支持的参数类型
- *
- * float
- * int
- * long
- * double
- * boolean
- * String
- *
- * Array
- * Varargs
- * List<?>
- * Map<String,Object>
- * custom object
- * 
- * 默认传递Application context, String scheme, VPromise promise
- */
 @RouterModule(scheme = "android", host = "main")
 public class MainModule implements IRouter {
 
     //Route => android://main
+    //默认传递Application context, String scheme, VPromise promise
     @RouterPath
     public void def(Application context, String scheme, VPromise promise) {
         promise.resolve("","from scheme: [" + scheme + "] " + "path: []");
@@ -189,6 +173,30 @@ public class RemoteModule implements IRouter {
     }
 }
 ```
+
+**Supported parameter**
+
+|from|-|to|desc|
+|:---|:---:|:---|:---|
+|context|→|context|`version 1.0.0+` 类型: Application [default]|
+|scheme|→|scheme|`version 1.0.0+` 类型: String(Router scheme) [default]|
+|promise|→|promise|`version 1.0.0+` 类型: VPromise (Used return) [default]|
+|float|⇌|float|`version 1.0.0+`|
+|int|⇌|int|`version 1.0.0+`|
+|long|⇌|long|`version 1.0.0+`|
+|double|⇌|double|`version 1.0.0+`|
+|boolean|⇌|boolean|`version 1.0.0+`|
+|String|⇌|String|`version 1.0.0+`|
+|Object A|⇌|Object A|`version 1.0.0+` From和To必须实现IRouter并且需要有空参数constructor|
+|Object A|⇌|Object B|`version 1.0.0+` From和To必须实现IRouter并且需要有空参数constructor|
+|A[]|⇌|A[]|`version 2.0.1+`|
+|A[]|⇌|B[]|`version 2.0.1+`|
+|A[]|→|Varargs A|`version 2.0.1+` [1,2,3] → add(int... i)|
+|List< A>|⇌|List< A>|`version 1.0.0+` 接收者定义必须是List<?>接口类型 eg:List< A>|
+|List< A>|⇌|List< B>|`version 1.0.0+`|
+|Json Object|⇌|Object|`version 1.0.0+`|
+|Json Object|⇌|Map< String,String>|即将支持|
+|Json Array|⇌|List< ?>|`version 1.0.0+`|
 
 **第二步:调用协议**
 ```

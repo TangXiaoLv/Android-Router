@@ -74,6 +74,7 @@ public class ReflectTool {
     @SuppressWarnings("all")
     public static String getFieldTypeWithGeneric(Field f) {
         Class fieldType = f.getType();
+        //TODO Anonymous Inner Class Cant be find By Class.fromName,but getName could.
         String type = fieldType.getCanonicalName();
         if (fieldType.isAssignableFrom(List.class)) {
             try {

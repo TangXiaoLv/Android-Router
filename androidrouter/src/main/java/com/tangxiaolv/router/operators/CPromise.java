@@ -74,7 +74,7 @@ public class CPromise<T> {
      * @return result
      * @see CPromise#getValue(Reject reject)
      */
-    public <R> R getValue() {
+    public Object getValue() {
         return getValue(null);
     }
 
@@ -85,12 +85,13 @@ public class CPromise<T> {
      * @return result
      */
     @SuppressWarnings("unchecked")
-    public <R> R getValue(final Reject reject) {
+    //TODO no idea to find out actual type.
+    public Object getValue(final Reject reject) {
         final Object[] arr = new Object[1];
         final CountDownLatch latch = new CountDownLatch(1);
-        target.call(new Resolve<R>() {
+        target.call(new Resolve<Object>() {
             @Override
-            public void call(R result) {
+            public void call(Object result) {
                 arr[0] = result;
                 latch.countDown();
             }
@@ -104,18 +105,15 @@ public class CPromise<T> {
             }
         });
 
-        R result = null;
-
         try {
             latch.await();
-            result = (R) arr[0];
         } catch (Exception e) {
             if (reject != null) {
                 reject.call(new RouterRemoteException("getValue fail.", e));
             }
         }
 
-        return result;
+        return arr[0];
     }
 
     /**
