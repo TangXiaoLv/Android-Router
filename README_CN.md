@@ -3,9 +3,9 @@
 
 <img src="img/2.png" width = "660" height = "300"/>
 
-|lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
-|---|---|---|---|
-|version|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter/images/download.svg?version=2.0.1) ](https://bintray.com/tangxiaolv/maven/androidrouter/2.0.1/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-compiler/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-compiler/1.0.0/link)|[ ![Download](https://api.bintray.com/packages/tangxiaolv/maven/androidrouter-annotations/images/download.svg?version=1.0.0) ](https://bintray.com/tangxiaolv/maven/androidrouter-annotations/1.0.0/link)|
+|Lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
+|:---:|:---|:---|:---|
+|最新版本|2.0.1|1.0.1|1.0.0|
 
 高性能，灵活，简单易用的轻量级Android组件化协议框架，用来解决复杂工程的互相依赖，解耦出的单个模块有利于独立开发和维护。
 
@@ -178,25 +178,25 @@ public class RemoteModule implements IRouter {
 
 |from|-|to|desc|
 |:---|:---:|:---|:---|
-|context|→|context|`version 1.0.0+` 类型: Application [default]|
-|scheme|→|scheme|`version 1.0.0+` 类型: String(Router scheme) [default]|
-|promise|→|promise|`version 1.0.0+` 类型: VPromise (Used return) [default]|
-|float|⇌|float|`version 1.0.0+`|
-|int|⇌|int|`version 1.0.0+`|
-|long|⇌|long|`version 1.0.0+`|
-|double|⇌|double|`version 1.0.0+`|
-|boolean|⇌|boolean|`version 1.0.0+`|
-|String|⇌|String|`version 1.0.0+`|
-|Object A|⇌|Object A|`version 1.0.0+` From和To必须实现IRouter并且需要有空参数constructor|
-|Object A|⇌|Object B|`version 1.0.0+` From和To必须实现IRouter并且需要有空参数constructor|
-|A[]|⇌|A[]|`version 2.0.1+`|
-|A[]|⇌|B[]|`version 2.0.1+`|
-|A[]|→|Varargs A|`version 2.0.1+` [1,2,3] → add(int... i)|
-|List< A>|⇌|List< A>|`version 1.0.0+` 接收者定义必须是List<?>接口类型 eg:List< A>|
-|List< A>|⇌|List< B>|`version 1.0.0+`|
-|Json Object|⇌|Object|`version 1.0.0+`|
+|context|→|context|`1.0.0+` 类型: Application [default]|
+|scheme|→|scheme|`1.0.0+` 类型: String(Router scheme) [default]|
+|promise|→|promise|`1.0.0+` 类型: VPromise (Used return) [default]|
+|float|⇌|float|`1.0.0+`|
+|int|⇌|int|`1.0.0+`|
+|long|⇌|long|`1.0.0+`|
+|double|⇌|double|`1.0.0+`|
+|boolean|⇌|boolean|`1.0.0+`|
+|String|⇌|String|`1.0.0+`|
+|Object A|⇌|Object A|`1.0.0+` From和To必须实现IRouter并且需要有空参数constructor|
+|Object A|⇌|Object B|`1.0.0+` From和To必须实现IRouter并且需要有空参数constructor|
+|A[]|⇌|A[]|`2.0.1+`|
+|A[]|⇌|B[]|`2.0.1+`|
+|A[]|→|Varargs A|`2.0.1+` [1,2,3] → add(int... i)|
+|List< A>|⇌|List< A>|`1.0.0+` 接收者定义必须是List<?>接口类型 eg:List< A>|
+|List< A>|⇌|List< B>|`1.0.0+`|
+|Json Object|⇌|Object|`1.0.0+`|
 |Json Object|⇌|Map< String,String>|即将支持|
-|Json Array|⇌|List< ?>|`version 1.0.0+`|
+|Json Array|⇌|List< ?>|`1.0.0+`|
 
 **第二步:调用协议**
 ```
