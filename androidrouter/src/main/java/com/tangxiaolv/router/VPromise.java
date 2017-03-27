@@ -18,6 +18,7 @@ public class VPromise {
      * return result
      *
      * @param result The result of whatever you want.
+     * @param <R>    the output type
      */
     public <R> void resolve(R result) {
         target.resolve(result);

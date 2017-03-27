@@ -20,6 +20,7 @@ public final class AndroidRouter {
      * Open url, usually invoked externally. like from browser.
      *
      * @param url scheme://host/path?params=json
+     * @param <R> the output type
      * @return {@link CPromise}
      */
     public static <R> CPromise<R> open(String url) {
@@ -33,6 +34,7 @@ public final class AndroidRouter {
      * @param scheme The scheme of protocol
      * @param host   The host of protocol
      * @param path   The path of protocol
+     * @param <R>    the output type
      * @return {@link CPromise}
      */
     public static <R> CPromise<R> open(String scheme, String host, String path) {
@@ -47,6 +49,7 @@ public final class AndroidRouter {
      * @param host   The host of protocol
      * @param path   The path of protocol
      * @param params The jsonObject params of protocol
+     * @param <R>    the output type
      * @return {@link CPromise}
      */
     public static <R> CPromise<R> open(String scheme, String host, String path, Map<String, Object> params) {
@@ -61,6 +64,7 @@ public final class AndroidRouter {
      * @param host   The host of protocol
      * @param path   The path of protocol
      * @param params The jsonArray params of protocol
+     * @param <R>    the output type
      * @return {@link CPromise}
      */
     public static <R> CPromise<R> open(String scheme, String host, String path, List params) {
@@ -75,6 +79,7 @@ public final class AndroidRouter {
      * @param host   The host of protocol
      * @param path   The path of protocol
      * @param json   The json params of protocol
+     * @param <R>    the output type
      * @return {@link CPromise}
      */
     public static <R> CPromise<R> open(String scheme, String host, String path, String json) {

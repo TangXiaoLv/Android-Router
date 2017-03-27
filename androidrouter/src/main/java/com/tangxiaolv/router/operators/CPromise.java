@@ -32,6 +32,7 @@ public class CPromise<T> {
      * Start route.
      *
      * @param resolve Result callback
+     * @param <R>     the output type
      */
     public <R> void call(Resolve<R> resolve) {
         call(resolve, null);
@@ -51,6 +52,7 @@ public class CPromise<T> {
      *
      * @param resolve Result callback
      * @param reject  Exception callback
+     * @param <R>     the output type
      */
     public <R> void call(Resolve<R> resolve, Reject reject) {
         target.call(resolve, reject);
@@ -213,6 +215,7 @@ public class CPromise<T> {
     public void done(final Resolve<T> resolve, final Reject reject) {
         callActual(resolve, reject);
     }
+
 
     /**
      * Call to a CPromise-like and provides a callback to handle the items it emits.
