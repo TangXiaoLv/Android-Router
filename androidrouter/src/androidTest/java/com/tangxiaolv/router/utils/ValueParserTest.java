@@ -72,20 +72,6 @@ public class ValueParserTest {
     }
 
     @Test
-    public void check_Obj_Map() throws ValueParseException {
-//        A a = ObjGenerator.getA();
-//
-//        Object parse = ValueParser.parse(a, Map.class.getCanonicalName());
-//        assertTrue(parse instanceof Map);
-    }
-
-    @Test
-    public void check_Map_Obj() {
-
-
-    }
-
-    @Test
     public void check_Json_Obj() throws ValueParseException {
         A a = ObjGenerator.getA();
         String json = new Gson().toJson(a);
@@ -115,7 +101,6 @@ public class ValueParserTest {
         assertNotNull(parse);
         assertTrue(parse instanceof List);
         assertTrue(((List) parse).get(0) instanceof A);
-
     }
 
     @Test
@@ -125,6 +110,14 @@ public class ValueParserTest {
 
         Object parse = ValueParser.parse(json, Map.class.getCanonicalName());
         assertTrue(parse instanceof Map);
+    }
+
+    @Test
+    public void check_Obj_Map() throws ValueParseException {
+    }
+
+    @Test
+    public void check_Map_Obj() {
     }
 
     @SuppressWarnings("all")

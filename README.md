@@ -195,7 +195,7 @@ public class RemoteModule implements IRouter {
 |List< A>|⇌|List< A>|`1.0.0+` Receiver must be defined as List<?> interface|
 |List< A>|⇌|List< B>|`1.0.0+`|
 |Json Object|⇌|Object|`1.0.0+`|
-|Json Object|⇌|Map< String,String>|Coming Soon|
+|Json Object|→|Map< String,String>|`2.0.1+`|
 |Json Array|⇌|List< ?>|`1.0.0+`|
 
 **Step 2:Invoke**

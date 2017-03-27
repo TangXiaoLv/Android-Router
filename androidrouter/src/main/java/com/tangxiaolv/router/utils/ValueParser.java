@@ -136,7 +136,7 @@ public class ValueParser {
                 } else {
                     //checked string format
                     if (!isJson(from.toString())) {
-                        throw new ValueParseException("Expected array type,The input string must jsonArray.");
+                        throw new ValueParseException("Expected " + expectedType + ",But The input string isn't json.");
                     }
                     jArray = new JSONArray((String) from);
                 }
@@ -205,20 +205,30 @@ public class ValueParser {
         return from;
     }
 
-    private static Object toMap(Object from, String expectType) {
+    private static Object toMap(Object from, String expectType) throws ValueParseException {
         try {
             if (from instanceof String || from instanceof JSONObject) {
-                JSONObject jObj = from instanceof String ? new JSONObject((String) from) : (JSONObject) from;
-                HashMap<String, Object> map = new HashMap<>(jObj.length());
+                JSONObject jObj;
+                if (from instanceof JSONObject) {
+                    jObj = (JSONObject) from;
+                } else {
+                    //checked string format
+                    if (!isJson(from.toString())) {
+                        throw new ValueParseException("Expected " + expectType + ",But The input string isn't json.");
+                    }
+                    jObj = new JSONObject((String) from);
+                }
+
+                HashMap<String, String> map = new HashMap<>(jObj.length());
                 Iterator<String> it = jObj.keys();
                 while (it.hasNext()) {
                     String key = it.next();
-                    Object v = jObj.get(key);
-                    map.put(key, v);
+                    map.put(key, jObj.get(key).toString());
                 }
                 from = map;
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            throw new ValueParseException("parse to " + expectType + " type fail.", e);
         }
         return from;
     }

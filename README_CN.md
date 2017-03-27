@@ -195,7 +195,7 @@ public class RemoteModule implements IRouter {
 |List< A>|⇌|List< A>|`1.0.0+` 接收者定义必须是List<?>接口类型 eg:List< A>|
 |List< A>|⇌|List< B>|`1.0.0+`|
 |Json Object|⇌|Object|`1.0.0+`|
-|Json Object|⇌|Map< String,String>|即将支持|
+|Json Object|→|Map< String,String>|`2.0.1+`|
 |Json Array|⇌|List< ?>|`1.0.0+`|
 
 **第二步:调用协议**
