@@ -178,22 +178,19 @@ public class RemoteModule implements IRouter {
 
 |from|-|to|desc|
 |:---|:---:|:---|:---|
-|context|→|context|`1.0.0+` Type: Application [default]|
-|scheme|→|scheme|`1.0.0+` Type: String(Router scheme) [default]|
-|promise|→|promise|`1.0.0+` Type: VPromise (Used return) [default]|
 |float|⇌|float|`1.0.0+`|
 |int|⇌|int|`1.0.0+`|
 |long|⇌|long|`1.0.0+`|
 |double|⇌|double|`1.0.0+`|
 |boolean|⇌|boolean|`1.0.0+`|
 |String|⇌|String|`1.0.0+`|
-|Object A|⇌|Object A|`1.0.0+` From and To must implement IRouter and keep empty constructor|
-|Object A|⇌|Object B|`1.0.0+` From and To must implement IRouter and keep empty constructor|
+|Object A|⇌|Object A|`1.0.0+` |
+|Object A|⇌|Object B|`1.0.0+` A and B object must implement IRouter and keep empty constructor|
 |A[]|⇌|A[]|`2.0.1+`|
-|A[]|⇌|B[]|`2.0.1+`|
+|A[]|⇌|B[]|`2.0.1+` A and B object must implement IRouter and keep empty constructor|
 |A[]|→|Varargs A|`2.0.1+` [1,2,3] → add(int... i)|
 |List< A>|⇌|List< A>|`1.0.0+` Receiver must be defined as List<?> interface|
-|List< A>|⇌|List< B>|`1.0.0+`|
+|List< A>|⇌|List< B>|`1.0.0+` A and B object must implement IRouter and keep empty constructor|
 |Json Object|⇌|Object|`1.0.0+`|
 |Json Object|→|Map< String,String>|`2.0.1+`|
 |Json Array|⇌|List< ?>|`1.0.0+`|
