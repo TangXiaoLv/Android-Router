@@ -50,9 +50,9 @@ Modular architecture diagram
 
 Gradle
 ---
-```
+```gradle
 //Add dependencies inside application/library.
-//android plugin version > 2.2+
+//android plugin version >= 2.2+
 dependencies {
     compile 'com.library.tangxiaolv:androidrouter:x.x.x'
     annotationProcessor 'com.library.tangxiaolv:androidrouter-compiler:x.x.x'
@@ -196,7 +196,7 @@ public class RemoteModule implements IRouter {
 |Json Array|⇌|List< ?>|`1.0.0+`|
 
 **Step 2:Invoke**
-```
+```java
 AndroidRouter
     .open("android://main/activity/localActivity")
     .callOnSubThread()
