@@ -50,9 +50,9 @@ Update Log
 
 Gradle
 ---
-```
+```gradle
 //需要在各自的application/library 中添加依赖
-//android plugin version > 2.2+
+//android plugin version >= 2.2+
 dependencies {
     compile 'com.library.tangxiaolv:androidrouter:x.x.x'
     annotationProcessor 'com.library.tangxiaolv:androidrouter-compiler:x.x.x'
@@ -196,7 +196,7 @@ public class RemoteModule implements IRouter {
 |Json Array|⇌|List< ?>|`1.0.0+`|
 
 **第二步:调用协议**
-```
+```java
 //任意地方调用
 //方式一
 AndroidRouter.open("android://main/activity/localActivity")
