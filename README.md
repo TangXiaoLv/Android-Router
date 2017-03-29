@@ -5,13 +5,14 @@ English | [中文](https://github.com/TangXiaoLv/Android-Router/blob/master/READ
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|Latest Version|2.0.1|1.0.1|1.0.0|
+|Latest Version|2.0.2|1.0.1|1.0.0|
 
 High-performance, flexible, easy-to-use lightweight Android component-based framework, Used to solve the interdependence of complex projects, A single module is conducive to independent development and maintenance.
 
 Update Log
 ---
 ```
+2.0.2: Fix context param override exception.
 2.0.1: Support auto cast on return value, fix array cast exception. 
 2.0.0: Resolve callback support generic, Support reactive programming, Remove resolve.call 'type' param. 
 -----2.0+ new feature dont support 1.0+
