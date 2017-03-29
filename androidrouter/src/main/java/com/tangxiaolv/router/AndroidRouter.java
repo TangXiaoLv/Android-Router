@@ -29,6 +29,42 @@ public final class AndroidRouter {
     }
 
     /**
+     * Open url, usually invoked by inner.
+     *
+     * @param url scheme://host/path
+     * @param <R> the output type
+     * @return {@link CPromise}
+     */
+    public static <R> CPromise<R> open(String url, String paramsJson) {
+        Promise promise = new Promise(new Asker(url, paramsJson));
+        return new CPromise<>(promise);
+    }
+
+    /**
+     * Open url, usually invoked by inner.
+     *
+     * @param url scheme://host/path
+     * @param <R> the output type
+     * @return {@link CPromise}
+     */
+    public static <R> CPromise<R> open(String url, Map<String, Object> params) {
+        Promise promise = new Promise(new Asker(url, params));
+        return new CPromise<>(promise);
+    }
+
+    /**
+     * Open url, usually invoked by inner.
+     *
+     * @param url scheme://host/path
+     * @param <R> the output type
+     * @return {@link CPromise}
+     */
+    public static <R> CPromise<R> open(String url, List params) {
+        Promise promise = new Promise(new Asker(url, params));
+        return new CPromise<>(promise);
+    }
+
+    /**
      * Usually invoked inner, Empty params.
      *
      * @param scheme The scheme of protocol

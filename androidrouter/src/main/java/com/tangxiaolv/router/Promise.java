@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.tangxiaolv.router.exceptions.RouterException;
 import com.tangxiaolv.router.exceptions.ValueParseException;
 import com.tangxiaolv.router.utils.PromiseTimer;
+import com.tangxiaolv.router.utils.RLog;
 import com.tangxiaolv.router.utils.ReflectTool;
 import com.tangxiaolv.router.utils.ValueParser;
 
@@ -91,8 +92,7 @@ public class Promise {
     @SuppressWarnings("unchecked")
     void resolve(Object result) {
         showToast();
-        if (resolve == null)
-            return;
+        if (resolve == null) return;
 
         Object expected = result;
         try {
@@ -144,11 +144,9 @@ public class Promise {
 
     void reject(Exception e) {
         showToast();
-        if (e == null)
-            e = new RouterException("unkownException");
-        e.printStackTrace();
-        if (reject == null)
-            return;
+        if (e == null) e = new RouterException("unkownException");
+        if (RLog.DEBUG) e.printStackTrace();
+        if (reject == null) return;
 
         final Exception _e = e;
         //call on main thread

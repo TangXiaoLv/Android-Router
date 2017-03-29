@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.tangxiaolv.router.exceptions.NotFoundRouterException;
 import com.tangxiaolv.router.exceptions.RouterException;
 import com.tangxiaolv.router.interfaces.IMirror;
+import com.tangxiaolv.router.utils.RLog;
 import com.tangxiaolv.router.utils.ReflectTool;
 
 import org.json.JSONException;
@@ -30,10 +31,15 @@ class Asker {
     private Exception _e;
 
     /**
-     * @param url scheme://host/path?params=json
+     * @param urlWithParams scheme://host/path?params=json
      */
-    Asker(String url) {
+    Asker(String urlWithParams) {
+        parse(urlWithParams);
+    }
+
+    Asker(String url, Object params) {
         parse(url);
+        this.params = params;
     }
 
     Asker(String scheme, String host, String path, Object params) {
@@ -105,7 +111,9 @@ class Asker {
         ParamsWrapper wrapper = new ParamsWrapper(params);
         wrapper.put("scheme", scheme);
         wrapper.put("promise", promise.getVPromise());
-        wrapper.put("context", ReflectTool.getApplication());
+        if (wrapper.get("context") == null){
+            wrapper.put("context", ReflectTool.getApplication());
+        }
         return wrapper;
     }
 

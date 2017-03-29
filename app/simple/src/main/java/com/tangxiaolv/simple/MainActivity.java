@@ -3,6 +3,7 @@ package com.tangxiaolv.simple;
 
 import com.google.gson.Gson;
 
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -19,19 +20,14 @@ import com.tangxiaolv.router.Resolve;
 import com.tangxiaolv.router.operators.Func;
 import com.tangxiaolv.simple.entity.A;
 import com.tangxiaolv.simple.entity.B;
-import com.tangxiaolv.simple.entity.ObjGenerator;
 
-import junit.framework.Assert;
-
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static android.R.attr.type;
 import static com.tangxiaolv.router.AndroidRouter.open;
-import static com.tangxiaolv.simple.R.id.router5;
-import static com.tangxiaolv.simple.entity.ObjGenerator.*;
+import static com.tangxiaolv.simple.entity.ObjGenerator.getA;
+import static com.tangxiaolv.simple.entity.ObjGenerator.getB;
+import static com.tangxiaolv.simple.entity.ObjGenerator.getListB;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -128,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         router4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                open(route4).showTime().call(new Resolve() {
+                open(Uri.encode(route4)).showTime().call(new Resolve() {
                     @Override
                     public void call(Object result) {
                         title.setText(result.toString());
@@ -208,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                 map.put("listA", listB);
                 map.put("b", arr);
                 map.put("names", names);
-                open("android", "main", "/differentTypes", map).showTime().callOnSubThread().returnOnMainThread()
+                open("android://main/differentTypes", map).showTime().callOnSubThread().returnOnMainThread()
                         .call(new Resolve<String>() {
                             @Override
                             public void call(String result) {

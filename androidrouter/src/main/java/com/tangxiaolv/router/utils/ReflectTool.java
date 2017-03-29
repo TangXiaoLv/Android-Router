@@ -4,6 +4,7 @@ package com.tangxiaolv.router.utils;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -84,5 +85,10 @@ public class ReflectTool {
             }
         }
         return type;
+    }
+
+    public static boolean debugable() {
+        Context context = getApplication();
+        return context != null && (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
     }
 }

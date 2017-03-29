@@ -8,7 +8,7 @@ import android.util.Log;
  */
 public final class RLog {
     private static final String TAG = "AndroidRouter";
-    private static boolean DEBUG = true;
+    public static boolean DEBUG = ReflectTool.debugable();
 
     public static void e(String msg, Object... args) {
         if (DEBUG) {
