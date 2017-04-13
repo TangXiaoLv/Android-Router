@@ -55,7 +55,9 @@ public class ValueParserTest {
         });
         parse = ValueParser.parse(listA, firstGeneric);
         assertTrue(parse instanceof List);
-        assertTrue(((List) parse).get(0) instanceof B);
+        parse = ((List) parse).get(0);
+        assertTrue(parse instanceof B);
+        assertNotNull(((B) parse).getListStr());
     }
 
     @Test
@@ -69,6 +71,7 @@ public class ValueParserTest {
 
         parse = ValueParser.parse(a, B.class.getName());
         assertTrue(parse instanceof B);
+        assertNotNull(((B) parse).getListStr());
     }
 
     @Test
@@ -77,6 +80,7 @@ public class ValueParserTest {
         String json = new Gson().toJson(a);
         Object parse = ValueParser.parse(json, A.class.getCanonicalName());
         assertTrue(parse instanceof A);
+        assertNotNull(((A) parse).getListStr());
     }
 
     @Test
@@ -88,7 +92,9 @@ public class ValueParserTest {
         }));
         assertNotNull(parse);
         assertTrue(parse.getClass().isArray());
-        assertTrue(((Object[]) parse)[0] instanceof A);
+        parse = ((Object[]) parse)[0];
+        assertTrue(parse instanceof A);
+        assertNotNull(((A) parse).getListStr());
     }
 
     @Test
@@ -100,7 +106,9 @@ public class ValueParserTest {
         }));
         assertNotNull(parse);
         assertTrue(parse instanceof List);
-        assertTrue(((List) parse).get(0) instanceof A);
+        parse = ((List) parse).get(0);
+        assertTrue(parse instanceof A);
+        assertNotNull(((A) parse).getListStr());
     }
 
     @Test

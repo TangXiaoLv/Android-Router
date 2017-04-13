@@ -87,8 +87,7 @@ public class CPromise<T> {
      * @return result
      */
     @SuppressWarnings("unchecked")
-    //TODO no idea to find out actual type.
-    public Object getValue(final Reject reject) {
+    public <R> R getValue(final Reject reject) {
         final Object[] arr = new Object[1];
         final CountDownLatch latch = new CountDownLatch(1);
         target.call(new Resolve<Object>() {
@@ -115,7 +114,7 @@ public class CPromise<T> {
             }
         }
 
-        return arr[0];
+        return (R) arr[0];
     }
 
     /**

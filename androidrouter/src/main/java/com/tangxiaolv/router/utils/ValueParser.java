@@ -33,7 +33,7 @@ public class ValueParser {
      * @throws ValueParseException parse exception
      */
     public static Object parse(Object from, String expectedType) throws ValueParseException {
-        if (TextUtils.isEmpty(expectedType)) return from;
+        if (from == null || TextUtils.isEmpty(expectedType)) return from;
         if ("int".equals(expectedType) || "java.lang.Integer".equals(expectedType)) {
             from = toInteger(from, 0);
         } else if ("boolean".equals(expectedType) || "java.lang.Boolean".equals(expectedType)) {
@@ -271,21 +271,18 @@ public class ValueParser {
         try {
             if (!isJson(from.toString())) return from;
             JSONObject jObj = from instanceof String ? new JSONObject((String) from) : (JSONObject) from;
-            Class<?> clazz = Class.forName(getNoGenericTypeName(expectType));
-            Object target = clazz.newInstance();
-            Iterator<String> it = jObj.keys();
-            while (it.hasNext()) {
-                try {
-                    String key = it.next();
-                    Field f = clazz.getDeclaredField(key);
+            Class<?> targetClass = Class.forName(getNoGenericTypeName(expectType));
+            Object target = targetClass.newInstance();
+            do {
+                Field[] fields = targetClass.getDeclaredFields();
+                for (Field f : fields) {
                     String name = f.getName();
                     String type = ReflectTool.getFieldTypeWithGeneric(f);
                     f.setAccessible(true);
                     f.set(target, parse(jObj.get(name), type));
-                } catch (JSONException ignored) {
-                } catch (NoSuchFieldException ignored) {
                 }
-            }
+                targetClass = targetClass.getSuperclass();
+            } while (!(targetClass == Object.class));
             from = target;
         } catch (JSONException ignored) {
         } catch (Exception e) {
@@ -297,16 +294,19 @@ public class ValueParser {
     //from params => to obj
     private static Object parseMapToTarget(Object from, String expectType) throws ValueParseException {
         try {
-            Class<?> clazz = Class.forName(getNoGenericTypeName(expectType));
-            Object target = clazz.newInstance();
-            Field[] toFields = clazz.getDeclaredFields();
+            Class<?> targetClass = Class.forName(getNoGenericTypeName(expectType));
+            Object target = targetClass.newInstance();
+            Field[] toFields = targetClass.getDeclaredFields();
             Map params = (Map) from;
-            for (Field toF : toFields) {
-                String toKey = toF.getName();
-                Object fromValue = params.get(toKey);
-                toF.setAccessible(true);
-                toF.set(target, parse(fromValue, ReflectTool.getFieldTypeWithGeneric(toF)));
-            }
+            do {
+                for (Field toF : toFields) {
+                    String toKey = toF.getName();
+                    Object fromValue = params.get(toKey);
+                    toF.setAccessible(true);
+                    toF.set(target, parse(fromValue, ReflectTool.getFieldTypeWithGeneric(toF)));
+                }
+                targetClass = targetClass.getSuperclass();
+            } while (!(targetClass == Object.class));
             from = target;
         } catch (Exception e) {
             throw new ValueParseException("parse to " + expectType + " type fail.", e);
@@ -317,25 +317,38 @@ public class ValueParser {
     //from obj => to obj
     private static Object parseObjToTarget(Object from, String expectType) throws ValueParseException {
         try {
-            Class<?> clazz = Class.forName(getNoGenericTypeName(expectType));
-            Object target = clazz.newInstance();
-            Field[] toFields = clazz.getDeclaredFields();
-            for (Field toF : toFields) {
-                try {
-                    String toKey = toF.getName();
-                    Field fromField = from.getClass().getDeclaredField(toKey);
-                    fromField.setAccessible(true);
-                    Object fromValue = fromField.get(from);
+            Class<?> targetClass = Class.forName(getNoGenericTypeName(expectType));
+            Object target = targetClass.newInstance();
+            Map<String, Object> kvs = extractKeyValue(from);
+            do {
+                Field[] toFields = targetClass.getDeclaredFields();
+                for (Field toF : toFields) {
                     toF.setAccessible(true);
+                    Object fromValue = kvs.get(toF.getName());
                     toF.set(target, parse(fromValue, ReflectTool.getFieldTypeWithGeneric(toF)));
-                } catch (NoSuchFieldException ignored) {
                 }
-            }
+                targetClass = targetClass.getSuperclass();
+            } while (!(targetClass == Object.class));
             from = target;
         } catch (Exception e) {
             throw new ValueParseException("parse to " + expectType + " type fail.", e);
         }
         return from;
+    }
+
+    private static Map<String, Object> extractKeyValue(Object obj) throws IllegalAccessException {
+        Class<?> clazz = obj.getClass();
+        HashMap<String, Object> kvs = new HashMap<>();
+        do {
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field f : fields) {
+                f.setAccessible(true);
+                Object value = f.get(obj);
+                kvs.put(f.getName(), value);
+            }
+            clazz = clazz.getSuperclass();
+        } while (!(clazz == Object.class));
+        return kvs;
     }
 
     private static String getListGeneric(String type) {
