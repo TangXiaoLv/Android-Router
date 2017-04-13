@@ -84,7 +84,7 @@ public class CPromise<T> {
      * Await the result returned.It will be block thread.
      *
      * @param reject {@link Reject}
-     * @return result Note:Didn't support different types transformation
+     * @return result Note:Didn't support different types cast.
      */
     @SuppressWarnings("unchecked")
     public <R> R getValue(final Reject reject) {

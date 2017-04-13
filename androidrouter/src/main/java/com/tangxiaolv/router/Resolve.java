@@ -9,7 +9,7 @@ package com.tangxiaolv.router;
 public interface Resolve<T> {
 
     /**
-     * Note:Support different types transformation.eg:A -> B
+     * Note:Support different types transformation.eg:A cast to B.
      */
     void call(T result);
 }
