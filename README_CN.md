@@ -204,9 +204,9 @@ public class RemoteModule implements IRouter {
 AndroidRouter.open("android://main/activity/localActivity")
     .callOnSubThread()//调用在子线程
     .returnOnMainThread()//回调在主线程
-    .call(new Resolve() {
+    .call(new Resolve<String>() {
         @Override
-        public void call(String type, Object result) {
+        public void call(String result) {
             //获取返回值
         }
     }, new Reject() {
@@ -223,7 +223,7 @@ AndroidRouter.open("android://main/activity/localActivity")
     
 //方式三
 //阻塞式拿返回值
-Object value = AndroidRouter.open("android://main/getValue").getValue();
+boolean value = AndroidRouter.open("android://main/getValue").getValue();
 
 //方式四:响应式处理
 AndroidRouter.open("android://main/reactive")
