@@ -203,9 +203,9 @@ AndroidRouter
     .open("android://main/activity/localActivity")
     .callOnSubThread()
     .returnOnMainThread()
-    .call(new Resolve() {
+    .call(new Resolve<String>() {
         @Override
-        public void call(String type, Object result) {
+        public void call(String result) {
             //Receive result
         }
     }, new Reject() {
@@ -223,7 +223,7 @@ AndroidRouter
     
 //or
 //Await the result returned.It will block thread.
-Object value = AndroidRouter.open("android://main/getValue").getValue();
+boolean value = AndroidRouter.open("android://main/getValue").getValue();
 
 //or
 AndroidRouter.open("android://main/reactive")
