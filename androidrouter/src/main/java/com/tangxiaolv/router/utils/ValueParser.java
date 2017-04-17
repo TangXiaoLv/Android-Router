@@ -33,7 +33,7 @@ public class ValueParser {
      * @throws ValueParseException parse exception
      */
     public static Object parse(Object from, String expectedType) throws ValueParseException {
-        if (from == null || TextUtils.isEmpty(expectedType)) return from;
+        if (TextUtils.isEmpty(expectedType)) return from;
         if ("int".equals(expectedType) || "java.lang.Integer".equals(expectedType)) {
             from = toInteger(from, 0);
         } else if ("boolean".equals(expectedType) || "java.lang.Boolean".equals(expectedType)) {

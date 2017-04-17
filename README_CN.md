@@ -5,7 +5,7 @@
 
 |Lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |:---:|:---|:---|:---|
-|最新版本|2.0.3|1.0.1|1.0.0|
+|最新版本|2.0.4|1.0.1|1.0.0|
 
 高性能，灵活，简单易用的轻量级Android组件化协议框架，用来解决复杂工程的互相依赖，解耦出的单个模块有利于独立开发和维护。
 

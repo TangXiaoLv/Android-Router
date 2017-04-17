@@ -5,7 +5,7 @@ English | [中文](https://github.com/TangXiaoLv/Android-Router/blob/master/READ
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|Latest Version|2.0.3|1.0.1|1.0.0|
+|Latest Version|2.0.4|1.0.1|1.0.0|
 
 High-performance, flexible, easy-to-use lightweight Android component-based framework, Used to solve the interdependence of complex projects, A single module is conducive to independent development and maintenance.
 
