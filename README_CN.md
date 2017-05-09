@@ -5,13 +5,15 @@
 
 |Lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |:---:|:---|:---|:---|
-|最新版本|2.0.4|1.0.1|1.0.0|
+|最新版本|2.0.5|1.0.1|1.0.0|
 
 高性能，灵活，简单易用的轻量级Android组件化协议框架，用来解决复杂工程的互相依赖，解耦出的单个模块有利于独立开发和维护。
 
 Update Log
 ---
 ```
+2.0.5: 修复使用getValue拿返回值当返回值是void类型时引发的ANR异常。
+2.0.4: 优化代码。
 2.0.3: 修复继承类互相转化成不同类值取不全，支持getValue方法强制类型转换(但不支持不同类之间转换,适用于基本类型取值,复杂类型请使用回调的方式并且支持不同类型转换)
 2.0.2: 修复context参数覆盖问题。
 2.0.1: 支持返回值对象不一致时自动转换，修复数组类型解析异常。
@@ -199,8 +201,8 @@ public class RemoteModule implements IRouter {
 
 **第二步:调用协议**
 ```java
-//任意地方调用
 //方式一
+//异步拿返回值
 AndroidRouter.open("android://main/activity/localActivity")
     .callOnSubThread()//调用在子线程
     .returnOnMainThread()//回调在主线程
@@ -222,7 +224,7 @@ AndroidRouter.open("android://main/activity/localActivity")
     .call();//忽略返回值和错误
     
 //方式三
-//阻塞式拿返回值
+//同步拿返回值
 boolean value = AndroidRouter.open("android://main/getValue").getValue();
 
 //方式四:响应式处理

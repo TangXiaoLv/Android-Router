@@ -5,13 +5,15 @@ English | [中文](https://github.com/TangXiaoLv/Android-Router/blob/master/READ
 
 |lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |---|---|---|---|
-|Latest Version|2.0.4|1.0.1|1.0.0|
+|Latest Version|2.0.5|1.0.1|1.0.0|
 
 High-performance, flexible, easy-to-use lightweight Android component-based framework, Used to solve the interdependence of complex projects, A single module is conducive to independent development and maintenance.
 
 Update Log
 ---
 ```
+2.0.5: Fix ANR issue when 'getValue' used but return are void type.
+2.0.4: Optimizing Code.
 2.0.3: Fix inherit class cast exception,support force typecast of method who named 'getValue'.
 2.0.2: Fix context param override exception.
 2.0.1: Support auto cast on return value, fix array cast exception. 
@@ -199,6 +201,7 @@ public class RemoteModule implements IRouter {
 
 **Step 2:Invoke**
 ```java
+//Take the value with async.
 AndroidRouter
     .open("android://main/activity/localActivity")
     .callOnSubThread()
@@ -222,7 +225,7 @@ AndroidRouter
     .call();//Igone result and error.
     
 //or
-//Await the result returned.It will block thread.
+//Take the value with synchronized.
 boolean value = AndroidRouter.open("android://main/getValue").getValue();
 
 //or
