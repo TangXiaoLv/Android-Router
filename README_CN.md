@@ -178,9 +178,9 @@ public class RemoteModule implements IRouter {
 }
 ```
 
-**Supported parameter**
+**支持的类型转换**
 
-|from|-|to|desc|
+|来源类型|-|去向类型|描述|
 |:---|:---:|:---|:---|
 |float|⇌|float|`1.0.0+`|
 |int|⇌|int|`1.0.0+`|
