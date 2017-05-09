@@ -22,7 +22,7 @@ public final class PromiseCall<T, R> extends AbstractPromiseWithUpstream<T, R> {
             @Override
             public void call(Object result) {
                 try {
-                    String firstGeneric = ReflectTool.getFirstGeneric(func);
+                    String firstGeneric = ReflectTool.tryGetGeneric(func);
                     resolve.call(func.call((T) ValueParser.parse(result, firstGeneric)));
                 } catch (ValueParseException e) {
                     reject.call(e);

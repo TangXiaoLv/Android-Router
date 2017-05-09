@@ -28,8 +28,7 @@ public class ReflectTool {
                 return sApplication.getApplicationContext();
             }
             Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
-            Method staticActivityThreadMethod = activityThreadClass
-                    .getDeclaredMethod("currentActivityThread");
+            Method staticActivityThreadMethod = activityThreadClass.getDeclaredMethod("currentActivityThread");
             staticActivityThreadMethod.setAccessible(true);
             Object currentActivityThread = staticActivityThreadMethod.invoke(null);
             Field applicationField = activityThreadClass.getDeclaredField("mInitialApplication");
@@ -42,13 +41,13 @@ public class ReflectTool {
     }
 
     /**
-     * Try to get first generic of object.
+     * Try to get generic of object.
      *
      * @param t   any object.
      * @param <T> input type
      * @return generic type
      */
-    public static <T> String getFirstGeneric(T t) {
+    public static <T> String tryGetGeneric(T t) {
         ParameterizedType pt = null;
         Type[] types = t.getClass().getGenericInterfaces();
         if (types.length != 0) {
@@ -66,8 +65,13 @@ public class ReflectTool {
 
         Type[] actual = pt.getActualTypeArguments();
         String unsafe = actual[0].toString();
-        String[] elms = unsafe.split(" ");/*maybe get generic mark, like E,T*/
-        String genericString = elms.length <= 1 ? unsafe : elms[1];
+        String genericString;
+        if (unsafe.contains(",")) {
+            genericString = unsafe;
+        } else {
+            String[] elms = unsafe.split(" ");/*maybe get generic mark, like E,T*/
+            genericString = elms.length <= 1 ? unsafe : elms[1];
+        }
         return genericString.length() < 4 ? null : genericString;
     }
 

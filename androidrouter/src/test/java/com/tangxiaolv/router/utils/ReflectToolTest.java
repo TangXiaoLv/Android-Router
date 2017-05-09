@@ -13,55 +13,69 @@ import static org.junit.Assert.assertEquals;
 public final class ReflectToolTest {
 
     @Test
-    public void getFirstGeneric() throws NoSuchMethodException {
-
+    public void checkMap() {
         String cls;
 
-        Object o = new Object();
-        cls = ReflectTool.getFirstGeneric(o);
+        Map<String, Object> map = new HashMap<>();
+        cls = ReflectTool.tryGetGeneric(map);
         assertEquals(cls, null);
+
+        Mark<Map<String,Object>> mark = new Mark<Map<String, Object>>() {
+        };
+        cls = ReflectTool.tryGetGeneric(mark);
+        assertEquals(cls, "java.util.Map<java.lang.String, java.lang.Object>");
+    }
+
+    @Test
+    public void checkList() {
+        String cls;
 
         List<String> list = new ArrayList<>();
-        cls = ReflectTool.getFirstGeneric(list);
-        assertEquals(cls, null);
-
-        Map<String, Object> map = new HashMap<>();
-        cls = ReflectTool.getFirstGeneric(map);
+        cls = ReflectTool.tryGetGeneric(list);
         assertEquals(cls, null);
 
         Mark<List<String>> mark = new Mark<List<String>>() {
         };
-        cls = ReflectTool.getFirstGeneric(mark);
+        cls = ReflectTool.tryGetGeneric(mark);
         assertEquals(cls, "java.util.List<java.lang.String>");
 
         IMark<List<String>> iMark = new IMark<List<String>>() {
         };
-        cls = ReflectTool.getFirstGeneric(iMark);
+        cls = ReflectTool.tryGetGeneric(iMark);
         assertEquals(cls, "java.util.List<java.lang.String>");
 
         MarkImpl<List<String>> markImpl = new MarkImpl<List<String>>() {
         };
-        cls = ReflectTool.getFirstGeneric(markImpl);
+        cls = ReflectTool.tryGetGeneric(markImpl);
         assertEquals(cls, "java.util.List<java.lang.String>");
+    }
+
+    @Test
+    public void checkCustomObj() {
+        String cls;
+
+        Object o = new Object();
+        cls = ReflectTool.tryGetGeneric(o);
+        assertEquals(cls, null);
 
         MarkImpl<A> markA = new MarkImpl<A>() {
         };
-        cls = ReflectTool.getFirstGeneric(markA);
+        cls = ReflectTool.tryGetGeneric(markA);
         assertEquals(cls, A.class.getName());
 
         MarkImpl<B> markB = new MarkImpl<B>() {
         };
-        cls = ReflectTool.getFirstGeneric(markB);
+        cls = ReflectTool.tryGetGeneric(markB);
         assertEquals(cls, B.class.getName());
 
         MarkImpl<C> markC = new MarkImpl<C>() {
         };
-        cls = ReflectTool.getFirstGeneric(markC);
+        cls = ReflectTool.tryGetGeneric(markC);
         assertEquals(cls, C.class.getName());
 
         MarkImpl<D> markD = new MarkImpl<D>() {
         };
-        cls = ReflectTool.getFirstGeneric(markD);
+        cls = ReflectTool.tryGetGeneric(markD);
         assertEquals(cls, D.class.getName());
     }
 

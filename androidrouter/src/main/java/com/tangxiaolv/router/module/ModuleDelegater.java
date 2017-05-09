@@ -50,7 +50,9 @@ class ModuleDelegater {
 
     private static void autoReturn(ParamsWrapper params, Method method, Object result) {
         String returnType = method.getReturnType().getName();
-        if (!"void".equals(returnType)) {
+        if ("void".equals(returnType)) {
+            ((VPromise) params.get("promise")).resolve(void.class);
+        }else{
             ((VPromise) params.get("promise")).resolve(result);
         }
     }

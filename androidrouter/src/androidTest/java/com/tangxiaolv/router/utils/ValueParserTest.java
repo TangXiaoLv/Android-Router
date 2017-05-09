@@ -4,6 +4,7 @@ package com.tangxiaolv.router.utils;
 import com.google.gson.Gson;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.util.ArrayMap;
 
 import com.tangxiaolv.router.entity.A;
 import com.tangxiaolv.router.entity.B;
@@ -15,10 +16,11 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tangxiaolv.router.utils.ReflectTool.getFirstGeneric;
+import static com.tangxiaolv.router.utils.ReflectTool.tryGetGeneric;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
@@ -46,12 +48,12 @@ public class ValueParserTest {
         List<A> listA = ObjGenerator.getListA();
         Object parse;
 
-        String firstGeneric = getFirstGeneric(new Mark<List<A>>() {
+        String firstGeneric = tryGetGeneric(new Mark<List<A>>() {
         });
         parse = ValueParser.parse(listA, firstGeneric);
         assertEquals(parse, listA);
 
-        firstGeneric = getFirstGeneric(new Mark<List<B>>() {
+        firstGeneric = tryGetGeneric(new Mark<List<B>>() {
         });
         parse = ValueParser.parse(listA, firstGeneric);
         assertTrue(parse instanceof List);
@@ -88,7 +90,7 @@ public class ValueParserTest {
         List<A> listA = ObjGenerator.getListA();
         String json = new Gson().toJson(listA);
 
-        Object parse = ValueParser.parse(json, getFirstGeneric(new Mark<A[]>() {
+        Object parse = ValueParser.parse(json, tryGetGeneric(new Mark<A[]>() {
         }));
         assertNotNull(parse);
         assertTrue(parse.getClass().isArray());
@@ -102,7 +104,7 @@ public class ValueParserTest {
         List<A> listA = ObjGenerator.getListA();
         String json = new Gson().toJson(listA);
 
-        Object parse = ValueParser.parse(json, getFirstGeneric(new Mark<List<A>>() {
+        Object parse = ValueParser.parse(json, tryGetGeneric(new Mark<List<A>>() {
         }));
         assertNotNull(parse);
         assertTrue(parse instanceof List);
@@ -125,7 +127,33 @@ public class ValueParserTest {
     }
 
     @Test
-    public void check_Map_Obj() {
+    public void check_Map_Obj() throws ValueParseException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("inte", 10);
+        map.put("lon", 20L);
+
+        Object parse = ValueParser.parse(map, tryGetGeneric(new Mark<A>() {
+        }));
+        assertTrue(parse instanceof A);
+        assertTrue(((A) parse).getInte() == 10);
+    }
+
+    @Test
+    public void check_Map_Map() throws ValueParseException {
+        Map<String, String> map = new HashMap<>();
+        map.put("a", "1");
+        map.put("b", "2");
+
+        Object parse = ValueParser.parse(map, Map.class.getCanonicalName());
+        assertTrue(parse instanceof Map);
+
+        HashMap<String, Object> maps = new HashMap<>();
+        maps.put("a", 1);
+        maps.put("b", true);
+        maps.put("c", "3");
+        parse = ValueParser.parse(maps, Map.class.getCanonicalName());
+        assertTrue(parse instanceof Map);
+        assertTrue(((Map) parse).get("a") instanceof Integer);
     }
 
     @SuppressWarnings("all")

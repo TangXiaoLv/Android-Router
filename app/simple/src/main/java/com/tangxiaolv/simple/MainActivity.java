@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Await the result returned.It will block thread.
                 Object value = open(router11.getText().toString()).getValue();
-                title.setText(value.toString());
+                title.setText(value == null ? "null" : value.toString());
             }
         });
 

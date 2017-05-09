@@ -107,7 +107,8 @@ public class MainModule implements IRouter {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        promise.resolve("I'm sleep 3 sec!!!");
+//        promise.resolve("I'm sleep 3 sec!!!");
+//        return "I'm sleep 3 sec!!!";
     }
 
     @RouterPath("/reactive")

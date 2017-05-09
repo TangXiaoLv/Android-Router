@@ -76,7 +76,7 @@ public class CPromise<T> {
      * @return result
      * @see CPromise#getValue(Reject reject)
      */
-    public Object getValue() {
+    public <R> R getValue() {
         return getValue(null);
     }
 
@@ -88,26 +88,28 @@ public class CPromise<T> {
      */
     @SuppressWarnings("unchecked")
     public <R> R getValue(final Reject reject) {
-        final Object[] arr = new Object[1];
+        final Object[] arr = new Object[2];
         final CountDownLatch latch = new CountDownLatch(1);
+        target.allowGetVoidType();
         target.call(new Resolve<Object>() {
             @Override
             public void call(Object result) {
-                arr[0] = result;
+                if (result != void.class){
+                    arr[0] = result;
+                }
                 latch.countDown();
             }
         }, new Reject() {
             @Override
             public void call(Exception e) {
-                if (reject != null) {
-                    reject.call(e);
-                }
+                arr[1] = e;
                 latch.countDown();
             }
         });
 
         try {
             latch.await();
+            if (arr[1] instanceof Exception) throw new IllegalStateException();
         } catch (Exception e) {
             if (reject != null) {
                 reject.call(new RouterRemoteException("getValue fail.", e));
@@ -214,7 +216,6 @@ public class CPromise<T> {
     public void done(final Resolve<T> resolve, final Reject reject) {
         callActual(resolve, reject);
     }
-
 
     /**
      * Call to a CPromise-like and provides a callback to handle the items it emits.

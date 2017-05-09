@@ -46,9 +46,9 @@ public class ValueParser {
             from = toFloat(from, 0f);
         } else if (expectedType.contains("[")) {
             from = toArray(from, expectedType);
-        } else if (expectedType.contains("java.util.List")) {
+        } else if (expectedType.contains("java.util.List") || expectedType.contains("java.util.ArrayList")) {
             from = toList(from, expectedType);
-        } else if (expectedType.contains("java.util.Map")) {
+        } else if (expectedType.contains("java.util.Map") || expectedType.contains("java.util.HashMap")) {
             from = toMap(from, expectedType);
         } else if (!"java.lang.Object".equals(expectedType)) {
             from = toTargetObj(from, expectedType);
@@ -296,9 +296,9 @@ public class ValueParser {
         try {
             Class<?> targetClass = Class.forName(getNoGenericTypeName(expectType));
             Object target = targetClass.newInstance();
-            Field[] toFields = targetClass.getDeclaredFields();
             Map params = (Map) from;
             do {
+                Field[] toFields = targetClass.getDeclaredFields();
                 for (Field toF : toFields) {
                     String toKey = toF.getName();
                     Object fromValue = params.get(toKey);

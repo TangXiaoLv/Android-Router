@@ -1,6 +1,7 @@
 
 package com.tangxiaolv.router;
 
+import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -41,16 +42,17 @@ public class Promise {
     public static final int FLAG_RETURN_THREAD = 1 << 4;
 
     private final Asker asker;
-    private final VPromise mVPromise;
+    private final VPromise promiseForReturn;
     private Resolve resolve;
     private Reject reject;
     private String tag;
     private PromiseTimer timer;
     private int flagMark = 0;
+    private boolean voidTypeable = false;
 
     Promise(Asker asker) {
         this.asker = asker;
-        this.mVPromise = new VPromise(this);
+        this.promiseForReturn = new VPromise(this);
         if (asker != null) asker.setPromise(this);
     }
 
@@ -64,7 +66,7 @@ public class Promise {
         this.reject = reject;
 
         //call on main thread
-        if ((flagMark & FLAG_CALL_MAIN) != 0) {
+        if ((flagMark & FLAG_CALL_MAIN) != 0 && !isMainThread()) {
             RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
@@ -91,21 +93,25 @@ public class Promise {
 
     @SuppressWarnings("unchecked")
     void resolve(Object result) {
+        //Check void type.
+        if (result == void.class && !voidTypeable) return;
+
         showToast();
         if (resolve == null) return;
 
-        Object expected = result;
+        Object expected;
         try {
-            String firstGeneric = ReflectTool.getFirstGeneric(resolve);
+            String firstGeneric = ReflectTool.tryGetGeneric(resolve);
             expected = ValueParser.parse(result, firstGeneric);
         } catch (ValueParseException e) {
             reject(e);
+            return;
         }
 
         final Object expectedResult = expected;
 
         //call on main thread
-        if ((flagMark & FLAG_RETURN_MIAN) != 0) {
+        if ((flagMark & FLAG_RETURN_MIAN) != 0 && !isMainThread()) {
             RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
@@ -150,7 +156,7 @@ public class Promise {
 
         final Exception _e = e;
         //call on main thread
-        if ((flagMark & FLAG_RETURN_MIAN) != 0) {
+        if ((flagMark & FLAG_RETURN_MIAN) != 0 && !isMainThread()) {
             RouterHelper.HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
@@ -175,6 +181,10 @@ public class Promise {
         }
     }
 
+    private boolean isMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
+    }
+
     public void showTime() {
         timer = new PromiseTimer();
     }
@@ -190,7 +200,14 @@ public class Promise {
     }
 
     VPromise getVPromise() {
-        return mVPromise;
+        return promiseForReturn;
+    }
+
+    /**
+     * Sync To obtain the return value.
+     */
+    public void allowGetVoidType() {
+        this.voidTypeable = true;
     }
 
     public void setThreadFlag(int flag) {
@@ -205,7 +222,7 @@ public class Promise {
     String getTag() {
         if (TextUtils.isEmpty(tag)) {
             tag = RouterHelper.getInstance().genPromiseTag();
-            RouterHelper.getInstance().addToPromisePool(tag, mVPromise);
+            RouterHelper.getInstance().addToPromisePool(tag, promiseForReturn);
         }
         return tag;
     }
