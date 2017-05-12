@@ -188,8 +188,7 @@ public class ValueParser {
                 List origin = (List) from;
                 List<Object> target = new ArrayList<>(origin.size());
                 String listGeneric = getListGeneric(expectedType);
-                Object first = origin.get(0);
-                if (first != null && !first.getClass().getCanonicalName().equalsIgnoreCase(listGeneric)) {
+                if (origin.size() != 0 && !origin.get(0).getClass().getCanonicalName().equalsIgnoreCase(listGeneric)) {
                     for (Object o : origin) {
                         target.add(parse(o, listGeneric));
                     }

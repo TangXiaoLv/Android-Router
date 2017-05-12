@@ -4,9 +4,9 @@ package com.tangxiaolv.router.utils;
 import com.google.gson.Gson;
 
 import android.support.test.runner.AndroidJUnit4;
-import android.util.ArrayMap;
 
 import com.tangxiaolv.router.entity.A;
+import com.tangxiaolv.router.entity.A1;
 import com.tangxiaolv.router.entity.B;
 import com.tangxiaolv.router.entity.ObjGenerator;
 import com.tangxiaolv.router.exceptions.ValueParseException;
@@ -16,6 +16,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,18 +49,26 @@ public class ValueParserTest {
         List<A> listA = ObjGenerator.getListA();
         Object parse;
 
-        String firstGeneric = tryGetGeneric(new Mark<List<A>>() {
+        String generic = tryGetGeneric(new Mark<List<A>>() {
         });
-        parse = ValueParser.parse(listA, firstGeneric);
+        parse = ValueParser.parse(listA, generic);
         assertEquals(parse, listA);
 
-        firstGeneric = tryGetGeneric(new Mark<List<B>>() {
+        generic = tryGetGeneric(new Mark<List<B>>() {
         });
-        parse = ValueParser.parse(listA, firstGeneric);
+        parse = ValueParser.parse(listA, generic);
         assertTrue(parse instanceof List);
         parse = ((List) parse).get(0);
         assertTrue(parse instanceof B);
         assertNotNull(((B) parse).getListStr());
+
+        A a = new A();
+        a.setObjList(new ArrayList<A1>());
+
+        generic = tryGetGeneric(new Mark<B>() {
+        });
+        parse = ValueParser.parse(a, generic);
+        assertTrue(parse instanceof B);
     }
 
     @Test
