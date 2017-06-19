@@ -11,9 +11,24 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        myConfig {
+            storeFile file("key.jks")
+            storePassword "123456"
+            keyAlias "key"
+            keyPassword "123456"
+        }
+    }
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.myConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -26,7 +41,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile project(':app:simple-lib')
-    compile project(':androidrouter')
     annotationProcessor project(':androidrouter-compiler')
     //compile "io.reactivex.rxjava2:rxjava:2.0.7"
 }

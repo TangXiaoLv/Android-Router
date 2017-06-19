@@ -1,4 +1,5 @@
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
 
 version = libraryVersion
 
@@ -54,6 +55,17 @@ bintray {
                 passphrase = properties.getProperty("bintray.gpg.password")
                 //Optional. The passphrase for GPG signing'
             }
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+            pom.groupId = project.property('GROUP_ID')
+            pom.artifactId = project.property('ARTIFACT_ID')
+            pom.version = project.property('PUBLIC_VERSION')
         }
     }
 }

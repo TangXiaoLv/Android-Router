@@ -4,6 +4,9 @@ import com.tangxiaolv.router.Promise;
 import com.tangxiaolv.router.Reject;
 import com.tangxiaolv.router.Resolve;
 import com.tangxiaolv.router.exceptions.RouterRemoteException;
+import com.tangxiaolv.router.utils.ReflectTool;
+import com.tangxiaolv.router.interfaces.TypeCase;
+import com.tangxiaolv.router.utils.ValueParser;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -74,27 +77,48 @@ public class CPromise<T> {
      * Await the result returned.It will be block thread.
      *
      * @return result
-     * @see CPromise#getValue(Reject reject)
+     * @see CPromise#getValue(TypeCase, Reject)
      */
     public <R> R getValue() {
-        return getValue(null);
+        return getValue(null, null);
     }
 
     /**
      * Await the result returned.It will be block thread.
      *
+     * @return result
+     * @see CPromise#getValue(TypeCase, Reject reject)
+     */
+    public <R> R getValue(Reject reject) {
+        return getValue(null, reject);
+    }
+
+    /**
+     * Await the result returned.It will be block thread.
+     *
+     * @return result
+     * @see CPromise#getValue(TypeCase, Reject reject)
+     */
+    public <R> R getValue(TypeCase<R> type) {
+        return getValue(type, null);
+    }
+
+    /**
+     * Await the result returned.It will be block thread.
+     *
+     * @param type   {@link TypeCase}
      * @param reject {@link Reject}
      * @return result Note:Didn't support different types cast.
      */
     @SuppressWarnings("unchecked")
-    public <R> R getValue(final Reject reject) {
-        final Object[] arr = new Object[2];
+    public <R> R getValue(TypeCase<R> type, final Reject reject) {
+        final Object[] arr = new Object[1];
         final CountDownLatch latch = new CountDownLatch(1);
         target.allowGetVoidType();
         target.call(new Resolve<Object>() {
             @Override
             public void call(Object result) {
-                if (result != void.class){
+                if (result != void.class) {
                     arr[0] = result;
                 }
                 latch.countDown();
@@ -102,21 +126,27 @@ public class CPromise<T> {
         }, new Reject() {
             @Override
             public void call(Exception e) {
-                arr[1] = e;
+                arr[0] = e;
                 latch.countDown();
             }
         });
 
+        R result = (R) arr[0];
         try {
             latch.await();
-            if (arr[1] instanceof Exception) throw new IllegalStateException();
+            if (result instanceof Exception) {
+                throw new IllegalStateException();
+            }
+            if (type != null) {
+                result = (R) ValueParser.parse(result, ReflectTool.tryGetGeneric(type));
+            }
         } catch (Exception e) {
             if (reject != null) {
                 reject.call(new RouterRemoteException("getValue fail.", e));
             }
         }
 
-        return (R) arr[0];
+        return result;
     }
 
     /**

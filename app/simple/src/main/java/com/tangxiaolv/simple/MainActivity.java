@@ -18,6 +18,7 @@ import com.tangxiaolv.router.AndroidRouter;
 import com.tangxiaolv.router.Reject;
 import com.tangxiaolv.router.Resolve;
 import com.tangxiaolv.router.operators.Func;
+import com.tangxiaolv.router.interfaces.TypeCase;
 import com.tangxiaolv.simple.entity.A;
 import com.tangxiaolv.simple.entity.B;
 
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView router11 = (TextView) findViewById(R.id.router11);
         final TextView router12 = (TextView) findViewById(R.id.router12);
         final TextView router13 = (TextView) findViewById(R.id.router13);
+        final TextView router14 = (TextView) findViewById(R.id.router14);
 
         /*android://main*/
         router1.setText("android://main");
@@ -333,6 +335,16 @@ public class MainActivity extends AppCompatActivity {
                         title.setText(e.toString());
                     }
                 });
+            }
+        });
+
+        router14.setText("android://main/getValueWhitType");
+        router14.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Await the result returned.It will block thread.
+                B value = open(router14.getText().toString()).getValue(new TypeCase<B>(){});
+                title.setText(value == null ? "null" : value.toString());
             }
         });
 

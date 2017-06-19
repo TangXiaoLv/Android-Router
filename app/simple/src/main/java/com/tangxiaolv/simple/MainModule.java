@@ -15,6 +15,8 @@ import com.tangxiaolv.simple.entity.Package;
 
 import java.util.List;
 
+import static com.tangxiaolv.simple.entity.ObjGenerator.getA;
+
 /**
  * Support parameter types
  *
@@ -107,8 +109,16 @@ public class MainModule implements IRouter {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        promise.resolve("I'm sleep 3 sec!!!");
-//        return "I'm sleep 3 sec!!!";
+        //promise.resolve("I'm sleep 3 sec!!!");
+        //return "I'm sleep 3 sec!!!";
+    }
+
+    @RouterPath("/getValueWhitType")
+    public void getValueWhitType(VPromise promise) {
+        A a = getA();
+        promise.resolve(a);
+        //or
+        //return a;
     }
 
     @RouterPath("/reactive")

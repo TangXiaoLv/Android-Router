@@ -50,10 +50,8 @@ public class ReflectTool {
     public static <T> String tryGetGeneric(T t) {
         ParameterizedType pt = null;
         Type[] types = t.getClass().getGenericInterfaces();
-        if (types.length != 0) {
-            if (types[0] instanceof ParameterizedType) {
-                pt = (ParameterizedType) types[0];
-            }
+        if (types.length != 0 && types[0] instanceof ParameterizedType) {
+            pt = (ParameterizedType) types[0];
         } else {
             Type type = t.getClass().getGenericSuperclass();
             if (type instanceof ParameterizedType) {
@@ -61,9 +59,11 @@ public class ReflectTool {
             }
         }
 
-        if (pt == null) return null;
+        if (pt == null) {
+            return null;
+        }
 
-        Type[] actual = pt.getActualTypeArguments();
+        Type[] actual= pt.getActualTypeArguments();
         String unsafe = actual[0].toString();
         String genericString;
         if (unsafe.contains(",")) {
