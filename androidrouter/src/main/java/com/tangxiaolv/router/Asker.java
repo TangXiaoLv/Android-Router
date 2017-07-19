@@ -7,13 +7,14 @@ import android.text.TextUtils;
 import com.tangxiaolv.router.exceptions.NotFoundRouterException;
 import com.tangxiaolv.router.exceptions.RouterException;
 import com.tangxiaolv.router.interfaces.IMirror;
-import com.tangxiaolv.router.utils.RLog;
 import com.tangxiaolv.router.utils.ReflectTool;
 
 import org.json.JSONException;
 
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Parse url and invoke {@link IMirror}
@@ -27,6 +28,7 @@ class Asker {
     private String host;
     private String path;
     private Object params;
+    private Object appendParams;
     private Promise promise;
     private Exception _e;
 
@@ -37,9 +39,9 @@ class Asker {
         parse(urlWithParams);
     }
 
-    Asker(String url, Object params) {
+    Asker(String url, Object appendParams) {
+        this.appendParams = appendParams;
         parse(url);
-        this.params = params;
     }
 
     Asker(String scheme, String host, String path, Object params) {
@@ -111,8 +113,12 @@ class Asker {
         ParamsWrapper wrapper = new ParamsWrapper(params);
         wrapper.put("scheme", scheme);
         wrapper.put("promise", promise.getVPromise());
-        if (wrapper.get("context") == null){
+        if (wrapper.get("context") == null) {
             wrapper.put("context", ReflectTool.getApplication());
+        }
+
+        if (appendParams != null) {
+            wrapper.append(appendParams);
         }
         return wrapper;
     }

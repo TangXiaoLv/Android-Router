@@ -15,7 +15,6 @@ import java.util.Map;
  */
 public final class AndroidRouter {
 
-
     /**
      * Open url, usually invoked externally. like from browser.
      *
@@ -35,8 +34,8 @@ public final class AndroidRouter {
      * @param <R> the output type
      * @return {@link CPromise}
      */
-    public static <R> CPromise<R> open(String url, String paramsJson) {
-        Promise promise = new Promise(new Asker(url, paramsJson));
+    public static <R> CPromise<R> open(String url, String appendJson) {
+        Promise promise = new Promise(new Asker(url, appendJson));
         return new CPromise<>(promise);
     }
 
@@ -47,8 +46,8 @@ public final class AndroidRouter {
      * @param <R> the output type
      * @return {@link CPromise}
      */
-    public static <R> CPromise<R> open(String url, Map<String, Object> params) {
-        Promise promise = new Promise(new Asker(url, params));
+    public static <R> CPromise<R> open(String url, Map<String, Object> appendMap) {
+        Promise promise = new Promise(new Asker(url, appendMap));
         return new CPromise<>(promise);
     }
 
@@ -59,8 +58,8 @@ public final class AndroidRouter {
      * @param <R> the output type
      * @return {@link CPromise}
      */
-    public static <R> CPromise<R> open(String url, List params) {
-        Promise promise = new Promise(new Asker(url, params));
+    public static <R> CPromise<R> open(String url, List appendList) {
+        Promise promise = new Promise(new Asker(url, appendList));
         return new CPromise<>(promise);
     }
 
