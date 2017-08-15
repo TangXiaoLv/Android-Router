@@ -6,15 +6,17 @@ import android.text.TextUtils;
 
 import com.tangxiaolv.router.exceptions.NotFoundRouterException;
 import com.tangxiaolv.router.exceptions.RouterException;
+import com.tangxiaolv.router.exceptions.RouterRemoteException;
 import com.tangxiaolv.router.interfaces.IMirror;
 import com.tangxiaolv.router.utils.ReflectTool;
 
 import org.json.JSONException;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
-import java.util.List;
-import java.util.Map;
+
+import static com.tangxiaolv.router.utils.Utilities.getRealException;
 
 /**
  * Parse url and invoke {@link IMirror}
@@ -73,7 +75,7 @@ class Asker {
                 params = s.substring(index + URL_PARAMS.length(), s.length());
             }
         } catch (Exception e) {
-            this._e = new NotFoundRouterException("invalid router url: " + url);
+            this._e = new NotFoundRouterException("invalid router url: " + url, e);
         }
     }
 
@@ -104,6 +106,8 @@ class Asker {
             targetMethod.invoke(target, path, createParamsWrapper(params));
         } catch (ClassNotFoundException e) {
             reject(new NotFoundRouterException("invalid router url: " + getUrl()));
+        } catch (InvocationTargetException e) {
+            reject(new RouterRemoteException(getRealException(e)));
         } catch (Exception e) {
             reject(e);
         }

@@ -5,14 +5,14 @@
 
 |Lib|androidrouter|androidrouter-compiler|androidrouter-annotations|
 |:---:|:---|:---|:---|
-|最新版本|2.0.8|1.0.1|1.0.0|
+|最新版本|2.0.9|1.0.1|1.0.0|
 
 高性能，灵活，简单易用的轻量级Android组件化协议框架，用来解决复杂工程的互相依赖，解耦出的单个模块有利于独立开发和维护。
 
 Update Log
 ---
 ```
-2.0.8: 入参优化
+2.0.9: 修复错误抛出不明确问题.
 2.0.7: 特性：新增getValue中Runtime类型转化
 2.0.6: 修复空list解析异常
 2.0.5: 修复使用getValue拿返回值当返回值是void类型时引发的ANR异常。

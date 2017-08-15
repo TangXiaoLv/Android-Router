@@ -4,8 +4,9 @@ import com.tangxiaolv.router.Promise;
 import com.tangxiaolv.router.Reject;
 import com.tangxiaolv.router.Resolve;
 import com.tangxiaolv.router.exceptions.RouterRemoteException;
-import com.tangxiaolv.router.utils.ReflectTool;
 import com.tangxiaolv.router.interfaces.TypeCase;
+import com.tangxiaolv.router.utils.ReflectTool;
+import com.tangxiaolv.router.utils.Utilities;
 import com.tangxiaolv.router.utils.ValueParser;
 
 import java.util.concurrent.CountDownLatch;
@@ -134,15 +135,16 @@ public class CPromise<T> {
         R result = (R) arr[0];
         try {
             latch.await();
-            if (result instanceof Exception) {
-                throw new IllegalStateException();
+            if (result instanceof Throwable) {
+                throw (Throwable) result;
             }
             if (type != null) {
                 result = (R) ValueParser.parse(result, ReflectTool.tryGetGeneric(type));
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
+            result = null;
             if (reject != null) {
-                reject.call(new RouterRemoteException("getValue fail.", e));
+                reject.call(new RouterRemoteException(Utilities.getRealException(e)));
             }
         }
 
